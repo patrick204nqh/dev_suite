@@ -1,9 +1,5 @@
 RSpec.describe DevSuite do
   it "has a version number" do
-    expect(DevSuite::VERSION).not_to be nil
-  end
-
-  it "does something useful" do
-    expect(false).to eq(true)
+    expect(DevSuite::VERSION).not_to be_nil
   end
 end
