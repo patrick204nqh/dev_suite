@@ -27,14 +27,19 @@ module DevSuite
         private
 
         def current
-          # Get the current process information
-          proc_info = Sys::ProcTable.ps(pid: Process.pid)
+          begin
+            # Get the current process information
+            proc_info = Sys::ProcTable.ps(pid: Process.pid)
 
-          # Calculate total CPU time using total_user and total_system
-          total_time = proc_info.total_user + proc_info.total_system
-          cpu_usage = (total_time.to_f / (total_time + 1)) * 100
+            # Calculate total CPU time using threads_user and threads_system
+            total_time = proc_info.threads_user + proc_info.threads_system
+            cpu_usage = (total_time.to_f / (total_time + 1)) * 100
 
-          cpu_usage
+            cpu_usage
+          rescue Sys::ProcTable::Error => e
+            puts "Error: Unable to get CPU usage: #{e.message}"
+            0
+          end
         end
       end
     end
