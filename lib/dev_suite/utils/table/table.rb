@@ -2,7 +2,7 @@
 
 require_relative "column/column"
 require_relative "row/row"
-require_relative "renderer/simple"
+require_relative "renderer"
 require_relative "config"
 
 module DevSuite

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../../utils/table/table"
-require_relative "../../utils/table/config"
-require_relative "../../utils/table/renderer/simple"
+require_relative "../../utils"
 
 module DevSuite
   module Performance
