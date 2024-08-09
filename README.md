@@ -1,5 +1,8 @@
 # DevSuite
 
+[![Gem Version](https://badge.fury.io/rb/dev_suite.svg)](https://badge.fury.io/rb/dev_suite)
+[![Code Climate](https://codeclimate.com/github/patrick204nqh/dev_suite/badges/gpa.svg)](https://codeclimate.com/github/patrick204nqh/dev_suite)
+
 Welcome to DevSuite! This gem provides a suite of utilities for developers to enhance their productivity.
 
 ## Installation
