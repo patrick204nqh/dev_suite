@@ -6,11 +6,10 @@ module DevSuite
   module Performance
     module Reporting
       class ReportGenerator
-        def initialize(description, benchmark_result, memory_stats, cpu_stats)
+        def initialize(description, benchmark_result, memory_stats)
           @description = description
           @benchmark_result = benchmark_result
           @memory_stats = memory_stats
-          @cpu_stats = cpu_stats
         end
 
         def generate
@@ -28,8 +27,6 @@ module DevSuite
           formatter.add_row(["Max Memory Used (MB)", format("%.2f", @memory_stats[:max])])
           formatter.add_row(["Min Memory Used (MB)", format("%.2f", @memory_stats[:min])])
           formatter.add_row(["Avg Memory Used (MB)", format("%.2f", @memory_stats[:avg])])
-          formatter.add_row(["Avg CPU Usage (%)", format("%.2f", @cpu_stats[:avg])])
-          formatter.add_row(["Peak CPU Usage (%)", format("%.2f", @cpu_stats[:peak])])
 
           puts formatter.to_table
         end
