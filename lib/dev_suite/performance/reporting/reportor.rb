@@ -5,7 +5,7 @@ require_relative "../../utils"
 module DevSuite
   module Performance
     module Reporting
-      class ReportGenerator
+      class Reportor
         def initialize(description, benchmark_result, memory_stats)
           @description = description
           @benchmark_result = benchmark_result

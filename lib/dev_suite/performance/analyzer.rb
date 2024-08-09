@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "reporting/report_generator"
+require_relative "reporting"
 require_relative "profiling/benchmark_profiler"
 require_relative "profiling/memory_profiler"
 
@@ -54,12 +54,12 @@ module DevSuite
       # @param benchmark_result [Benchmark::Tms] The benchmark result
       # @param memory_stats [Hash] The memory statistics
       def generate_report(benchmark_result, memory_stats)
-        report_generator = Reporting::ReportGenerator.new(
+        reportor = Reporting::Reportor.new(
           @description,
           benchmark_result,
           memory_stats,
         )
-        report_generator.generate
+        reportor.generate
       end
     end
   end
