@@ -12,7 +12,7 @@ module DevSuite
           @cpu_usage = Data::CPUUsage.new
         end
 
-        def profile
+        def profile(&block)
           @cpu_usage.record
         end
 

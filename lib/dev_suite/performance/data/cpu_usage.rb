@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "sys/proctable"
+
 module DevSuite
   module Performance
     module Data
@@ -25,8 +27,14 @@ module DevSuite
         private
 
         def current
-          # TODO: need to review and implement this method
-          10
+          # Get the current process information
+          proc_info = Sys::ProcTable.ps(pid: Process.pid)
+
+          # Calculate CPU usage percentage
+          total_time = proc_info.total_user + proc_info.total_system
+          cpu_usage = (total_time.to_f / (proc_info.total_user + proc_info.total_system + 1)) * 100
+
+          cpu_usage
         end
       end
     end
