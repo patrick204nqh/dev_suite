@@ -9,7 +9,7 @@ module DevSuite
       class CPUProfiler < BaseProfiler
         def initialize
           super
-          @cpu_usage = Data::CPUUsage.new
+          @cpu_usage = Data::CpuUsage.new
         end
 
         def profile(&block)

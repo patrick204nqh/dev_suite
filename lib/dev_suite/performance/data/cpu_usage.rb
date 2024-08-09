@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 require "sys/proctable"
+require "rbconfig"
 
 module DevSuite
   module Performance
     module Data
-      class CPUUsage
+      class CpuUsage
         def initialize
           @cpu_points = []
         end
@@ -27,18 +28,24 @@ module DevSuite
         private
 
         def current
-          begin
-            # Get the current process information
-            proc_info = Sys::ProcTable.ps(pid: Process.pid)
+          proc_info = Sys::ProcTable.ps(pid: Process.pid)
+          total_time = total_cpu_time(proc_info)
+          cpu_usage = (total_time.to_f / (total_time + 1)) * 100
+          cpu_usage
+        rescue StandardError => e
+          puts "Error: Unable to get CPU usage: #{e.message}"
+          0
+        end
 
-            # Calculate total CPU time using threads_user and threads_system
-            total_time = proc_info.threads_user + proc_info.threads_system
-            cpu_usage = (total_time.to_f / (total_time + 1)) * 100
-
-            cpu_usage
-          rescue Sys::ProcTable::Error => e
-            puts "Error: Unable to get CPU usage: #{e.message}"
-            0
+        def total_cpu_time(proc_info)
+          platform = RbConfig::CONFIG["host_os"]
+          case platform
+          when /darwin/
+            proc_info.total_user + proc_info.total_system
+          when /linux/
+            proc_info.utime + proc_info.stime
+          else
+            raise "Unsupported platform: #{platform}"
           end
         end
       end
