@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "../../utils/table/table_formatter"
+require_relative "../../utils/table/table"
+require_relative "../../utils/table/config"
+require_relative "../../utils/table/renderer/simple"
 
 module DevSuite
   module Performance
@@ -12,23 +14,49 @@ module DevSuite
           @memory_stats = memory_stats
         end
 
+        # Generates the performance report
         def generate
-          formatter = Utils::Table::TableFormatter.new
-          formatter.set_title("Performance Analysis", color: :cyan)
-          formatter.set_headings(["Metric", "Value"], color: :yellow)
-          formatter.add_row(["Description", @description])
-          formatter.add_row(["Total Time (s)", format("%.6f", @benchmark_result.real)])
-          formatter.add_row(["User CPU Time (s)", format("%.6f", @benchmark_result.utime)])
-          formatter.add_row(["System CPU Time (s)", format("%.6f", @benchmark_result.stime)])
-          formatter.add_row(["User + System CPU Time (s)", format("%.6f", @benchmark_result.total)])
-          formatter.add_row(["Memory Before (MB)", format("%.2f", @memory_stats[:before])])
-          formatter.add_row(["Memory After (MB)", format("%.2f", @memory_stats[:after])])
-          formatter.add_row(["Memory Used (MB)", format("%.2f", @memory_stats[:used])])
-          formatter.add_row(["Max Memory Used (MB)", format("%.2f", @memory_stats[:max])])
-          formatter.add_row(["Min Memory Used (MB)", format("%.2f", @memory_stats[:min])])
-          formatter.add_row(["Avg Memory Used (MB)", format("%.2f", @memory_stats[:avg])])
+          table = create_table
+          populate_table(table)
+          render_table(table)
+        end
 
-          puts formatter.to_table
+        private
+
+        #
+        # Creates a new table with the specified configuration
+        #
+        def create_table
+          config = Utils::Table::Config.new
+          Utils::Table::Table.new(config).tap do |table|
+            table.title = "Performance Analysis"
+            table.add_columns("Metric", "Value")
+          end
+        end
+
+        #
+        # Populates the table with benchmark and memory statistics
+        #
+        def populate_table(table)
+          table.add_row(["Description", @description])
+          table.add_row(["Total Time (s)", format("%.6f", @benchmark_result.real)])
+          table.add_row(["User CPU Time (s)", format("%.6f", @benchmark_result.utime)])
+          table.add_row(["System CPU Time (s)", format("%.6f", @benchmark_result.stime)])
+          table.add_row(["User + System CPU Time (s)", format("%.6f", @benchmark_result.total)])
+          table.add_row(["Memory Before (MB)", format("%.2f", @memory_stats[:before])])
+          table.add_row(["Memory After (MB)", format("%.2f", @memory_stats[:after])])
+          table.add_row(["Memory Used (MB)", format("%.2f", @memory_stats[:used])])
+          table.add_row(["Max Memory Used (MB)", format("%.2f", @memory_stats[:max])])
+          table.add_row(["Min Memory Used (MB)", format("%.2f", @memory_stats[:min])])
+          table.add_row(["Avg Memory Used (MB)", format("%.2f", @memory_stats[:avg])])
+        end
+
+        #
+        # Renders the table using the specified renderer
+        #
+        def render_table(table)
+          renderer = Utils::Table::Renderer::Simple.new
+          puts table.render(renderer: renderer)
         end
       end
     end
