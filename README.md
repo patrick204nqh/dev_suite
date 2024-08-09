@@ -40,7 +40,7 @@ DevSuite::SomeUtility.do_something
 ## Features
 
 <details>
-  <summary><strong>Performance Analysis with DevSuite::Performance::Analyzer</strong></summary>
+  <summary><strong>Performance Analysis</strong></summary>
   
   Analyze the performance of your code blocks with detailed benchmark and memory usage reports.
   
@@ -52,7 +52,8 @@ DevSuite::SomeUtility.do_something
     # Your code here
   end
   ```
-</detail>
+</details>
+
 
 ## Development
 
