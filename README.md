@@ -52,8 +52,31 @@ DevSuite::SomeUtility.do_something
   require 'dev_suite'
 
   DevSuite::Performance::Analyzer.analyze(description: "My Code Block") do
-    # Your code here
+    sum = 0
+    1_000_000.times do |i|
+      sum += i
+    end
+    sum
   end
+  ```
+
+  **Example output**
+  ```
+  |            Performance Analysis            |
+  +----------------------------+---------------+
+  | Metric                     | Value         |
+  +----------------------------+---------------+
+  | Description                | My Code Block |
+  | Total Time (s)             | 0.056238      |
+  | User CPU Time (s)          | 0.055662      |
+  | System CPU Time (s)        | 0.000097      |
+  | User + System CPU Time (s) | 0.055759      |
+  | Memory Before (MB)         | 25.39         |
+  | Memory After (MB)          | 25.42         |
+  | Memory Used (MB)           | 0.03          |
+  | Max Memory Used (MB)       | 25.41         |
+  | Min Memory Used (MB)       | 25.41         |
+  | Avg Memory Used (MB)       | 25.41         |
   ```
 </details>
 

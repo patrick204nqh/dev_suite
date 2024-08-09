@@ -9,8 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["patrick204nqh@gmail.com"]
 
   spec.summary       = "A suite of development tools."
-  spec.description   = "Provides tools for performance analysis, folder structure visualization, " \
-    "and custom curl command generation."
+  spec.description   = "This gem provides a suite of utilities for developers to enhance their productivity."
   spec.homepage      = "https://patrick204nqh.github.io"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
