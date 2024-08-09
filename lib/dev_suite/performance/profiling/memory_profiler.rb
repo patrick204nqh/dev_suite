@@ -1,5 +1,7 @@
-require_relative 'base_profiler'
-require_relative '../data/memory_usage'
+# frozen_string_literal: true
+
+require_relative "base_profiler"
+require_relative "../data/memory_usage"
 
 module DevSuite
   module Performance
@@ -8,6 +10,7 @@ module DevSuite
         attr_reader :max_memory, :min_memory, :average_memory
 
         def initialize
+          super
           @memory_usage = Data::MemoryUsage.new
           @memory_points = []
         end
@@ -20,7 +23,14 @@ module DevSuite
         def stats(before, after)
           memory_used = after - before
           @average_memory = @memory_points.sum / @memory_points.size
-          { before: before, after: after, used: memory_used, max: @memory_points.max, min: @memory_points.min, avg: @average_memory }
+          {
+            before: before,
+            after: after,
+            used: memory_used,
+            max: @memory_points.max,
+            min: @memory_points.min,
+            avg: @average_memory,
+          }
         end
 
         private

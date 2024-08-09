@@ -1,5 +1,7 @@
-require 'benchmark'
-require_relative 'base_profiler'
+# frozen_string_literal: true
+
+require "benchmark"
+require_relative "base_profiler"
 
 module DevSuite
   module Performance

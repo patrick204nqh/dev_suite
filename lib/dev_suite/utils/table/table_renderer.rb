@@ -1,5 +1,7 @@
-require_relative '../color/colorizer'
-require_relative 'column_width_calculator'
+# frozen_string_literal: true
+
+require_relative "../color/colorizer"
+require_relative "column_width_calculator"
 
 module DevSuite
   module Utils
@@ -10,10 +12,10 @@ module DevSuite
           @rows = rows
           @colorizer = Color::Colorizer.new
           @options = {
-            title: '',
+            title: "",
             title_color: :default,
             headings_color: :default,
-            border_color: :default
+            border_color: :default,
           }.merge(options)
           @column_widths = ColumnWidthCalculator.new(@headings, @rows).calculate
         end
@@ -40,7 +42,7 @@ module DevSuite
         end
 
         def format_separator
-          separator = @column_widths.map { |width| '-' * width }.join('-+-')
+          separator = @column_widths.map { |width| "-" * width }.join("-+-")
           @colorizer.colorize("+-#{separator}-+", @options[:border_color])
         end
 
@@ -48,7 +50,7 @@ module DevSuite
           formatted_cells = cells.each_with_index.map do |cell, index|
             cell.to_s.ljust(@column_widths[index])
           end
-          row_str = "| #{formatted_cells.join(' | ')} |"
+          row_str = "| #{formatted_cells.join(" | ")} |"
           @colorizer.colorize(row_str, color)
         end
       end

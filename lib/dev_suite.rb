@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "dev_suite/version"
 require "dev_suite/performance/analyzer"
 require "dev_suite/utils/color/colorizer"

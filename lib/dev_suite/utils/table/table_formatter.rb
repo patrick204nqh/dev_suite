@@ -1,4 +1,6 @@
-require_relative 'table_renderer'
+# frozen_string_literal: true
+
+require_relative "table_renderer"
 
 module DevSuite
   module Utils
@@ -27,7 +29,7 @@ module DevSuite
             title: @title,
             title_color: @title_color,
             headings_color: @headings_color,
-            border_color: :blue
+            border_color: :blue,
           })
           renderer.render
         end

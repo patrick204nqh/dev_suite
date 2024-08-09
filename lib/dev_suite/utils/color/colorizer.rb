@@ -1,4 +1,6 @@
-require_relative 'color_palette'
+# frozen_string_literal: true
+
+require_relative "color_palette"
 
 module DevSuite
   module Utils

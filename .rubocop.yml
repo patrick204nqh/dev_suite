@@ -1,0 +1,28 @@
+inherit_gem:
+  rubocop-shopify: rubocop.yml
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 2.7
+  Exclude:
+    - 'bin/**/*'
+    - 'db/schema.rb'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+    - 'spec/**/*'
+    - 'test/**/*'
+    - 'lib/dev_suite/version.rb'
+
+Metrics/LineLength:
+  Max: 120
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+
+Layout/IndentationWidth:
+  Width: 2
+
+Metrics/BlockLength:
+  Exclude:
+    - 'lib/tasks/**/*.rake'
+    - 'spec/**/*'

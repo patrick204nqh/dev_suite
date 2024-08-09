@@ -1,12 +1,14 @@
-require_relative 'reporting/report_generator'
-require_relative 'profiling/benchmark_profiler'
-require_relative 'profiling/memory_profiler'
-require_relative 'profiling/cpu_profiler'
+# frozen_string_literal: true
+
+require_relative "reporting/report_generator"
+require_relative "profiling/benchmark_profiler"
+require_relative "profiling/memory_profiler"
+require_relative "profiling/cpu_profiler"
 
 module DevSuite
   module Performance
     class Analyzer
-      def initialize(description: 'Block')
+      def initialize(description: "Block")
         @description = description
         @cpu_profiler = Profiling::CPUProfiler.new
         @benchmark_profiler = Profiling::BenchmarkProfiler.new
@@ -15,7 +17,7 @@ module DevSuite
       end
 
       def analyze(&block)
-        raise ArgumentError, 'No block given' unless block_given?
+        raise ArgumentError, "No block given" unless block_given?
 
         memory_before = @memory_usage.current
         benchmark_result = profile_benchmark(&block)
@@ -41,7 +43,7 @@ module DevSuite
           @description,
           benchmark_result,
           memory_stats,
-          cpu_stats
+          cpu_stats,
         )
         report_generator.generate
       end

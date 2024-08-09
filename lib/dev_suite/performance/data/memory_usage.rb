@@ -1,4 +1,6 @@
-require 'get_process_mem'
+# frozen_string_literal: true
+
+require "get_process_mem"
 
 module DevSuite
   module Performance
