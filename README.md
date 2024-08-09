@@ -1,8 +1,6 @@
 # DevSuite
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/dev_suite`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Welcome to DevSuite! This gem provides a suite of utilities for developers to enhance their productivity.
 
 ## Installation
 
@@ -14,21 +12,67 @@ gem 'dev_suite'
 
 And then execute:
 
-    $ bundle install
+```sh
+$ bundle install
+```
 
 Or install it yourself as:
 
-    $ gem install dev_suite
+```sh
+$ gem install dev_suite
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+To use DevSuite, require it in your Ruby code:
+
+```ruby
+require 'dev_suite'
+```
+
+### Example Usage
+
+```ruby
+# Example of using a utility from DevSuite
+DevSuite::SomeUtility.do_something
+```
+
+## Features
+
+<details>
+  <summary><strong>Performance Analysis with DevSuite::Performance::Analyzer</strong></summary>
+  
+  Analyze the performance of your code blocks with detailed benchmark and memory usage reports.
+  
+  **Usage:**
+  ```ruby
+  require 'dev_suite'
+
+  DevSuite::Performance::Analyzer.analyze(description: "My Code Block") do
+    # Your code here
+  end
+  ```
+</detail>
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup`for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run:
+
+```sh
+$ bundle exec rake install
+```
+
+To release a new version, update the version number in `version.rb`, and then run:
+
+```sh
+$ bundle exec rake release
+```
+
+This will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
+
 
 ## Contributing
 
