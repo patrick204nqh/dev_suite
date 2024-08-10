@@ -80,6 +80,37 @@ DevSuite::SomeUtility.do_something
   ```
 </details>
 
+<details>
+  <summary><strong>Directory Tree Visualization</strong></summary>
+  
+  Visualize the structure of directories and their subdirectories with a detailed hierarchical representation. This tool is essential for understanding the organization of your files and directories at a glance.
+
+  **Usage:**
+  ```ruby
+  require 'dev_suite'
+
+  # Set the base path for the directory you want to visualize
+  base_path = "/path/to/your/directory"
+
+  # Perform the visualization
+  DevSuite::DirectoryTree::Visualizer.visualize(base_path)
+  ```
+
+  **Example output**
+  ```
+  /path/to/your/directory/
+  ├── project/
+  │   ├── src/
+  │   │   ├── main.rb
+  │   │   └── helper.rb
+  │   └── spec/
+  │       └── main_spec.rb
+  ├── doc/
+  │   └── README.md
+  └── test/
+      └── test_helper.rb
+  ```
+</details>
 
 ## Development
 
