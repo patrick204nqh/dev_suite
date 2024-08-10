@@ -6,16 +6,23 @@ module DevSuite
   module DirectoryTree
     module Renderer
       class Base
-        def initialize(base_path)
-          @base_path = Pathname.new(base_path)
-        end
+        def render(path)
+          raise ArgumentError, "Invalid path" unless valid_path?(path)
 
-        def render
-          root = build_tree(@base_path)
+          root = build_tree(Pathname.new(path))
           render_node(root, "", true)
         end
 
         private
+
+        def valid_path?(path)
+          [
+            path.is_a?(String),
+            ::File.exist?(path),
+            ::File.directory?(path),
+            ::File.readable?(path),
+          ].all?
+        end
 
         # Builds the tree structure
         # @param path [Pathname] The path to build the tree from

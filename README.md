@@ -51,7 +51,7 @@ DevSuite::SomeUtility.do_something
   ```ruby
   require 'dev_suite'
 
-  DevSuite::Performance::Analyzer.analyze(description: "My Code Block") do
+  DevSuite::Performance.analyze(description: "My Code Block") do
     sum = 0
     1_000_000.times do |i|
       sum += i
@@ -93,7 +93,7 @@ DevSuite::SomeUtility.do_something
   base_path = "/path/to/your/directory"
 
   # Perform the visualization
-  DevSuite::DirectoryTree::Visualizer.visualize(base_path)
+  DevSuite::DirectoryTree.visualize(base_path)
   ```
 
   **Example output**

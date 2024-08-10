@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "base"
-require_relative "../node"
-
 module DevSuite
   module DirectoryTree
     module Renderer
