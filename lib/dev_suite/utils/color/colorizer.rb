@@ -3,12 +3,6 @@
 module DevSuite
   module Utils
     module Color
-      class << self
-        def colorize(text, **kargs)
-          Colorizer.new(Config.configuration).colorize(text, **kargs)
-        end
-      end
-
       class Colorizer
         attr_reader :config
 
@@ -18,6 +12,15 @@ module DevSuite
 
         def colorize(text, **kargs)
           puts @config.strategy.colorize(text, **kargs)
+        end
+      end
+
+      class << self
+        def colorize(text, **kargs)
+          raise ArgumentError, "Text to colorize must be a string" unless text.is_a?(String)
+
+          colorizer = Colorizer.new
+          colorizer.colorize(text, **kargs)
         end
       end
     end

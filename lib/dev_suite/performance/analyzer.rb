@@ -1,23 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "reportor"
-require_relative "profiler"
-
 module DevSuite
   module Performance
     class Analyzer
-      class << self
-        # Generates a performance report
-        # @param benchmark_result [Benchmark::Tms] The benchmark result
-        # @param memory_stats [Hash] The memory statistics
-        def analyze(description: "Block", &block)
-          raise ArgumentError, "No block given" unless block_given?
-
-          analyzer = new(description: description)
-          analyzer.analyze(&block)
-        end
-      end
-
       def initialize(description: "Block")
         @description = description
         @benchmark_profiler = Profiler::Benchmark.new
@@ -29,6 +14,8 @@ module DevSuite
       # @param block [Proc] The block to be analyzed
       # @raise [ArgumentError] If no block is given
       def analyze(&block)
+        raise ArgumentError, "No block given" unless block_given?
+
         memory_before = @memory_usage.current
         benchmark_result = profile_benchmark(&block)
         memory_after = @memory_usage.current
@@ -59,6 +46,13 @@ module DevSuite
           memory_stats,
         )
         reportor.generate
+      end
+    end
+
+    class << self
+      def analyze(description: "Block", &block)
+        analyzer = Analyzer.new(description: description)
+        analyzer.analyze(&block)
       end
     end
   end

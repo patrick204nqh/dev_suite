@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "base"
-require_relative "../data/memory_usage"
-
 module DevSuite
   module Performance
     module Profiler

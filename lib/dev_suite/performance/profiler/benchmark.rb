@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "benchmark"
-require_relative "base"
 
 module DevSuite
   module Performance

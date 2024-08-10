@@ -1,8 +1,7 @@
-# spec/dev_suite/directory_tree/visualizer_spec.rb
 require 'rspec'
 require 'pathname'
 
-RSpec.describe DevSuite::DirectoryTree::Visualizer do
+RSpec.describe DevSuite::DirectoryTree do
   let(:base_path) { Pathname.new(Dir.mktmpdir) }
 
   before do
@@ -23,8 +22,8 @@ RSpec.describe DevSuite::DirectoryTree::Visualizer do
     subject { described_class }
 
     it 'creates a new instance and calls visualize on it' do
-      visualizer_instance = instance_double(subject)
-      allow(subject).to receive(:new).with(base_path.to_s).and_return(visualizer_instance)
+      visualizer_instance = instance_double(DevSuite::DirectoryTree::Visualizer)
+      allow(DevSuite::DirectoryTree::Visualizer).to receive(:new).and_return(visualizer_instance)
       expect(visualizer_instance).to receive(:visualize)
       subject.visualize(base_path.to_s)
     end

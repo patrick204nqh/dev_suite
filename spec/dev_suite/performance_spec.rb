@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe DevSuite::Performance::Analyzer do
+RSpec.describe DevSuite::Performance do
   describe '.analyze' do
     subject { described_class }
 
