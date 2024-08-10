@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
+require_relative "base"
 require_relative "../../utils"
 
 module DevSuite
   module Performance
-    module Reporting
-      class Reportor
+    module Reportor
+      class Simple < Base
         def initialize(description, benchmark_result, memory_stats)
+          super()
           @description = description
           @benchmark_result = benchmark_result
           @memory_stats = memory_stats

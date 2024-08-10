@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 require "benchmark"
-require_relative "base_profiler"
+require_relative "base"
 
 module DevSuite
   module Performance
-    module Profiling
-      class BenchmarkProfiler < BaseProfiler
+    module Profiler
+      class Benchmark < Base
         def run(&block)
-          Benchmark.measure do
+          ::Benchmark.measure do
             block.call
           end
         end
