@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "base"
-require_relative "../formatter/text_aligner"
-require_relative "../formatter/column_width_calculator"
-require_relative "../formatter/colorizer"
-
 module DevSuite
   module Utils
     module Table
@@ -35,7 +30,7 @@ module DevSuite
           # Colorizes the given string with the specified color
           #
           def colorize(str, color)
-            Formatter::Colorizer.colorize(str, color)
+            Utils::Color.colorize(str, color: color)
           end
 
           #

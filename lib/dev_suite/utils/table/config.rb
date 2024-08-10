@@ -17,8 +17,32 @@ module DevSuite
           },
         }.freeze
 
-        def initialize(custom_settings = {})
-          @settings = deep_merge(DEFAULTS, custom_settings)
+        attr_reader :settings
+
+        def initialize(settings = {})
+          @settings = deep_merge(DEFAULTS, settings)
+        end
+
+        class << self
+          #
+          # Provide global access to a single instance of Config
+          #
+          def configuration
+            @configuration ||= new
+          end
+
+          # Allow block-based configuration
+          def configure
+            yield(configuration)
+          rescue StandardError => e
+            handle_configuration_error(e)
+          end
+
+          private
+
+          def handle_configuration_error(error)
+            puts "Configuration error: #{error.message}"
+          end
         end
 
         def color_for(key)
