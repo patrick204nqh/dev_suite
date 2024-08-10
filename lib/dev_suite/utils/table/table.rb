@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require_relative "column/column"
-require_relative "row/row"
-require_relative "renderer"
-require_relative "config"
-
 module DevSuite
   module Utils
     module Table
+      require_relative "column"
+      require_relative "row"
+      require_relative "renderer"
+      require_relative "config"
+
       class Table
         attr_accessor :title
         attr_reader :columns, :rows, :config
