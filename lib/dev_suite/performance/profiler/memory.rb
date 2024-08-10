@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require_relative "base_profiler"
+require_relative "base"
 require_relative "../data/memory_usage"
 
 module DevSuite
   module Performance
-    module Profiling
-      class MemoryProfiler < BaseProfiler
+    module Profiler
+      class Memory < Base
         attr_reader :max_memory, :min_memory, :average_memory
 
         def initialize

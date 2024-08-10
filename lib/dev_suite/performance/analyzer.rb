@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative "reporting"
-require_relative "profiling/benchmark_profiler"
-require_relative "profiling/memory_profiler"
+require_relative "reportor"
+require_relative "profiler"
 
 module DevSuite
   module Performance
@@ -21,8 +20,8 @@ module DevSuite
 
       def initialize(description: "Block")
         @description = description
-        @benchmark_profiler = Profiling::BenchmarkProfiler.new
-        @memory_profiler = Profiling::MemoryProfiler.new
+        @benchmark_profiler = Profiler::Benchmark.new
+        @memory_profiler = Profiler::Memory.new
         @memory_usage = Data::MemoryUsage.new
       end
 
@@ -54,7 +53,7 @@ module DevSuite
       # @param benchmark_result [Benchmark::Tms] The benchmark result
       # @param memory_stats [Hash] The memory statistics
       def generate_report(benchmark_result, memory_stats)
-        reportor = Reporting::Reportor.new(
+        reportor = Reportor::Simple.new(
           @description,
           benchmark_result,
           memory_stats,

@@ -2,8 +2,8 @@
 
 module DevSuite
   module Performance
-    module Profiling
-      class BaseProfiler
+    module Profiler
+      class Base
         def run(&block)
           raise NotImplementedError, "Subclasses must implement the run method"
         end

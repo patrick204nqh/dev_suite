@@ -2,8 +2,8 @@
 
 module DevSuite
   module Performance
-    module Profiling
-      require_relative "profiling/profiler"
+    module Reporting
+      require_relative "reportor/simple"
     end
   end
 end
