@@ -3,8 +3,12 @@
 module DevSuite
   module Utils
     module Table
-      module Row
-        require_relative "row/row"
+      class Row
+        attr_reader :data
+
+        def initialize(data)
+          @data = data
+        end
       end
     end
   end

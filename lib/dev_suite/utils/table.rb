@@ -2,6 +2,8 @@
 
 module DevSuite
   module Utils
-    require_relative "utils/table"
+    module Table
+      require_relative "table/table"
+    end
   end
 end
