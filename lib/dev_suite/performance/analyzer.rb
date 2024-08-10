@@ -3,8 +3,10 @@
 module DevSuite
   module Performance
     class Analyzer
-      def initialize(description: "Block")
+      def initialize(description: "Block", config: Config.configuration)
         @description = description
+        @config = config
+
         @benchmark_profiler = Profiler::Benchmark.new
         @memory_profiler = Profiler::Memory.new
         @memory_usage = Data::MemoryUsage.new
@@ -40,12 +42,11 @@ module DevSuite
       # @param benchmark_result [Benchmark::Tms] The benchmark result
       # @param memory_stats [Hash] The memory statistics
       def generate_report(benchmark_result, memory_stats)
-        reportor = Reportor::Simple.new(
-          @description,
-          benchmark_result,
-          memory_stats,
+        @config.reportor.generate(
+          description: @description,
+          benchmark_result: benchmark_result,
+          memory_stats: memory_stats,
         )
-        reportor.generate
       end
     end
 
