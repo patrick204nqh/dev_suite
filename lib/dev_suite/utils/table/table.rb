@@ -7,11 +7,10 @@ module DevSuite
         attr_accessor :title
         attr_reader :columns, :rows, :config
 
-        def initialize(config = Config.new)
+        def initialize(config = Config.configuration)
+          @config = config
           @columns = []
           @rows = []
-          @title = ""
-          @config = config
         end
 
         def add_columns(*names)
@@ -26,8 +25,8 @@ module DevSuite
           @rows << Row.new(data)
         end
 
-        def render(renderer: Renderer::Simple.new(config))
-          renderer.render(self)
+        def render
+          @config.renderer.render(self)
         end
       end
     end

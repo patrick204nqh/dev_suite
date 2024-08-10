@@ -6,5 +6,6 @@ module DevSuite
     require_relative "performance/profiler"
     require_relative "performance/reportor"
     require_relative "performance/analyzer"
+    require_relative "performance/config"
   end
 end
