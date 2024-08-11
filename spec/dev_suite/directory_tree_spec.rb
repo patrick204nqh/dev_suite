@@ -1,111 +1,131 @@
-require 'rspec'
-require 'pathname'
+require 'spec_helper'
 
 RSpec.describe DevSuite::DirectoryTree do
   let(:base_path) { Pathname.new(Dir.mktmpdir) }
 
   before do
-    #
-    # Create a sample directory structure
-    #
-    (base_path + 'dir1').mkdir
-    (base_path + 'dir1/file1.txt').write('content1')
-    (base_path + 'dir2').mkdir
-    (base_path + 'dir2/file2.txt').write('content2')
+    FileUtils.mkdir_p(base_path + 'dir1')
+    FileUtils.mkdir_p(base_path + 'dir1/subdir1')
+    File.write(base_path + 'dir1/file1.txt', 'content1')
+    File.write(base_path + 'dir1/subdir1/hidden_file.txt', 'hidden content', mode: 'w')
+
+    FileUtils.mkdir_p(base_path + 'dir2')
+    File.write(base_path + 'dir2/file2.txt', 'content2')
+
+    FileUtils.mkdir_p(base_path + '.hidden_dir')
+    File.write(base_path + '.hidden_dir/hidden_file2.txt', 'hidden content 2')
   end
 
   after do
-    FileUtils.remove_entry base_path
+    FileUtils.remove_entry_secure(base_path)
   end
 
   describe '.visualize' do
-    subject { described_class }
-
-    it 'creates a new instance and calls visualize on it' do
-      visualizer_instance = instance_double(DevSuite::DirectoryTree::Visualizer)
-      allow(DevSuite::DirectoryTree::Visualizer).to receive(:new).and_return(visualizer_instance)
-      expect(visualizer_instance).to receive(:visualize)
-      subject.visualize(base_path.to_s)
+    after do
+      DevSuite::DirectoryTree::Config.configure do |config|
+        config.settings.reset!
+      end
     end
 
     it 'outputs the correct directory structure' do
       expected_output = <<~OUTPUT
         #{base_path.basename}/
             ├── dir1/
-            |   └── file1.txt
-            └── dir2/
-                └── file2.txt
-      OUTPUT
-
-      expect { subject.visualize(base_path.to_s) }.to output(expected_output).to_stdout
-    end
-
-    it 'handles nested directories correctly' do
-      (base_path + 'dir1/subdir1').mkdir
-      (base_path + 'dir1/subdir1/file3.txt').write('content3')
-
-      expected_output = <<~OUTPUT
-        #{base_path.basename}/
-            ├── dir1/
-            |   ├── file1.txt
-            |   └── subdir1/
-            |       └── file3.txt
-            └── dir2/
-                └── file2.txt
-      OUTPUT
-
-      expect { subject.visualize(base_path.to_s) }.to output(expected_output).to_stdout
-    end
-
-    it 'handles empty directories correctly' do
-      (base_path + 'empty_dir').mkdir
-
-      expected_output = <<~OUTPUT
-        #{base_path.basename}/
-            ├── dir1/
-            |   └── file1.txt
+            │   ├── file1.txt
+            │   └── subdir1/
+            │       └── hidden_file.txt
             ├── dir2/
-            |   └── file2.txt
-            └── empty_dir/
+            │   └── file2.txt
+            └── .hidden_dir/
+                └── hidden_file2.txt
       OUTPUT
 
-      expect { subject.visualize(base_path.to_s) }.to output(expected_output).to_stdout
+      expect { DevSuite::DirectoryTree.visualize(base_path.to_s) }.to output(expected_output).to_stdout
     end
 
-    it 'handles directories with only files correctly' do
-      (base_path + 'file_only_dir').mkdir
-      (base_path + 'file_only_dir/file3.txt').write('content3')
+    context 'when skipping hidden files and directories' do
+      before do
+        DevSuite::DirectoryTree::Config.configure do |config|
+          config.settings.set(:skip_hidden, true)
+        end
+      end
 
-      expected_output = <<~OUTPUT
-        #{base_path.basename}/
-            ├── dir1/
-            |   └── file1.txt
-            ├── dir2/
-            |   └── file2.txt
-            └── file_only_dir/
-                └── file3.txt
-      OUTPUT
+      it 'does not include hidden files and directories' do
+        expected_output = <<~OUTPUT
+          #{base_path.basename}/
+              ├── dir1/
+              │   ├── file1.txt
+              │   └── subdir1/
+              │       └── hidden_file.txt
+              └── dir2/
+                  └── file2.txt
+        OUTPUT
 
-      expect { subject.visualize(base_path.to_s) }.to output(expected_output).to_stdout
+        expect { DevSuite::DirectoryTree.visualize(base_path.to_s) }.to output(expected_output).to_stdout
+      end
     end
 
-    it 'handles directories with no read permissions gracefully' do
-      (base_path + 'no_read_dir').mkdir
-      (base_path + 'no_read_dir').chmod(0000)
+    context 'when setting a max depth' do
+      before do
+        DevSuite::DirectoryTree::Config.configure do |config|
+          config.settings.set(:max_depth, 1)
+        end
+        puts "Settings: #{DevSuite::DirectoryTree::Config.configuration.settings.inspect}"
+      end
 
-      expected_output = <<~OUTPUT
-        #{base_path.basename}/
-            ├── dir1/
-            |   └── file1.txt
-            ├── dir2/
-            |   └── file2.txt
-            └── no_read_dir/
-      OUTPUT
+      it 'limits the output to the specified depth' do
+        expected_output = <<~OUTPUT
+          #{base_path.basename}/
+              ├── dir1/
+              ├── dir2/
+              └── .hidden_dir/
+        OUTPUT
 
-      expect { subject.visualize(base_path.to_s) }.to output(expected_output).to_stdout
+        puts "Settings: #{DevSuite::DirectoryTree::Config.configuration.settings.inspect}"
+        expect { DevSuite::DirectoryTree.visualize(base_path.to_s) }.to output(expected_output).to_stdout
+      end
+    end
 
-      # Restore permissions for cleanup
-      (base_path + 'no_read_dir').chmod(0755)
+    context 'when excluding specific file types' do
+      before do
+        DevSuite::DirectoryTree::Config.configure do |config|
+          config.settings.set(:skip_types, ['.txt'])
+        end
+      end
+
+      it 'does not include specified file types' do
+        expected_output = <<~OUTPUT
+          #{base_path.basename}/
+              ├── dir1/
+              │   └── subdir1/
+              ├── dir2/
+              └── .hidden_dir/
+        OUTPUT
+
+        expect { DevSuite::DirectoryTree.visualize(base_path.to_s) }.to output(expected_output).to_stdout
+      end
+    end
+
+    context 'complex settings' do
+      before do
+        DevSuite::DirectoryTree::Config.configure do |config|
+          config.settings.set(:skip_hidden, true)
+          config.settings.set(:skip_types, ['.txt'])
+          config.settings.set(:max_depth, 1)
+        end
+        puts "Settings: #{DevSuite::DirectoryTree::Config.configuration.settings.inspect}"
+      end
+
+      it 'applies multiple settings correctly' do
+        expected_output = <<~OUTPUT
+          #{base_path.basename}/
+              ├── dir1/
+              └── dir2/
+        OUTPUT
+
+        puts "Settings: #{DevSuite::DirectoryTree::Config.configuration.settings.inspect}"
+        expect { DevSuite::DirectoryTree.visualize(base_path.to_s) }.to output(expected_output).to_stdout
+      end
     end
   end
 end

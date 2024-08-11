@@ -4,7 +4,7 @@ module DevSuite
   module Utils
     module Table
       class Config
-        include Configurable
+        include ConfigTools::Configuration
 
         DEFAULT_SETTING = {
           colors: {
@@ -19,11 +19,11 @@ module DevSuite
           },
         }.freeze
 
-        attr_reader :setting, :renderer
+        attr_reader :settings, :renderer
 
-        def initialize(setting: {}, renderer: :simple)
-          @setting = Setting.create(setting)
-          @renderer = Renderer.create(renderer, setting: @setting)
+        def initialize(settings: {}, renderer: :simple)
+          @settings = Settings.new(settings)
+          @renderer = Renderer.create(renderer, settings: @settings)
           freeze
         end
       end

@@ -5,10 +5,9 @@ module DevSuite
     module Table
       class Table
         attr_accessor :title
-        attr_reader :columns, :rows, :config
+        attr_reader :columns, :rows
 
-        def initialize(config = Config.configuration)
-          @config = config
+        def initialize
           @columns = []
           @rows = []
         end
@@ -23,10 +22,6 @@ module DevSuite
 
         def add_row(data)
           @rows << Row.new(data)
-        end
-
-        def render
-          @config.renderer.render(self)
         end
       end
     end

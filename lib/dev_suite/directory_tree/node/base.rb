@@ -11,7 +11,19 @@ module DevSuite
         end
 
         def directory?
-          raise NotImplementedError, "Must implement in subclass"
+          false
+        end
+
+        def file?
+          false
+        end
+
+        def children
+          []
+        end
+
+        def hidden?
+          @name.start_with?(".")
         end
       end
     end

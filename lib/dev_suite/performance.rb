@@ -2,6 +2,9 @@
 
 module DevSuite
   module Performance
+    require "benchmark"
+    require "get_process_mem"
+
     require_relative "performance/data"
     require_relative "performance/profiler"
     require_relative "performance/reportor"

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "benchmark"
-
 module DevSuite
   module Performance
     module Profiler

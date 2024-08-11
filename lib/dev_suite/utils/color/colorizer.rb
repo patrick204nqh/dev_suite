@@ -4,14 +4,8 @@ module DevSuite
   module Utils
     module Color
       class Colorizer
-        attr_reader :config
-
-        def initialize(config = Config.configuration)
-          @config = config
-        end
-
         def colorize(text, **kargs)
-          puts @config.strategy.colorize(text, **kargs)
+          puts Config.configuration.strategy.colorize(text, **kargs)
         end
       end
 

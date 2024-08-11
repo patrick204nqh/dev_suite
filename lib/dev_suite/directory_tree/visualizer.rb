@@ -1,20 +1,14 @@
 # frozen_string_literal: true
 
-require "pathname"
-
 module DevSuite
   module DirectoryTree
     class Visualizer
-      attr_reader :config
-
-      def initialize(config = Config.configuration)
-        @config = config
-      end
-
       # Visualizes the directory tree
       # @param path [String] The base path of the directory
       def visualize(path)
-        puts @config.renderer.render(path)
+        root = Config.configuration.builder.build(Pathname.new(path))
+        renderer = Config.configuration.renderer
+        puts renderer.render(node: root)
       end
     end
 
