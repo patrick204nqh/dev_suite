@@ -5,14 +5,12 @@ module DevSuite
     class Settings
       include Utils::ConfigTools::Settings
 
-      DEFAULTS = {
-        skip_hidden: false,
-        skip_types: [],
-        max_depth: nil,
-      }.freeze
-
       def default_settings
-        DEFAULTS
+        {
+          skip_hidden: false,
+          skip_types: [],
+          max_depth: nil,
+        }
       end
 
       def skip_hidden?

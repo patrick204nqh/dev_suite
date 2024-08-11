@@ -40,6 +40,10 @@ module DevSuite
             raise NotImplementedError, "#{self.class} must implement the #apply method"
           end
 
+          def reset!
+            @settings = default_settings
+          end
+
           def default_settings
             {}
           end

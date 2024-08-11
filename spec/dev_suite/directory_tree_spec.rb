@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 RSpec.describe DevSuite::DirectoryTree do
   let(:base_path) { Pathname.new(Dir.mktmpdir) }
 
@@ -38,6 +40,7 @@ RSpec.describe DevSuite::DirectoryTree do
     context 'when skipping hidden files and directories' do
       before do
         DevSuite::DirectoryTree::Config.configure do |config|
+          config.settings.reset!
           config.settings.set(:skip_hidden, true)
         end
       end
@@ -46,7 +49,9 @@ RSpec.describe DevSuite::DirectoryTree do
         expected_output = <<~OUTPUT
           #{base_path.basename}/
               ├── dir1/
-              │   └── file1.txt
+              │   ├── file1.txt
+              │   └── subdir1/
+              │       └── hidden_file.txt
               └── dir2/
                   └── file2.txt
         OUTPUT
@@ -58,6 +63,7 @@ RSpec.describe DevSuite::DirectoryTree do
     context 'when setting a max depth' do
       before do
         DevSuite::DirectoryTree::Config.configure do |config|
+          config.settings.reset!
           config.settings.set(:max_depth, 1)
         end
       end
@@ -76,6 +82,7 @@ RSpec.describe DevSuite::DirectoryTree do
     context 'when excluding specific file types' do
       before do
         DevSuite::DirectoryTree::Config.configure do |config|
+          config.settings.reset!
           config.settings.set(:skip_types, ['.txt'])
         end
       end
@@ -85,6 +92,7 @@ RSpec.describe DevSuite::DirectoryTree do
           #{base_path.basename}/
               ├── dir1/
               │   └── subdir1/
+              ├── dir2/
               └── .hidden_dir/
         OUTPUT
 
@@ -95,6 +103,7 @@ RSpec.describe DevSuite::DirectoryTree do
     context 'complex settings' do
       before do
         DevSuite::DirectoryTree::Config.configure do |config|
+          config.settings.reset!
           config.settings.set(:skip_hidden, true)
           config.settings.set(:skip_types, ['.txt'])
           config.settings.set(:max_depth, 1)

@@ -6,21 +6,19 @@ module DevSuite
       class Settings
         include ConfigTools::Settings
 
-        DEFAULTS = {
-          colors: {
-            title: :cyan,
-            column: :yellow,
-            row: :default,
-            border: :blue,
-          },
-          alignments: {
-            column: :left,
-            row: :left,
-          },
-        }.freeze
-
         def default_settings
-          DEFAULTS
+          {
+            colors: {
+              title: :cyan,
+              column: :yellow,
+              row: :default,
+              border: :blue,
+            },
+            alignments: {
+              column: :left,
+              row: :left,
+            },
+          }
         end
 
         def color_for(key)
