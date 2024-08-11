@@ -96,8 +96,26 @@ DevSuite::SomeUtility.do_something
   DevSuite::DirectoryTree.visualize(base_path)
   ```
 
-  **Example output**
+  **Configuring the Visualization:**
+
+  ```ruby
+  DevSuite::DirectoryTree::Config.configure do |config|
+      config.settings.set(:skip_hidden, true)
+      # ...
+  end
   ```
+
+  **Available Configuration Options:**
+
+  | Setting        | Description                                      | Example Values           |
+  | -------------- | ------------------------------------------------ | ------------------------ |
+  | `:skip_hidden` | Skip hidden files and directories.               | `true`, `false`          |
+  | `:max_depth`   | Limit the depth of the directory tree displayed. | `1`, `2`, `3`, ...       |
+  | `:skip_types`  | Exclude files of specific types.                 | `['.log', '.tmp']`, `[]` |
+
+  **Example output**
+
+  ```bash
   /path/to/your/directory/
   ├── project/
   │   ├── src/
