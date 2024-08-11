@@ -10,19 +10,23 @@ module DevSuite
         def build(path)
           return build_permission_denied_node(path) unless path.readable?
 
-          path.directory? ? construct_directory_node(path) : build_file_node(path)
+          build_node(path)
         rescue Errno::EACCES
           build_permission_denied_node(path)
         end
 
         protected
 
+        def build_node(path)
+          path.directory? ? construct_directory_node(path) : build_file_node(path)
+        end
+
         def construct_directory_node(path)
-          directory = Node::Directory.new(path.basename.to_s)
-          path.children.each do |child|
-            directory.add_child(build(child))
+          Node::Directory.new(path.basename.to_s).tap do |directory|
+            path.children.each do |child|
+              directory.add_child(build(child)) if child.readable?
+            end
           end
-          directory
         end
 
         def build_file_node(path)
