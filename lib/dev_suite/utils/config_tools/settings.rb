@@ -45,7 +45,7 @@ module DevSuite
           end
 
           def default_settings
-            {}
+            raise NotImplementedError, "#{self.class} must implement the #default_settings method"
           end
 
           private
@@ -61,7 +61,11 @@ module DevSuite
 
           def merge_settings(defaults, overrides)
             defaults.merge(overrides) do |_key, oldval, newval|
-              oldval.is_a?(Hash) && newval.is_a?(Hash) ? merge_settings(oldval, newval) : newval
+              if oldval.is_a?(Hash) && newval.is_a?(Hash)
+                merge_settings(oldval, newval)
+              else
+                newval
+              end
             end
           end
         end

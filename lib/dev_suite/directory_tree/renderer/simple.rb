@@ -15,24 +15,15 @@ module DevSuite
         #   (U+0020) is the space character
         LAST_NODE_CONNECTOR = "└── "
         NODE_CONNECTOR = "├── "
-        SPACE = "    "
-        VERTICAL_LINE = "│   "
+        INDENT = "    "
+        PIPE = "│   "
 
-        def render(node, prefix = "", is_last = true)
-          return "" if skip_node?(node)
+        def render(node:, prefix: "", is_last: true, depth: 0)
+          return "" if skip_node?(node) || exceeds_max_depth?(depth)
 
-          is_root = prefix.empty?
-          connector = choose_connector(is_root, is_last)
-          new_prefix = calculate_new_prefix(prefix, is_last)
-
-          output = format_node_output(node, prefix, connector)
-          output += node_suffix(node)
-
+          output = node_line(node: node, prefix: prefix, is_last: is_last)
           if node.directory? && node.children.any?
-            visible_children = node.children.reject { |child| skip_node?(child) }
-            visible_children.each_with_index do |child, index|
-              output += render(child, new_prefix, index == visible_children.size - 1)
-            end
+            output += render_children(node: node, prefix: prefix, is_last: is_last, depth: depth)
           end
 
           output
@@ -40,38 +31,57 @@ module DevSuite
 
         private
 
+        def settings
+          Config.configuration.settings
+        end
+
         def skip_node?(node)
-          return true if Config.configuration.settings.skip_hidden? && node.hidden?
-          return true if node.file? && Config.configuration.settings.skip_types.include?(::File.extname(node.name))
-
-          false
+          hidden_file_skipped?(node) || filetype_skipped?(node)
         end
 
-        def build_node_output(node, prefix, is_last)
-          connector = choose_connector(prefix.empty?, is_last)
-          format_node_output(node, prefix, connector) + node_suffix(node)
+        def hidden_file_skipped?(node)
+          settings.skip_hidden? && node.hidden?
         end
 
-        def choose_connector(is_root, is_last)
+        def filetype_skipped?(node)
+          node.file? && settings.skip_types.include?(::File.extname(node.name))
+        end
+
+        def exceeds_max_depth?(depth)
+          max_depth = settings.max_depth
+          max_depth && depth > max_depth
+        end
+
+        def node_line(node:, prefix:, is_last:)
+          connector = determine_connector(is_root: prefix.empty?, is_last: is_last)
+          "#{prefix}#{connector}#{node.name}#{suffix_for(node)}"
+        end
+
+        def determine_connector(is_root:, is_last:)
           return "" if is_root
 
           is_last ? LAST_NODE_CONNECTOR : NODE_CONNECTOR
         end
 
-        def calculate_new_prefix(prefix, is_last)
-          "#{prefix}#{is_last ? SPACE : VERTICAL_LINE}" # (U+2502)
-        end
-
-        def format_node_output(node, prefix, connector)
-          [
-            prefix,
-            connector,
-            node.name,
-          ].join
-        end
-
-        def node_suffix(node)
+        def suffix_for(node)
           node.directory? ? "/\n" : "\n"
+        end
+
+        def render_children(node:, prefix:, is_last:, depth:)
+          new_prefix = updated_prefix(prefix: prefix, is_last: is_last)
+          visible_children = node.children.reject { |child| skip_node?(child) }
+          visible_children.each_with_index.map do |child, index|
+            render(
+              node: child,
+              prefix: new_prefix,
+              is_last: index == visible_children.size - 1,
+              depth: depth + 1,
+            )
+          end.join
+        end
+
+        def updated_prefix(prefix:, is_last:)
+          "#{prefix}#{is_last ? INDENT : PIPE}"
         end
       end
     end

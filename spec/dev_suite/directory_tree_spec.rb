@@ -21,6 +21,12 @@ RSpec.describe DevSuite::DirectoryTree do
   end
 
   describe '.visualize' do
+    after do
+      DevSuite::DirectoryTree::Config.configure do |config|
+        config.settings.reset!
+      end
+    end
+
     it 'outputs the correct directory structure' do
       expected_output = <<~OUTPUT
         #{base_path.basename}/
@@ -40,7 +46,6 @@ RSpec.describe DevSuite::DirectoryTree do
     context 'when skipping hidden files and directories' do
       before do
         DevSuite::DirectoryTree::Config.configure do |config|
-          config.settings.reset!
           config.settings.set(:skip_hidden, true)
         end
       end
@@ -63,18 +68,20 @@ RSpec.describe DevSuite::DirectoryTree do
     context 'when setting a max depth' do
       before do
         DevSuite::DirectoryTree::Config.configure do |config|
-          config.settings.reset!
           config.settings.set(:max_depth, 1)
         end
+        puts "Settings: #{DevSuite::DirectoryTree::Config.configuration.settings.inspect}"
       end
 
       it 'limits the output to the specified depth' do
         expected_output = <<~OUTPUT
           #{base_path.basename}/
               ├── dir1/
-              └── dir2/
+              ├── dir2/
+              └── .hidden_dir/
         OUTPUT
 
+        puts "Settings: #{DevSuite::DirectoryTree::Config.configuration.settings.inspect}"
         expect { DevSuite::DirectoryTree.visualize(base_path.to_s) }.to output(expected_output).to_stdout
       end
     end
@@ -82,7 +89,6 @@ RSpec.describe DevSuite::DirectoryTree do
     context 'when excluding specific file types' do
       before do
         DevSuite::DirectoryTree::Config.configure do |config|
-          config.settings.reset!
           config.settings.set(:skip_types, ['.txt'])
         end
       end
@@ -103,11 +109,11 @@ RSpec.describe DevSuite::DirectoryTree do
     context 'complex settings' do
       before do
         DevSuite::DirectoryTree::Config.configure do |config|
-          config.settings.reset!
           config.settings.set(:skip_hidden, true)
           config.settings.set(:skip_types, ['.txt'])
           config.settings.set(:max_depth, 1)
         end
+        puts "Settings: #{DevSuite::DirectoryTree::Config.configuration.settings.inspect}"
       end
 
       it 'applies multiple settings correctly' do
@@ -117,6 +123,7 @@ RSpec.describe DevSuite::DirectoryTree do
               └── dir2/
         OUTPUT
 
+        puts "Settings: #{DevSuite::DirectoryTree::Config.configuration.settings.inspect}"
         expect { DevSuite::DirectoryTree.visualize(base_path.to_s) }.to output(expected_output).to_stdout
       end
     end

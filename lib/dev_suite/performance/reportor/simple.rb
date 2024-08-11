@@ -55,7 +55,8 @@ module DevSuite
         # Renders the table using the specified renderer
         #
         def render_table(table)
-          puts Utils::Table::Config.configuration.renderer.render(table)
+          renderer = Utils::Table::Config.configuration.renderer
+          puts renderer.render(table)
         end
 
         #

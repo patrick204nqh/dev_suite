@@ -7,7 +7,8 @@ module DevSuite
       # @param path [String] The base path of the directory
       def visualize(path)
         root = Config.configuration.builder.build(Pathname.new(path))
-        puts Config.configuration.renderer.render(root)
+        renderer = Config.configuration.renderer
+        puts renderer.render(node: root)
       end
     end
 
