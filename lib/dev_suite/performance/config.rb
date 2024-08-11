@@ -3,7 +3,7 @@
 module DevSuite
   module Performance
     class Config
-      include Utils::Configurable
+      include Utils::ConfigTools::Configuration
 
       attr_reader :reportor
 

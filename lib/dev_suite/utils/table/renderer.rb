@@ -8,10 +8,10 @@ module DevSuite
         require_relative "renderer/simple"
 
         class << self
-          def create(type, setting: {})
+          def create(type, settings: Settings.new)
             case type
             when :simple
-              Simple.new(setting)
+              Simple.new(settings: settings)
             else
               raise ArgumentError, "Unknown renderer type: #{type}"
             end

@@ -3,10 +3,10 @@
 module DevSuite
   module Utils
     module Table
-      class Config
-        include ConfigTools::Configuration
+      class Settings
+        include ConfigTools::Settings
 
-        DEFAULT_SETTING = {
+        DEFAULTS = {
           colors: {
             title: :cyan,
             column: :yellow,
@@ -19,12 +19,16 @@ module DevSuite
           },
         }.freeze
 
-        attr_reader :settings, :renderer
+        def default_settings
+          DEFAULTS
+        end
 
-        def initialize(settings: {}, renderer: :simple)
-          @settings = Settings.new(settings)
-          @renderer = Renderer.create(renderer, settings: @settings)
-          freeze
+        def color_for(key)
+          get(:colors, key)
+        end
+
+        def alignment_for(key)
+          get(:alignments, key)
         end
       end
     end

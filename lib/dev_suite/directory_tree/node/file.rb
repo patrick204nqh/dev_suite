@@ -4,8 +4,8 @@ module DevSuite
   module DirectoryTree
     module Node
       class File < Base
-        def directory?
-          false
+        def file?
+          true
         end
       end
     end

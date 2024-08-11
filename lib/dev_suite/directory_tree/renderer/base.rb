@@ -1,43 +1,31 @@
 # frozen_string_literal: true
 
-require "pathname"
-
 module DevSuite
   module DirectoryTree
     module Renderer
       class Base
-        def render(path)
-          raise ArgumentError, "Invalid path" unless valid_path?(path)
+        attr_reader :settings
 
-          root = build_tree(Pathname.new(path))
-          render_node(root, "", true)
+        def initialize(settings: Settings.new)
+          @settings = settings
         end
 
-        private
-
-        def valid_path?(path)
-          [
-            path.is_a?(String),
-            ::File.exist?(path),
-            ::File.directory?(path),
-            ::File.readable?(path),
-          ].all?
-        end
-
-        # Builds the tree structure
-        # @param path [Pathname] The path to build the tree from
-        # @return [Node::Base] The root node of the tree
-        def build_tree(path)
-          raise NotImplementedError, "You must implement the build_tree method"
-        end
-
-        # Renders a node in the tree
+        # Render the tree
         # @param node [Node::Base] The node to render
         # @param prefix [String] The prefix to add to the node
-        # @param is_last [Boolean] Whether this is the last node in the list
-        # @return [String] The rendered node
-        def render_node(node, prefix, is_last)
-          raise NotImplementedError, "You must implement the render_node method"
+        # @param is_last [Boolean] Is this the last node in the list?
+        # @return [String] The rendered tree
+        # @abstract
+        # @raise [NotImplementedError] If the method is not implemented in the subclass
+        # @example
+        #  render(node, prefix, is_last)
+        #  # => "├── file1\n└── file2\n"
+        #  render(node, prefix, true)
+        #  # => "└── file1\n"
+        #  render(node, prefix, false)
+        #  # => "├── file1\n"
+        def render(node, prefix = "", is_last = true)
+          raise NotImplementedError, "You must implement the render method"
         end
       end
     end
