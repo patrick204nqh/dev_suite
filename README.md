@@ -40,82 +40,74 @@ require 'dev_suite'
 DevSuite::SomeUtility.do_something
 ```
 
-## Features
+## Features Overview
 
+### Performance Analysis
 <details>
-  <summary><strong>Performance Analysis</strong></summary>
+  <summary>Show more</summary>
   
-  Analyze the performance of your code blocks with detailed benchmark and memory usage reports.
-  
-  **Usage:**
+  **Purpose**: Quickly analyze the performance of Ruby code blocks, capturing metrics like execution time and memory usage.
+
+  **How to Use**:
   ```ruby
   require 'dev_suite'
-
-  DevSuite::Performance.analyze(description: "My Code Block") do
+  
+  DevSuite::Performance.analyze(description: "Example Analysis") do
     sum = 0
-    1_000_000.times do |i|
-      sum += i
-    end
+    1_000_000.times { |i| sum += i }
     sum
   end
   ```
 
-  **Example output**
+  **Sample Output**:
   ```
-  |            Performance Analysis            |
-  +----------------------------+---------------+
-  | Metric                     | Value         |
-  +----------------------------+---------------+
-  | Description                | My Code Block |
-  | Total Time (s)             | 0.056238      |
-  | User CPU Time (s)          | 0.055662      |
-  | System CPU Time (s)        | 0.000097      |
-  | User + System CPU Time (s) | 0.055759      |
-  | Memory Before (MB)         | 25.39         |
-  | Memory After (MB)          | 25.42         |
-  | Memory Used (MB)           | 0.03          |
-  | Max Memory Used (MB)       | 25.41         |
-  | Min Memory Used (MB)       | 25.41         |
-  | Avg Memory Used (MB)       | 25.41         |
+| Metric              | Value            |
+|---------------------|------------------|
+| Description         | Example Analysis |
+| Total Time (s)      | 0.056238         |
+| User CPU Time (s)   | 0.055662         |
+| System CPU Time (s) | 0.000097         |
+| Memory Before (MB)  | 25.39            |
+| Memory After (MB)   | 25.42            |
+| Memory Used (MB)    | 0.03             |
   ```
 </details>
 
+### Directory Tree Visualization
 <details>
-  <summary><strong>Directory Tree Visualization</strong></summary>
+  <summary>Show more</summary>
   
-  Visualize the structure of directories and their subdirectories with a detailed hierarchical representation. This tool is essential for understanding the organization of your files and directories at a glance.
+  **Purpose**: Visualize the file structure of directories and subdirectories to better understand project organization.
 
-  **Usage:**
+  **How to Use**:
   ```ruby
   require 'dev_suite'
 
-  # Set the base path for the directory you want to visualize
+  # Define the directory path
   base_path = "/path/to/your/directory"
 
-  # Perform the visualization
+  # Execute the visualization
   DevSuite::DirectoryTree.visualize(base_path)
   ```
 
-  **Configuring the Visualization:**
-
+  **Configuration Guide**:
+  Customize the visualization by setting configuration options:
   ```ruby
   DevSuite::DirectoryTree::Config.configure do |config|
-      config.settings.set(:skip_hidden, true)
-      # ...
+    config.settings.set(:skip_hidden, true)
+    # ...
   end
   ```
 
-  **Available Configuration Options:**
+  **Configuration Options**:
+| Setting        | Description                                       | Example Values           |
+|----------------|---------------------------------------------------|--------------------------|
+| `:skip_hidden` | Skips hidden files and directories.               | `true`, `false`          |
+| `:max_depth`   | Limits the depth of the directory tree displayed. | `1`, `2`, `3`, ...       |
+| `:skip_types`  | Excludes files of specific types.                 | `['.log', '.tmp']`, `[]` |
 
-  | Setting        | Description                                      | Example Values           |
-  | -------------- | ------------------------------------------------ | ------------------------ |
-  | `:skip_hidden` | Skip hidden files and directories.               | `true`, `false`          |
-  | `:max_depth`   | Limit the depth of the directory tree displayed. | `1`, `2`, `3`, ...       |
-  | `:skip_types`  | Exclude files of specific types.                 | `['.log', '.tmp']`, `[]` |
-
-  **Example output**
-
-  ```bash
+  **Sample Output**:
+  ```
   /path/to/your/directory/
   ├── project/
   │   ├── src/
