@@ -31,4 +31,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency("benchmark", "~> 0.1")
   spec.add_dependency("get_process_mem", "~> 1.0")
+  spec.add_dependency("thor", "~> 1.1")
 end
