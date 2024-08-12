@@ -44,6 +44,15 @@ require 'dev_suite'
 DevSuite::SomeUtility.do_something
 ```
 
+### CLI Commands
+
+DevSuite also provides a command-line interface for various utilities. Below are some general commands:
+
+| Command            | Description                         |
+|--------------------|-------------------------------------|
+| `devsuite version` | Displays the version of DevSuite    |
+| `devsuite help`    | Shows help information for commands |
+
 ## Features Overview
 
 ### Performance Analysis
@@ -92,6 +101,13 @@ DevSuite::SomeUtility.do_something
 
   # Execute the visualization
   DevSuite::DirectoryTree.visualize(base_path)
+  ```
+
+  **CLI Command**:
+  DevSuite also provides a command-line interface for directory tree visualization. Use the following command to print the directory tree of the specified path:
+
+  ```sh
+  $ devsuite tree [PATH]
   ```
 
   **Configuration Guide**:
