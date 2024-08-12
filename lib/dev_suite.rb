@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
-require "dev_suite/version"
-require "dev_suite/utils"
-require "dev_suite/performance"
-require "dev_suite/directory_tree"
-
 module DevSuite
+  require_relative "dev_suite/version"
+  require_relative "dev_suite/cli"
+  require_relative "dev_suite/utils"
+  require_relative "dev_suite/performance"
+  require_relative "dev_suite/directory_tree"
+
   class Error < StandardError; end
   # Your code goes here...
 end
