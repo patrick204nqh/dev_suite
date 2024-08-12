@@ -5,6 +5,7 @@ module DevSuite
     module Reportor
       require_relative "reportor/base"
       require_relative "reportor/simple"
+      require_relative "reportor/helpers"
 
       class << self
         def create(reportor)
