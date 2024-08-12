@@ -3,7 +3,9 @@
 [![Gem Version](https://img.shields.io/gem/v/dev_suite?color=blue)](https://rubygems.org/gems/dev_suite)
 [![Gem Downloads](https://img.shields.io/gem/dt/dev_suite?color=blue)](https://rubygems.org/gems/dev_suite)
 [![Code Climate](https://codeclimate.com/github/patrick204nqh/dev_suite/badges/gpa.svg)](https://codeclimate.com/github/patrick204nqh/dev_suite)
-<!-- ![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=patrick204nqh_dev_suite&metric=alert_status) -->
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=patrick204nqh_dev_suite&metric=alert_status)](https://sonarcloud.io/summary/overall?id=patrick204nqh_dev_suite)
+[![Dependencies Status](https://badges.depfu.com/badges/84fefb47a5b99ea19afd20a2aae22e3e/overview.svg)](https://depfu.com/github/patrick204nqh/dev_suite?project_id=44065)
+[![Known Vulnerabilities](https://snyk.io/test/github/patrick204nqh/dev_suite/badge.svg)](https://snyk.io/test/github/patrick204nqh/dev_suite)
 
 Welcome to DevSuite! This gem provides a suite of utilities for developers to enhance their productivity.
 
