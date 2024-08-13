@@ -32,14 +32,6 @@ module DevSuite
             end
           end
 
-          def apply
-            #
-            # Implement logic to apply settings in the including class
-            # TODO: need to review this method
-            #
-            raise NotImplementedError, "#{self.class} must implement the #apply method"
-          end
-
           def reset!
             @settings = default_settings
           end
