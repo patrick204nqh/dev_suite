@@ -107,8 +107,18 @@ DevSuite also provides a command-line interface for various utilities. Below are
   DevSuite also provides a command-line interface for directory tree visualization. Use the following command to print the directory tree of the specified path:
 
   ```sh
-  $ devsuite tree [PATH]
+  $ devsuite tree [PATH] [OPTIONS]
   ```
+
+  **CLI Options**:
+  
+  Below is a table describing the available options for the `devsuite tree` command:
+
+  | Option          | Description                                      | Example Usage                                  |
+  |-----------------|--------------------------------------------------|------------------------------------------------|
+  | `--depth`, `-d` | Limit the depth of the directory tree displayed. | `$ devsuite tree /path --depth 2`              |
+  | `--skip-hidden` | Skip hidden files and directories.               | `$ devsuite tree /path --skip-hidden`          |
+  | `--skip-types`  | Exclude files of specific types.                 | `$ devsuite tree /path --skip-types .log .tmp` |
 
   **Configuration Guide**:
   Customize the visualization by setting configuration options:
