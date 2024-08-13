@@ -16,6 +16,8 @@ module DevSuite
               puts "[ERROR] #{message}"
             when :debug
               puts "[DEBUG] #{message}" if ENV["DEBUG_MODE"]
+            else
+              raise ArgumentError, "Invalid log level: #{level}"
             end
           end
 

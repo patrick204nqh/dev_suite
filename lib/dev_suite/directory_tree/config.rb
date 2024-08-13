@@ -14,5 +14,15 @@ module DevSuite
         freeze # Make the instance of this class immutable as well
       end
     end
+
+    class << self
+      def configure
+        yield config
+      end
+
+      def config
+        @config ||= Config.configuration
+      end
+    end
   end
 end
