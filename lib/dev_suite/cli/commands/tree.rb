@@ -24,10 +24,17 @@ module DevSuite
         end
 
         def apply_configure(options)
-          DirectoryTree.configure do |config|
-            config.settings.set(:max_depth, options[:depth]) if options[:depth]
-            config.settings.set(:skip_hidden, options[:skip_hidden]) if options[:skip_hidden]
-            config.settings.set(:skip_types, options[:skip_types]) if options
+          option_config_mapping = {
+            depth: :max_depth,
+            skip_hidden: :skip_hidden,
+            skip_types: :skip_types,
+          }
+
+          DirectoryTree::Config.configure do |config|
+            option_config_mapping.each do |option_key, config_key|
+              value = options[option_key]
+              config.settings.set(config_key, value) if value
+            end
           end
         end
       end
