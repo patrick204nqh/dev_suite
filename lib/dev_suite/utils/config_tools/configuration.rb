@@ -85,7 +85,10 @@ module DevSuite
           # @param attr [Symbol] The name of the attribute
           # @param value [Object] The value to validate
           def validate_attr!(attr, value)
-            # Override in including class for custom validation logic
+            raise ArgumentError, "Unknown attribute: #{attr}" unless self.class.config_attrs.key?(attr)
+            raise ArgumentError, "Invalid #{attr} value: #{value}" if value.nil?
+
+            # Override in including class to add custom validation logic
           end
 
           # Validates that an attribute's value is a Hash
@@ -118,7 +121,9 @@ module DevSuite
           # @param _attr [Symbol] The name of the attribute
           # @param value [Object] The value to resolve
           # @return [Object] The resolved value
-          def resolve_attr(_attr, value)
+          def resolve_attr(attr, value)
+            raise ArgumentError, "Unknown attribute: #{attr}" unless self.class.config_attrs.key?(attr)
+
             # Override in including class to resolve symbols to objects
             value
           end
