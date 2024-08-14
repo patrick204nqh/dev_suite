@@ -8,6 +8,7 @@ SimpleCov.start do
 end
 
 require "bundler/setup"
+require "pry"
 require "dev_suite"
 
 RSpec.configure do |config|

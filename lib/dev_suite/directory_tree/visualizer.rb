@@ -3,12 +3,16 @@
 module DevSuite
   module DirectoryTree
     class Visualizer
+      def initialize
+        @config = Config.configuration
+      end
+
       # Visualizes the directory tree
       # @param path [String] The base path of the directory
       def visualize(path)
-        root = Config.configuration.builder.build(Pathname.new(path))
-        renderer = Config.configuration.renderer
-        puts renderer.render(node: root)
+        root = @config.builder.build(Pathname.new(path))
+        output = @config.renderer.render(node: root)
+        puts output
       end
     end
 

@@ -5,7 +5,7 @@ module DevSuite
     module Commands
       class Version < Base
         def execute
-          log("DevSuite version: #{DevSuite::VERSION}")
+          Logger.log("🚀 DevSuite version: #{DevSuite::VERSION} is live! 🎉")
         end
       end
     end
