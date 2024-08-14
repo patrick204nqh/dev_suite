@@ -1,0 +1,17 @@
+{
+  "ruby.lint": {
+    "rubocop": true,  // Enable RuboCop linting
+    "reek": false,    // Disable reek linting
+    "fasterer": false // Disable fasterer linting
+  },
+  "ruby.useBundler": true, // Use Bundler to manage gems
+  "editor.formatOnSave": true, // Automatically format code on save
+  "editor.rulers": [80], // Show vertical rulers at 80 characters
+  "editor.tabSize": 2, // Set tab size to 2 spaces for Ruby
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/coverage": true // Exclude coverage directory
+  }
+}
