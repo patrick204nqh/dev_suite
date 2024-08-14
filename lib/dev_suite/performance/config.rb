@@ -6,26 +6,23 @@ module DevSuite
       include Utils::ConfigTools::Configuration
 
       # Define configuration attributes
-      config_attr :profilers, :reportor
-
-      def initialize(profilers: [:execution_time, :memory], reportor: :simple)
-        # Set default values for profilers and reportor.
-        self.profilers = profilers
-        self.reportor = reportor
-      end
+      config_attr :profilers, default_value: [:execution_time, :memory]
+      config_attr :reportor, default_value: :simple
 
       private
 
-      def validate_config_attr(attr, value)
+      def validate_attr!(attr, value)
         case attr
         when :profilers
-          validate_profilers(value)
+          validate_array!(attr, value)
         when :reportor
-          validate_reportor(value)
+          validate_symbol!(attr, value)
+        else
+          raise ArgumentError, "Invalid attribute: #{attr}"
         end
       end
 
-      def resolve_config_attr(attr, value)
+      def resolve_attr(attr, value)
         case attr
         when :profilers
           Profiler.create_multiple(value)
@@ -33,18 +30,6 @@ module DevSuite
           Reportor.create(value)
         else
           value
-        end
-      end
-
-      def validate_profilers(value)
-        unless value.is_a?(Array) && value.all? { |v| v.is_a?(Symbol) }
-          raise ArgumentError, "Profilers must be an array of symbols"
-        end
-      end
-
-      def validate_reportor(value)
-        unless value.is_a?(Symbol)
-          raise ArgumentError, "Invalid reportor value"
         end
       end
     end

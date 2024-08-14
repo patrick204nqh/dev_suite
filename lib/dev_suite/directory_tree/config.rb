@@ -6,30 +6,25 @@ module DevSuite
       include Utils::ConfigTools::Configuration
 
       # Define configuration attributes
-      config_attr :settings, :builder, :renderer, :visualizer
-
-      def initialize(settings: {}, builder: :base, renderer: :simple, visualizer: :tree)
-        # Set default values for settings, renderer and builder.
-        self.settings = settings
-        self.builder = builder
-        self.renderer = renderer
-        self.visualizer = visualizer
-      end
+      config_attr :settings, default_value: {}
+      config_attr :builder, default_value: :base
+      config_attr :renderer, default_value: :simple
+      config_attr :visualizer, default_value: :tree
 
       private
 
-      def validate_config_attr(attr, value)
+      def validate_attr!(attr, value)
         case attr
-        when :builder, :renderer, :visualizer
-          raise ArgumentError, "Invalid #{attr} value" unless value.is_a?(Symbol)
         when :settings
-          raise ArgumentError, "Settings must be a hash" unless value.is_a?(Hash)
+          validate_hash!(attr, value)
+        when :builder, :renderer, :visualizer
+          validate_symbol!(attr, value)
         else
-          raise ArgumentError, "Invalid attribute"
+          raise ArgumentError, "Invalid attribute: #{attr}"
         end
       end
 
-      def resolve_config_attr(attr, value)
+      def resolve_attr(attr, value)
         case attr
         when :settings
           Settings.new(value)
@@ -40,7 +35,7 @@ module DevSuite
         when :visualizer
           Visualizer.create(value)
         else
-          raise ArgumentError, "Invalid attribute"
+          super # Return the value directly if no special resolution is needed
         end
       end
     end
