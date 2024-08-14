@@ -6,13 +6,15 @@ module DevSuite
 
     def handle_error(error)
       Logger.log(
-        "🚨❌ Oops! An error occurred: #{error.message}",
+        "Oops! An error occurred: #{error.message}",
         level: :error,
+        emoji: :error,
       )
       Logger.log(
-        "📖 For more information, please refer to the README: " \
+        "For more information, please refer to the README: " \
           "https://github.com/patrick204nqh/dev_suite",
         level: :error,
+        emoji: :document,
       )
       # exit(1)
     end

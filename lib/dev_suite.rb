@@ -2,6 +2,7 @@
 
 module DevSuite
   require_relative "dev_suite/version"
+  require_relative "dev_suite/emoji"
   require_relative "dev_suite/logger"
   require_relative "dev_suite/error_handler"
   require_relative "dev_suite/utils"
