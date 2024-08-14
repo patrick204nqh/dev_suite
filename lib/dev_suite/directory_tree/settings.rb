@@ -10,19 +10,8 @@ module DevSuite
           skip_hidden: false,
           skip_types: [],
           max_depth: nil,
+          max_size: 100 * 1024 * 1024, # 100 MB
         }
-      end
-
-      def skip_hidden?
-        get(:skip_hidden)
-      end
-
-      def skip_types
-        get(:skip_types)
-      end
-
-      def max_depth
-        get(:max_depth)
       end
     end
   end
