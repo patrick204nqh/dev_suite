@@ -40,15 +40,15 @@ module DevSuite
         end
 
         def hidden_file_skipped?(node)
-          settings.skip_hidden? && node.hidden?
+          settings.get(:skip_hidden) && node.hidden?
         end
 
         def filetype_skipped?(node)
-          node.file? && settings.skip_types.include?(::File.extname(node.name))
+          node.file? && settings.get(:skip_types).include?(::File.extname(node.name))
         end
 
         def exceeds_max_depth?(depth)
-          max_depth = settings.max_depth
+          max_depth = settings.get(:max_depth)
           max_depth && depth > max_depth
         end
 

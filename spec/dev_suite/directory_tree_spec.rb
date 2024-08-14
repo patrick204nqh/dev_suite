@@ -105,6 +105,18 @@ RSpec.describe DevSuite::DirectoryTree do
       end
     end
 
+    context 'when setting a max size' do
+      before do
+        DevSuite::DirectoryTree::Config.configure do |config|
+          config.settings.set(:max_size, 1) # 1 byte
+        end
+      end
+
+      it 'raises an error if the directory size exceeds the max size' do
+        expect { DevSuite::DirectoryTree.visualize(base_path.to_s) }.to raise_error(ArgumentError, "Directory too large to render")
+      end
+    end
+
     context 'complex settings' do
       before do
         DevSuite::DirectoryTree::Config.configure do |config|

@@ -5,23 +5,43 @@ module DevSuite
     class Config
       include Utils::ConfigTools::Configuration
 
-      attr_reader :settings, :builder, :renderer
+      # Define configuration attributes
+      config_attr :settings, :builder, :renderer, :visualizer
 
-      def initialize(settings: {}, builder: :base, renderer: :simple)
-        @settings = Settings.new(settings)
-        @builder = Builder.create(builder)
-        @renderer = Renderer.create(renderer)
-        freeze # Make the instance of this class immutable as well
-      end
-    end
-
-    class << self
-      def configure
-        yield config
+      def initialize(settings: {}, builder: :base, renderer: :simple, visualizer: :tree)
+        # Set default values for settings, renderer and builder.
+        self.settings = settings
+        self.builder = builder
+        self.renderer = renderer
+        self.visualizer = visualizer
       end
 
-      def config
-        @config ||= Config.configuration
+      private
+
+      def validate_config_attr(attr, value)
+        case attr
+        when :builder, :renderer, :visualizer
+          raise ArgumentError, "Invalid #{attr} value" unless value.is_a?(Symbol)
+        when :settings
+          raise ArgumentError, "Settings must be a hash" unless value.is_a?(Hash)
+        else
+          raise ArgumentError, "Invalid attribute"
+        end
+      end
+
+      def resolve_config_attr(attr, value)
+        case attr
+        when :settings
+          Settings.new(value)
+        when :builder
+          Builder.create(value)
+        when :renderer
+          Renderer.create(value)
+        when :visualizer
+          Visualizer.create(value)
+        else
+          raise ArgumentError, "Invalid attribute"
+        end
       end
     end
   end

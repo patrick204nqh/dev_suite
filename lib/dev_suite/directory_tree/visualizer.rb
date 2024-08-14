@@ -2,20 +2,21 @@
 
 module DevSuite
   module DirectoryTree
-    class Visualizer
-      # Visualizes the directory tree
-      # @param path [String] The base path of the directory
-      def visualize(path)
-        root = Config.configuration.builder.build(Pathname.new(path))
-        renderer = Config.configuration.renderer
-        puts renderer.render(node: root)
-      end
-    end
+    module Visualizer
+      require "pathname"
 
-    class << self
-      def visualize(path)
-        visualizer = Visualizer.new
-        visualizer.visualize(path)
+      require_relative "visualizer/base"
+      require_relative "visualizer/tree"
+
+      class << self
+        def create(type)
+          case type
+          when :tree
+            Tree.new
+          else
+            raise ArgumentError, "Unknown renderer type: #{type}"
+          end
+        end
       end
     end
   end
