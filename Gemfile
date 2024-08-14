@@ -2,11 +2,16 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in dev_suite.gemspec
+# Use the gemspec method to include dependencies specified in the gemspec file
 gemspec
 
-gem "rake", "~> 13.0"
-gem "rspec", "~> 3.9"
-gem "rubocop", "~> 1.65", require: false
-gem "rubocop-shopify", "~> 2.15", require: false
-gem "pry", "~> 0.14"
+# Additional development tools not required as part of the gem's runtime
+group :development, :test do
+  gem "rake", "~> 13.0"
+  gem "pry", "~> 0.14"
+end
+
+group :development do
+  gem "rubocop", "~> 1.65", require: false
+  gem "rubocop-shopify", "~> 2.15", require: false
+end

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'tmpdir'
 
 RSpec.describe DevSuite::DirectoryTree do
   let(:base_path) { Pathname.new(Dir.mktmpdir) }
