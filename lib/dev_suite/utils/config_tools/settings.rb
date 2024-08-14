@@ -17,6 +17,7 @@ module DevSuite
           end
 
           def set(*keys, value)
+            validate_setting!(keys, value) # Validate before setting
             key_path = normalize_keys(keys)
             last_key = key_path.pop
             target = key_path.each_with_object(@settings) do |key, nested|
@@ -33,7 +34,7 @@ module DevSuite
           end
 
           def reset!
-            @settings = default_settings
+            @settings = merge_settings(default_settings, {})
           end
 
           def default_settings
@@ -42,12 +43,14 @@ module DevSuite
 
           private
 
+          def validate_setting!(keys, value)
+            # Implement validation logic as needed
+            # Example: raise ArgumentError, "Invalid value for #{keys.join('.')}" if value.nil?
+          end
+
           def normalize_keys(keys)
-            key_path = keys.flatten
-            if key_path.size == 1 && key_path.first.is_a?(String)
-              key_path.first.to_s.split(".").map(&:to_sym)
-            else
-              key_path.map(&:to_sym)
+            keys.flatten.flat_map do |key|
+              key.is_a?(String) ? key.split('.').map(&:to_sym) : key.to_sym
             end
           end
 
@@ -55,6 +58,8 @@ module DevSuite
             defaults.merge(overrides) do |_key, oldval, newval|
               if oldval.is_a?(Hash) && newval.is_a?(Hash)
                 merge_settings(oldval, newval)
+              elsif oldval.is_a?(Array) && newval.is_a?(Array)
+                oldval + newval
               else
                 newval
               end

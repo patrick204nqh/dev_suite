@@ -11,6 +11,8 @@ module DevSuite
           skip_types: [],
           max_depth: nil,
           max_size: 100 * 1024 * 1024, # 100 MB
+          # exclude: [],
+          # include: [],
         }
       end
     end
