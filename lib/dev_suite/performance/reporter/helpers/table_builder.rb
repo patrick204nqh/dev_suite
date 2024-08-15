@@ -2,7 +2,7 @@
 
 module DevSuite
   module Performance
-    module Reportor
+    module Reporter
       module Helpers
         module TableBuilder
           class << self

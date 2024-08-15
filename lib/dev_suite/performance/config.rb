@@ -7,7 +7,7 @@ module DevSuite
 
       # Define configuration attributes
       config_attr :profilers, default_value: [:execution_time, :memory]
-      config_attr :reportor, default_value: :simple
+      config_attr :reporter, default_value: :simple
 
       private
 
@@ -15,7 +15,7 @@ module DevSuite
         case attr
         when :profilers
           validate_array!(attr, value)
-        when :reportor
+        when :reporter
           validate_symbol!(attr, value)
         else
           raise ArgumentError, "Invalid attribute: #{attr}"
@@ -26,8 +26,8 @@ module DevSuite
         case attr
         when :profilers
           Profiler.create_multiple(value)
-        when :reportor
-          Reportor.create(value)
+        when :reporter
+          Reporter.create(value)
         else
           value
         end

@@ -2,7 +2,7 @@
 
 module DevSuite
   module Performance
-    module Reportor
+    module Reporter
       class Simple < Base
         #
         # Generates the performance report

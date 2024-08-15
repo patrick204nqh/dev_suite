@@ -2,7 +2,7 @@
 
 module DevSuite
   module Performance
-    module Reportor
+    module Reporter
       class Base
         def generate
           raise NotImplementedError, "Subclasses must implement the generate method"

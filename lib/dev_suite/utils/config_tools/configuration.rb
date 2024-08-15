@@ -27,7 +27,7 @@ module DevSuite
           def configure
             yield(configuration)
           rescue StandardError => e
-            ErrorHandler.handle_error(e)
+            Utils::ErrorHandler.handle_error(e)
           end
 
           # Defines a configuration attribute with an optional default value
