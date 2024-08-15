@@ -8,5 +8,6 @@ module DevSuite
     require_relative "utils/config_tools"
     require_relative "utils/color"
     require_relative "utils/table"
+    require_relative "utils/file_loader"
   end
 end
