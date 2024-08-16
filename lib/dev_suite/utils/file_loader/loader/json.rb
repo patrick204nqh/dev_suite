@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DevSuite
   module Utils
     module FileLoader
@@ -5,9 +7,8 @@ module DevSuite
         class Json < Base
           class << self
             def extensions
-              ['json']
+              ["json"]
             end
-
           end
 
           def load(path)

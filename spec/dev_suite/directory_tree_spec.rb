@@ -22,11 +22,7 @@ RSpec.describe DevSuite::DirectoryTree do
   end
 
   describe '.visualize' do
-    after do
-      DevSuite::DirectoryTree::Config.configure do |config|
-        config.settings.reset!
-      end
-    end
+    after { DevSuite::DirectoryTree::Config.reset! }
 
     it 'outputs the correct directory structure' do
       expected_output = <<~OUTPUT

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DevSuite
   module Utils
     module FileLoader
@@ -5,7 +7,7 @@ module DevSuite
         class Yaml < Base
           class << self
             def extensions
-              ['yml', 'yaml']
+              ["yml", "yaml"]
             end
           end
 

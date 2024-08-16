@@ -55,6 +55,12 @@ module DevSuite
           def config_attrs
             @config_attrs ||= []
           end
+
+          # Resets the configuration by reinitializing it with default values
+          def reset!
+            @configuration = nil
+            configuration # Reinitialize the configuration instance
+          end
         end
 
         # Module for instance-level methods
