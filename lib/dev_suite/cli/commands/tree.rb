@@ -6,14 +6,14 @@ module DevSuite
       class Tree < Base
         desc "visualize PATH", "Visualize the directory structure at given PATH"
         def execute(path, options: {})
-          Logger.log("Starting visualization for: #{path}", emoji: :start)
+          Utils::Logger.log("Starting visualization for: #{path}", emoji: :start)
 
           apply_configure(options)
           visualize(path)
 
-          Logger.log("Visualization complete!", emoji: :success)
+          Utils::Logger.log("Visualization complete!", emoji: :success)
         rescue StandardError => e
-          ErrorHandler.handle_error(e)
+          Utils::ErrorHandler.handle_error(e)
         end
 
         private

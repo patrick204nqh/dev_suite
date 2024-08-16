@@ -2,8 +2,8 @@
 
 module DevSuite
   module Utils
-    module Table
-      require_relative "table/table"
+    module PathMatcher
+      require_relative "path_matcher/path_matcher"
     end
   end
 end

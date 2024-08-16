@@ -2,7 +2,7 @@
 
 module DevSuite
   module Performance
-    module Reportor
+    module Reporter
       module Helpers
         module StatMappings
           PROFILER_STAT_TITLES = {

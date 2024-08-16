@@ -2,7 +2,7 @@
 
 module DevSuite
   module Performance
-    module Reportor
+    module Reporter
       module Helpers
         require_relative "helpers/stat_mappings"
         require_relative "helpers/table_builder"

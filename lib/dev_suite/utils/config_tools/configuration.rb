@@ -27,7 +27,7 @@ module DevSuite
           def configure
             yield(configuration)
           rescue StandardError => e
-            ErrorHandler.handle_error(e)
+            Utils::ErrorHandler.handle_error(e)
           end
 
           # Defines a configuration attribute with an optional default value
@@ -36,7 +36,7 @@ module DevSuite
           # @param attr_name [Symbol] The name of the attribute
           # @param default_value [Object] The default value for the attribute
           def config_attr(attr_name, default_value: nil)
-            config_attrs[attr_name] = default_value
+            config_attrs << [attr_name, default_value]
 
             # Getter method for the attribute
             define_method(attr_name) do
@@ -53,7 +53,13 @@ module DevSuite
           # Stores configuration attributes and their default values
           # @return [Hash] A hash of attribute names and their default values
           def config_attrs
-            @config_attrs ||= {}
+            @config_attrs ||= []
+          end
+
+          # Resets the configuration by reinitializing it with default values
+          def reset!
+            @configuration = nil
+            configuration # Reinitialize the configuration instance
           end
         end
 
@@ -113,6 +119,14 @@ module DevSuite
           # @param value [Object] The value to validate
           def validate_array!(attr, value)
             raise ArgumentError, "Invalid #{attr} value: expected an Array" unless value.is_a?(Array)
+          end
+
+          # Validates that an attribute's value is an instance of a specific class
+          #
+          # @param attr [Symbol] The name of the attribute
+          # @param value [Object] The value to validate
+          def validate_instance_of!(attr, value, klass)
+            raise ArgumentError, "Invalid #{attr} value: expected an instance of #{klass}" unless value.is_a?(klass)
           end
 
           # Resolves the value of an attribute, especially if it requires

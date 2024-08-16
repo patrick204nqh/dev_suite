@@ -2,8 +2,8 @@
 
 module DevSuite
   module Utils
-    module Table
-      require_relative "table/table"
+    module FileLoader
+      require_relative "file_loader/file_loader"
     end
   end
 end
