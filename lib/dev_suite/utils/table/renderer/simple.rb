@@ -19,6 +19,10 @@ module DevSuite
 
           private
 
+          def settings
+            Config.configuration.settings
+          end
+
           #
           # Calculates the widths of the columns
           #

@@ -2,16 +2,10 @@
 
 module DevSuite
   module Utils
-    module ConfigTools
-      # Module for managing instance settings
-      module Settings
-        class << self
-          def included(base)
-            base.include(InstanceMethods)
-          end
-        end
-
-        module InstanceMethods
+    module Construct
+      module Config
+        # Module for managing instance settings
+        class BaseSettings
           def initialize(settings = {})
             @settings = merge_settings(default_settings, settings)
           end

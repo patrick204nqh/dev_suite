@@ -5,17 +5,12 @@ module DevSuite
     module Color
       module Strategy
         class Theme < Base
-          def initialize(palette)
-            super()
-            @palette = palette
-          end
-
           def colorize(text, color: :default)
-            unless @palette.colors.key?(color)
+            unless palette.colors.key?(color)
               raise ArgumentError, "Invalid color key"
             end
 
-            color_code = @palette.colors[color]
+            color_code = palette.colors[color]
 
             unless valid_color_code?(color_code)
               raise ArgumentError, "Invalid color code"
@@ -25,6 +20,10 @@ module DevSuite
           end
 
           private
+
+          def palette
+            Config.configuration.palette
+          end
 
           def valid_color_code?(color_code)
             color_code.is_a?(Integer) && color_code.between?(0, 255)

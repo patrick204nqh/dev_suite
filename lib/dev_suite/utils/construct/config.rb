@@ -2,7 +2,7 @@
 
 module DevSuite
   module Utils
-    module Table
+    module Construct
       module Config
         require_relative "config/config"
       end

@@ -6,7 +6,6 @@ module DevSuite
       require_relative "column"
       require_relative "row"
       require_relative "config"
-      require_relative "settings"
       require_relative "formatter"
       require_relative "renderer"
 

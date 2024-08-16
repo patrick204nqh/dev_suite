@@ -2,9 +2,11 @@
 
 module DevSuite
   module Utils
-    module Table
+    module Color
       module Config
-        require_relative "config/config"
+        include Construct::Config
+
+        require_relative "configuration"
       end
     end
   end
