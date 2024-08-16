@@ -61,7 +61,7 @@ RSpec.describe DevSuite::Utils::PathMatcher do
       context 'when the file matches both include and exclude patterns' do
         let(:excludes) { ['*.txt'] }
 
-        it 'excludes the file' do
+        it 'excludes the file even if it matches the include pattern' do
           expect(described_class.match?(txt_file, includes: includes, excludes: excludes)).to be_falsey
         end
       end
@@ -69,7 +69,7 @@ RSpec.describe DevSuite::Utils::PathMatcher do
       context 'when the file matches include patterns but not exclude patterns' do
         let(:excludes) { ['test.rb'] }
 
-        it 'matches the file' do
+        it 'matches the file as it is included and not excluded' do
           expect(described_class.match?(txt_file, includes: includes, excludes: excludes)).to be_truthy
         end
       end
