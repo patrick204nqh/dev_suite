@@ -3,6 +3,13 @@
 module DevSuite
   module Utils
     module Table
+      require_relative "column"
+      require_relative "row"
+      require_relative "config"
+      require_relative "settings"
+      require_relative "formatter"
+      require_relative "renderer"
+
       class Table
         attr_accessor :title
         attr_reader :columns, :rows
