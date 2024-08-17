@@ -4,8 +4,11 @@ module DevSuite
   module Utils
     module Construct
       module Config
-        require_relative "base_configuration"
-        require_relative "base_settings"
+        require_relative "base"
+        require_relative "validator"
+        require_relative "resolver"
+        require_relative "configuration"
+        require_relative "settings"
 
         class << self
           def included(base)
@@ -16,15 +19,10 @@ module DevSuite
           private
 
           def define_constants(base)
-            base.const_set(:BaseConfiguration, BaseConfiguration)
-            base.const_set(:BaseSettings, BaseSettings)
+            base.const_set(:BaseConfiguration, Configuration)
 
             unless base.const_defined?(:Configuration)
               base.const_set(:Configuration, Class.new(base::BaseConfiguration))
-            end
-
-            unless base.const_defined?(:Settings)
-              base.const_set(:Settings, Class.new(base::BaseSettings))
             end
           end
         end

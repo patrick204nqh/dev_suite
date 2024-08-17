@@ -5,32 +5,20 @@ module DevSuite
     module Table
       module Config
         class Configuration < BaseConfiguration
-          config_attr :settings, default_value: {}
-          config_attr :renderer, default_value: :simple
+          set_default_settings(
+            colors: {
+              title: :cyan,
+              column: :yellow,
+              row: :default,
+              border: :blue,
+            },
+            # alignments: {
+            #   column: :left,
+            #   row: :left,
+            # },
+          )
 
-          private
-
-          def validate_attr!(attr, value)
-            case attr
-            when :settings
-              validate_hash!(attr, value)
-            when :renderer
-              validate_symbol!(attr, value)
-            else
-              raise ArgumentError, "Invalid attribute: #{attr}"
-            end
-          end
-
-          def resolve_attr(attr, value)
-            case attr
-            when :settings
-              Settings.new(value)
-            when :renderer
-              Renderer.create(value)
-            else
-              super
-            end
-          end
+          config_attr :renderer, default_value: :simple, type: :symbol, resolver: ->(value) { Renderer.create(value) }
         end
       end
     end

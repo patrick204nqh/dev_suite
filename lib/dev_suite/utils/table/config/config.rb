@@ -7,7 +7,6 @@ module DevSuite
         include Construct::Config
 
         require_relative "configuration"
-        require_relative "settings"
       end
     end
   end

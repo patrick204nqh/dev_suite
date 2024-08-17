@@ -5,32 +5,15 @@ module DevSuite
     module Config
       class Configuration < BaseConfiguration
         # Define configuration attributes
-        config_attr :profilers, default_value: [:execution_time, :memory]
-        config_attr :reporter, default_value: :simple
+        config_attr :profilers,
+          default_value: [:execution_time, :memory],
+          type: :array,
+          resolver: ->(value) { Profiler.create_multiple(value) }
 
-        private
-
-        def validate_attr!(attr, value)
-          case attr
-          when :profilers
-            validate_array!(attr, value)
-          when :reporter
-            validate_symbol!(attr, value)
-          else
-            super
-          end
-        end
-
-        def resolve_attr(attr, value)
-          case attr
-          when :profilers
-            Profiler.create_multiple(value)
-          when :reporter
-            Reporter.create(value)
-          else
-            super
-          end
-        end
+        config_attr :reporter,
+          default_value: :simple,
+          type: :symbol,
+          resolver: ->(value) { Reporter.create(value) }
       end
     end
   end

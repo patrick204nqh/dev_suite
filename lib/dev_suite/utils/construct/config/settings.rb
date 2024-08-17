@@ -5,9 +5,10 @@ module DevSuite
     module Construct
       module Config
         # Module for managing instance settings
-        class BaseSettings
+        class Settings
           def initialize(settings = {})
-            @settings = merge_settings(default_settings, settings)
+            @default_settings = settings
+            @settings = merge_settings(@default_settings, settings)
           end
 
           def set(*keys, value)
@@ -27,11 +28,7 @@ module DevSuite
           end
 
           def reset!
-            @settings = default_settings
-          end
-
-          def default_settings
-            raise NotImplementedError, "#{self.class} must implement the #default_settings method"
+            @settings = @default_settings
           end
 
           private

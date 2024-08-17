@@ -5,30 +5,15 @@ module DevSuite
     module Color
       module Config
         class Configuration < BaseConfiguration
-          config_attr :strategy, default_value: :theme
-          config_attr :palette, default_value: :default
+          config_attr :strategy,
+            default_value: :theme,
+            type: :symbol,
+            resolver: ->(value) { Strategy.create(value) }
 
-          private
-
-          def validate_attr!(attr_name, value)
-            case attr_name
-            when :strategy, :palette
-              validate_symbol!(attr_name, value)
-            else
-              super
-            end
-          end
-
-          def resolve_attr(attr_name, value)
-            case attr_name
-            when :strategy
-              Strategy.create(value)
-            when :palette
-              Palette.create(value)
-            else
-              super
-            end
-          end
+          config_attr :palette,
+            default_value: :default,
+            type: :symbol,
+            resolver: ->(value) { Palette.create(value) }
         end
       end
     end

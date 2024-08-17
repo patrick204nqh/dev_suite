@@ -5,42 +5,19 @@ module DevSuite
     module FileLoader
       module Config
         class Configuration < BaseConfiguration
-          config_attr :loaders, default_value: [:text, :json, :yaml]
+          config_attr :loaders, default_value: [:text, :json, :yaml], type: :array
 
-          def initialize(**options)
-            super
+          register_hook :after_initialize do
             setup_registry
           end
 
           # Expose the registry as a read-only attribute
           attr_reader :registry
 
-          private
-
-          def validate_attr!(attr, value)
-            case attr
-            when :loaders
-              validate_array!(attr, value)
-            else
-              super
-            end
-          end
-
           # Setup the registry based on the current loaders
           def setup_registry
             @registry = LoaderRegistry.new
             update_registry(loaders)
-          end
-
-          # Automatically update the registry whenever loaders are updated
-          def resolve_attr(attr, value)
-            case attr
-            when :loaders
-              update_registry(value)
-              value
-            else
-              super
-            end
           end
 
           # Update the registry with the provided loaders
