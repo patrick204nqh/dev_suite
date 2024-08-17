@@ -25,7 +25,7 @@ module DevSuite
       # @param benchmark_result [Benchmark::Tms] The benchmark result
       # @param memory_stats [Hash] The memory statistics
       def generate_report(results)
-        Config.configuration.reportor.generate(
+        Config.configuration.reporter.generate(
           description: @description,
           results: results,
         )
