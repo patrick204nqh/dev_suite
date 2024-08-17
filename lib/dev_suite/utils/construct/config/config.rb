@@ -4,9 +4,11 @@ module DevSuite
   module Utils
     module Construct
       module Config
-        require_relative "base"
+        require_relative "attribute_management"
+        require_relative "hook_management"
         require_relative "validator"
         require_relative "resolver"
+        require_relative "base"
         require_relative "configuration"
         require_relative "settings"
 
