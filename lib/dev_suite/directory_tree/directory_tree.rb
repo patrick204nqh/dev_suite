@@ -6,7 +6,6 @@ module DevSuite
 
     require_relative "node"
     require_relative "config"
-    require_relative "settings"
     require_relative "renderer"
     require_relative "builder"
     require_relative "visualizer"

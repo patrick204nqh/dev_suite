@@ -10,16 +10,14 @@ module DevSuite
         require_relative "strategy/theme"
 
         class << self
-          def create(type, palette: nil)
+          def create(type)
             case type
             when :basic
               Basic.new
             when :rgb
               Rgb.new
             when :theme
-              raise ArgumentError, "Palette is required for theme strategy" unless palette
-
-              Theme.new(palette)
+              Theme.new
             else
               raise ArgumentError, "Unknown strategy type: #{type}"
             end

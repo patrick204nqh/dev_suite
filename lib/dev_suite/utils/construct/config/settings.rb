@@ -2,18 +2,13 @@
 
 module DevSuite
   module Utils
-    module ConfigTools
-      # Module for managing instance settings
-      module Settings
-        class << self
-          def included(base)
-            base.include(InstanceMethods)
-          end
-        end
-
-        module InstanceMethods
+    module Construct
+      module Config
+        # Module for managing instance settings
+        class Settings
           def initialize(settings = {})
-            @settings = merge_settings(default_settings, settings)
+            @default_settings = settings
+            @settings = merge_settings(@default_settings, settings)
           end
 
           def set(*keys, value)
@@ -33,11 +28,7 @@ module DevSuite
           end
 
           def reset!
-            @settings = default_settings
-          end
-
-          def default_settings
-            raise NotImplementedError, "#{self.class} must implement the #default_settings method"
+            @settings = @default_settings
           end
 
           private

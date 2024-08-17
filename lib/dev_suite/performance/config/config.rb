@@ -3,7 +3,9 @@
 module DevSuite
   module Performance
     module Config
-      require_relative "config/config"
+      include Utils::Construct::Config
+
+      require_relative "configuration"
     end
   end
 end
