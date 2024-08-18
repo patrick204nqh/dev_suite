@@ -12,7 +12,6 @@ module DevSuite
           end
 
           def set(*keys, value)
-            validate_setting!(keys, value) # Validate before setting
             key_path = normalize_keys(keys)
             last_key = key_path.pop
             target = key_path.each_with_object(@settings) do |key, nested|
@@ -33,11 +32,6 @@ module DevSuite
           end
 
           private
-
-          def validate_setting!(keys, value)
-            # Implement validation logic as needed
-            # Example: raise ArgumentError, "Invalid value for #{keys.join('.')}" if value.nil?
-          end
 
           def normalize_keys(keys)
             keys.flatten.flat_map do |key|

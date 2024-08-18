@@ -4,6 +4,7 @@ module DevSuite
   module Utils
     module Logger
       LOG_DETAILS = {
+        default: { prefix: "", color: :white },
         info: { prefix: "[INFO]", color: :green },
         warn: { prefix: "[WARNING]", color: :yellow },
         error: { prefix: "[ERROR]", color: :red },
@@ -16,7 +17,7 @@ module DevSuite
         # @param message [String] The message to log.
         # @param level [Symbol] The log level (:info, :warn, :error, :debug).
         # @param emoji [String, Symbol] Optional emoji to prepend to the message.
-        def log(message, level: :info, emoji: nil)
+        def log(message, level: :default, emoji: nil)
           emoji_icon = resolve_emoji(emoji)
           formatted_message = format_message("#{emoji_icon} #{message}", level)
           output_log(formatted_message)
