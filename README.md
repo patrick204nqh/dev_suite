@@ -201,8 +201,8 @@ DevSuite also provides a command-line interface for various utilities. Below are
 
   **Sample Output**:
   ```bash
-  [INFO] 🌐 NET_HTTP Request: GET https://jsonplaceholder.typicode.com/posts
-  [DEBUG] ✉️  NET_HTTP Response: 200 OK
+  [INFO] 🌐 Net::HTTP Request: GET http://example.com
+  [DEBUG] 📄 Net::HTTP Response: 200 OK
   ```
 </details>
 

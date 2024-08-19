@@ -6,6 +6,7 @@ module DevSuite
       module Config
         require_relative "attribute_management"
         require_relative "hook_management"
+        require_relative "settings_management"
         require_relative "validator"
         require_relative "resolver"
         require_relative "base"
