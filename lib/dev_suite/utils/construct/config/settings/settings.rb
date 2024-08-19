@@ -4,8 +4,9 @@ module DevSuite
   module Utils
     module Construct
       module Config
-        class Configuration < Base
-          include Settings::Manager
+        module Settings
+          require_relative "base"
+          require_relative "manager"
         end
       end
     end

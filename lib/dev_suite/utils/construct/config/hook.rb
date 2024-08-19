@@ -4,8 +4,8 @@ module DevSuite
   module Utils
     module Construct
       module Config
-        class Configuration < Base
-          include Settings::Manager
+        module Hook
+          require_relative "hook/hook"
         end
       end
     end

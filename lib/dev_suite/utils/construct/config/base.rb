@@ -5,8 +5,8 @@ module DevSuite
     module Construct
       module Config
         class Base
-          include AttributeManagement
-          include HookManagement
+          include Attribute::Manager
+          include Hook::Manager
 
           def initialize
             run_hooks(:before_initialize)
