@@ -4,7 +4,7 @@ RSpec.describe DevSuite::RequestLogger do
   let(:url) { 'http://example.com' }
   let(:uri) { URI.parse(url) }
 
-  describe '.log' do
+  describe '.with_logging' do
     context 'when adapter :net_http is enabled' do
       before do
         DevSuite::RequestLogger::Config.configure do |config|
@@ -14,7 +14,7 @@ RSpec.describe DevSuite::RequestLogger do
 
       it 'logs the request' do
         expect {
-          DevSuite::RequestLogger.log do
+          DevSuite::RequestLogger.with_logging do
             Net::HTTP.get(uri)
           end
         }.to output.to_stdout
@@ -26,7 +26,7 @@ RSpec.describe DevSuite::RequestLogger do
         expect(adapter).to receive(:enable).ordered.and_call_original
         expect(adapter).to receive(:disable).ordered.and_call_original
 
-        DevSuite::RequestLogger.log do
+        DevSuite::RequestLogger.with_logging do
           Net::HTTP.get(uri)
         end
       end

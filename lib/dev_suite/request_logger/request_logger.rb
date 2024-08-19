@@ -1,10 +1,13 @@
+# frozen_string_literal: true
+
 module DevSuite
   module RequestLogger
     require_relative "config"
     require_relative "adapter"
+    require_relative "logger"
 
     class << self
-      def log(&block)
+      def with_logging(&block)
         enable_adapters
         block.call
       ensure
