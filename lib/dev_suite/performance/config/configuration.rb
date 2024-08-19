@@ -8,12 +8,22 @@ module DevSuite
         config_attr :profilers,
           default_value: [:execution_time, :memory],
           type: :array,
-          resolver: ->(value) { Profiler.create_multiple(value) }
+          resolver: :resolve_profilers
 
         config_attr :reporter,
           default_value: :simple,
           type: :symbol,
-          resolver: ->(value) { Reporter.create(value) }
+          resolver: :resolve_reporter
+
+        private
+
+        def resolve_profilers(value)
+          Profiler.create_multiple(value)
+        end
+
+        def resolve_reporter(value)
+          Reporter.create(value)
+        end
       end
     end
   end

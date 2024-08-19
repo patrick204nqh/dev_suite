@@ -8,12 +8,22 @@ module DevSuite
           config_attr :strategy,
             default_value: :theme,
             type: :symbol,
-            resolver: ->(value) { Strategy.create(value) }
+            resolver: :resolve_strategy
 
           config_attr :palette,
             default_value: :default,
             type: :symbol,
-            resolver: ->(value) { Palette.create(value) }
+            resolver: :resolve_palette
+
+          private
+
+          def resolve_strategy(value)
+            Strategy.create(value)
+          end
+
+          def resolve_palette(value)
+            Palette.create(value)
+          end
         end
       end
     end

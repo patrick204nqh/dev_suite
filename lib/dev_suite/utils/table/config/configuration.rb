@@ -18,7 +18,13 @@ module DevSuite
             # },
           )
 
-          config_attr :renderer, default_value: :simple, type: :symbol, resolver: ->(value) { Renderer.create(value) }
+          config_attr :renderer, default_value: :simple, type: :symbol, resolver: :resolve_renderer
+
+          private
+
+          def resolve_renderer(value)
+            Renderer.create(value)
+          end
         end
       end
     end
