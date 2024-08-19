@@ -9,6 +9,7 @@ module DevSuite
         end
 
         def match?(path)
+          path = path.to_s
           !!(@regex =~ path)
         end
 

@@ -113,6 +113,65 @@ RSpec.describe DevSuite::DirectoryTree do
       end
     end
 
+    context 'when including specific files and directories' do
+      before do
+        DevSuite::DirectoryTree::Config.configure do |config|
+          config.settings.set(:includes, ['dir1/*'])
+        end
+      end
+
+      it 'only includes the specified files and directories' do
+        expected_output = <<~OUTPUT
+          #{base_path.basename}/
+              └── dir1/
+                  ├── file1.txt
+                  └── subdir1/
+                      └── hidden_file.txt
+        OUTPUT
+
+        expect { DevSuite::DirectoryTree.visualize(base_path.to_s) }.to output(expected_output).to_stdout
+      end
+    end
+
+    context 'when excluding specific files and directories' do
+      before do
+        DevSuite::DirectoryTree::Config.configure do |config|
+          config.settings.set(:exclude, ['dir1/subdir1', '.hidden_dir'])
+        end
+      end
+
+      it 'excludes the specified files and directories' do
+        expected_output = <<~OUTPUT
+          #{base_path.basename}/
+              ├── dir1/
+              │   └── file1.txt
+              └── dir2/
+                  └── file2.txt
+        OUTPUT
+
+        expect { DevSuite::DirectoryTree.visualize(base_path.to_s) }.to output(expected_output).to_stdout
+      end
+    end
+
+    context 'when using both include and exclude settings' do
+      before do
+        DevSuite::DirectoryTree::Config.configure do |config|
+          config.settings.set(:include, ['*.txt', '**/dir1/**/*'])
+          config.settings.set(:exclude, ['**/dir1/subdir1'])
+        end
+      end
+
+      it 'applies both include and exclude settings correctly' do
+        expected_output = <<~OUTPUT
+          #{base_path.basename}/
+              ├── dir1/
+              │   └── file1.txt
+        OUTPUT
+
+        expect { DevSuite::DirectoryTree.visualize(base_path.to_s) }.to output(expected_output).to_stdout
+      end
+    end
+
     context 'complex settings' do
       before do
         DevSuite::DirectoryTree::Config.configure do |config|

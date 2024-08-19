@@ -22,6 +22,13 @@ module DevSuite
           []
         end
 
+        def to_h
+          {
+            name: @name,
+            children: children.map(&:to_h),
+          }
+        end
+
         def hidden?
           @name.start_with?(".")
         end

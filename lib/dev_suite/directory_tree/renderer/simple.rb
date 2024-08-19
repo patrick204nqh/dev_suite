@@ -19,7 +19,7 @@ module DevSuite
         PIPE = "│   "
 
         def render(node:, prefix: "", is_last: true, depth: 0)
-          return "" if skip_node?(node) || exceeds_max_depth?(depth)
+          return "" if exceeds_max_depth?(depth)
 
           output = node_line(node: node, prefix: prefix, is_last: is_last)
           if node.directory? && node.children.any?

@@ -11,7 +11,7 @@ module DevSuite
 
         def match?(path)
           return false if excluded?(path)
-          return true if included?(path)
+          return true if included?(path) || any_child_included?(path)
 
           false
         end
@@ -24,6 +24,12 @@ module DevSuite
 
         def excluded?(path)
           @exclude_patterns.any? { |pattern| pattern.match?(path) }
+        end
+
+        def any_child_included?(path)
+          return false unless path.directory?
+
+          path.children.any? { |child| included?(child) || any_child_included?(child) }
         end
       end
     end

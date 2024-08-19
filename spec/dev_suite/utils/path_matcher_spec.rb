@@ -2,9 +2,10 @@ require 'spec_helper'
 
 RSpec.describe DevSuite::Utils::PathMatcher do
   describe '.match?' do
-    let(:txt_file) { 'spec/fixtures/test.txt' }
-    let(:rb_file) { 'spec/fixtures/test.rb' }
-    let(:root_txt_file) { 'test.txt' }
+    let(:txt_file) { Pathname.new('root/dir/test.txt') }
+    let(:rb_file) { Pathname.new('root/dir/test.rb') }
+    let(:dir) { Pathname.new('root/dir') }
+    let(:root_txt_file) { Pathname.new('test.txt') }
 
     context 'with includes only' do
       context 'when using "*.txt"' do
