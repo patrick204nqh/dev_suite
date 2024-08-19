@@ -11,9 +11,13 @@ module DevSuite
           log_level: :debug,
         )
 
-        config_attr :adapters, default_value: [:net_http], type: :array, resolver: ->(value) {
-                                                                                     Adapter.create_multiple(value)
-                                                                                   }
+        config_attr :adapters, default_value: [:net_http], type: :array, resolver: :resolve_adapters
+
+        private
+
+        def resolve_adapters(value)
+          Adapter.create_multiple(value)
+        end
       end
     end
   end
