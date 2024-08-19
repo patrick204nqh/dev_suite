@@ -12,8 +12,8 @@ module DevSuite
         end
 
         def log_response(adapter, response)
-          status_emoji = response_success?(response) ? :success : :error
-          log_level = response_success?(response) ? settings.get(:log_level) : :error
+          status_emoji = determine_status_emoji(response)
+          log_level = determine_log_level(response)
 
           log_entry(format_response_line(adapter, response), status_emoji, log_level)
           log_headers(response) if settings.get(:log_headers)
@@ -32,6 +32,14 @@ module DevSuite
 
         def log_entry(message, emoji, level = settings.get(:log_level))
           Utils::Logger.log(message, level: level, emoji: emoji)
+        end
+
+        def determine_status_emoji(response)
+          response_success?(response) ? :success : :error
+        end
+
+        def determine_log_level(response)
+          response_success?(response) ? settings.get(:log_level) : :error
         end
 
         def response_success?(response)
