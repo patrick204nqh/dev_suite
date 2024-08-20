@@ -8,16 +8,9 @@ module DevSuite
       require_relative "visualizer/base"
       require_relative "visualizer/tree"
 
-      class << self
-        def create(type)
-          case type
-          when :tree
-            Tree.new
-          else
-            raise ArgumentError, "Unknown renderer type: #{type}"
-          end
-        end
-      end
+      include Utils::Construct::ComponentManager
+
+      register_component(:tree, Tree)
     end
   end
 end

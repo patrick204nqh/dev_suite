@@ -9,20 +9,11 @@ module DevSuite
         require_relative "strategy/rgb"
         require_relative "strategy/theme"
 
-        class << self
-          def create(type)
-            case type
-            when :basic
-              Basic.new
-            when :rgb
-              Rgb.new
-            when :theme
-              Theme.new
-            else
-              raise ArgumentError, "Unknown strategy type: #{type}"
-            end
-          end
-        end
+        include Construct::ComponentManager
+
+        register_component(:basic, Basic)
+        register_component(:rgb, Rgb)
+        register_component(:theme, Theme)
       end
     end
   end

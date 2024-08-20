@@ -2,8 +2,8 @@
 
 module DevSuite
   module RequestLogger
-    module Adapters
-      require_relative "adapter/adapter"
+    module Extractor
+      require_relative "extractor/extractor"
     end
   end
 end

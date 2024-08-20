@@ -7,16 +7,9 @@ module DevSuite
         require_relative "renderer/base"
         require_relative "renderer/simple"
 
-        class << self
-          def create(type)
-            case type
-            when :simple
-              Simple.new
-            else
-              raise ArgumentError, "Unknown renderer type: #{type}"
-            end
-          end
-        end
+        include Construct::ComponentManager
+
+        register_component(:simple, Simple)
       end
     end
   end

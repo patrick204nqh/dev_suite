@@ -18,11 +18,11 @@ module DevSuite
           private
 
           def resolve_strategy(value)
-            Strategy.create(value)
+            Strategy.build(value)
           end
 
           def resolve_palette(value)
-            Palette.create(value)
+            Palette.build(value)
           end
         end
       end

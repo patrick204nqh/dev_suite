@@ -2,9 +2,12 @@
 
 module DevSuite
   module RequestLogger
+    require_relative "request"
+    require_relative "response"
     require_relative "config"
     require_relative "adapter"
     require_relative "logger"
+    require_relative "extractor"
 
     class << self
       def with_logging(&block)

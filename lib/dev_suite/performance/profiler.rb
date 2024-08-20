@@ -7,22 +7,10 @@ module DevSuite
       require_relative "profiler/execution_time"
       require_relative "profiler/memory"
 
-      class << self
-        def create(profiler)
-          case profiler
-          when :execution_time
-            ExecutionTime.new
-          when :memory
-            Memory.new
-          else
-            raise ArgumentError, "Invalid profiler: #{profiler}"
-          end
-        end
+      include Utils::Construct::ComponentManager
 
-        def create_multiple(profilers)
-          profilers.map { |profiler| create(profiler) }
-        end
-      end
+      register_component(:execution_time, ExecutionTime)
+      register_component(:memory, Memory)
     end
   end
 end

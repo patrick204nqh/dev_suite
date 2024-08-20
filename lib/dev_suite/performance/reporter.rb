@@ -7,16 +7,9 @@ module DevSuite
       require_relative "reporter/simple"
       require_relative "reporter/helpers"
 
-      class << self
-        def create(reporter)
-          case reporter
-          when :simple
-            Simple.new
-          else
-            raise ArgumentError, "Invalid reporter: #{reporter}"
-          end
-        end
-      end
+      include Utils::Construct::ComponentManager
+
+      register_component(:simple, Simple)
     end
   end
 end
