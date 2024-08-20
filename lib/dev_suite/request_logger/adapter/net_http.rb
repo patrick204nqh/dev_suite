@@ -34,6 +34,7 @@ module DevSuite
             # Restore the original request method by aliasing it back from _original_request
             # This effectively removes the logging functionality and returns Net::HTTP to its original state
             alias_method(:request, :_original_request)
+            remove_method(:_original_request)
           end
         end
       end

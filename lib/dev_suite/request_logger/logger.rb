@@ -5,6 +5,7 @@ module DevSuite
     module Logger
       class << self
         def log_request(adapter, request)
+          request = extract_request(adapter, request)
           log_entry(format_request_line(adapter, request), :start)
           log_headers(request) if settings.get(:log_headers)
           log_cookies(request) if settings.get(:log_cookies)
@@ -12,6 +13,7 @@ module DevSuite
         end
 
         def log_response(adapter, response)
+          response = extract_response(adapter, response)
           status_emoji = determine_status_emoji(response)
           log_level = determine_log_level(response)
 
@@ -30,51 +32,43 @@ module DevSuite
           config.settings
         end
 
+        def extract_request(adapter, request)
+          extractor = Extractor.choose_extractor(adapter)
+          extractor.extract_request(request)
+        end
+
+        def extract_response(adapter, response)
+          extractor = Extractor.choose_extractor(adapter)
+          extractor.extract_response(response)
+        end
+
         def log_entry(message, emoji, level = settings.get(:log_level))
           Utils::Logger.log(message, level: level, emoji: emoji)
         end
 
         def determine_status_emoji(response)
-          response_success?(response) ? :success : :error
+          response.success? ? :success : :error
         end
 
         def determine_log_level(response)
-          response_success?(response) ? settings.get(:log_level) : :error
-        end
-
-        def response_success?(response)
-          response.code.to_i.between?(200, 299)
-        end
-
-        def extract_headers(request)
-          request.each_header.to_h
-        end
-
-        def extract_cookies(request)
-          if request.respond_to?(:to_hash) && request.to_hash["cookie"]
-            request.to_hash["cookie"]
-          elsif request.respond_to?(:headers) && request.headers["Cookie"]
-            [request.headers["Cookie"]]
-          else
-            []
-          end
+          response.success? ? settings.get(:log_level) : :error
         end
 
         def format_request_line(adapter, request)
-          "#{adapter.class} Request: #{request.method} #{request.uri}"
+          "#{adapter.class} Request: #{request.method} #{request.url}"
         end
 
         def format_response_line(adapter, response)
-          "#{adapter.class} Response: #{response.code} #{response.message}"
+          "#{adapter.class} Response: #{response.status} #{response.message}"
         end
 
         def log_headers(request)
-          headers = extract_headers(request)
+          headers = request.headers
           log_entry("Headers: #{headers}", :document) unless headers.empty?
         end
 
         def log_cookies(request)
-          cookies = extract_cookies(request)
+          cookies = request.cookies
           if cookies.any?
             log_entry("Cookies: #{cookies.join("; ")}", :cookie)
           else
