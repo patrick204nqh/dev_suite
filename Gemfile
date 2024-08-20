@@ -5,9 +5,6 @@ source "https://rubygems.org"
 # Use the gemspec method to include dependencies specified in the gemspec file
 gemspec
 
-# Additional runtime dependencies
-gem "faraday", "~> 1.0"
-
 # Additional development tools not required as part of the gem's runtime
 group :development, :test do
   gem "rspec", "~> 3.9"

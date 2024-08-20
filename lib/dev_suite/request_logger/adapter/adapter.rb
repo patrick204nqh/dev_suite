@@ -3,9 +3,6 @@
 module DevSuite
   module RequestLogger
     module Adapter
-      require "net/http"
-      require "faraday"
-
       require_relative "base"
       require_relative "net_http"
       require_relative "faraday"

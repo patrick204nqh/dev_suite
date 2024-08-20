@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "net/http"
+
 module DevSuite
   module RequestLogger
     module Adapter
