@@ -16,7 +16,7 @@ module DevSuite
         private
 
         def resolve_adapters(value)
-          Adapter.create_multiple(value)
+          Adapter.build_all(value)
         end
       end
     end

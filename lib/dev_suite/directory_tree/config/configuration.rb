@@ -12,9 +12,9 @@ module DevSuite
         )
 
         # Define configuration attributes
-        config_attr :builder, default_value: :base, type: :symbol, resolver: ->(value) { Builder.create(value) }
-        config_attr :renderer, default_value: :simple, type: :symbol, resolver: ->(value) { Renderer.create(value) }
-        config_attr :visualizer, default_value: :tree, type: :symbol, resolver: ->(value) { Visualizer.create(value) }
+        config_attr :builder, default_value: :base, type: :symbol, resolver: ->(value) { Builder.build(value) }
+        config_attr :renderer, default_value: :simple, type: :symbol, resolver: ->(value) { Renderer.build(value) }
+        config_attr :visualizer, default_value: :tree, type: :symbol, resolver: ->(value) { Visualizer.build(value) }
       end
     end
   end

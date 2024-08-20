@@ -7,18 +7,22 @@ module DevSuite
       require_relative "net_http"
       require_relative "faraday"
 
+      include Utils::Construct::ComponentManager
+
       class << self
         def choose_extractor(instance)
-          case instance
-          when ::Net::HTTP
-            NetHttp.new
-          when ::Faraday::Middleware
-            Faraday.new
-          else
-            raise ArgumentError, "Extractor not found for instance: #{instance.class}"
+          extractor_class = registered_components.find do |klass, _|
+            instance.is_a?(klass)
           end
+
+          raise ArgumentError, "Extractor not found for instance: #{instance.class}" unless extractor_class
+
+          extractor_class.last.new
         end
       end
+
+      register_component(::Net::HTTP, NetHttp)
+      register_component(::Faraday::Middleware, Faraday)
     end
   end
 end

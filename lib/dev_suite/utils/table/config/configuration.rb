@@ -23,7 +23,7 @@ module DevSuite
           private
 
           def resolve_renderer(value)
-            Renderer.create(value)
+            Renderer.build(value)
           end
         end
       end

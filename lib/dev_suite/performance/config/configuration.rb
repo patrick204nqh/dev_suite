@@ -18,11 +18,11 @@ module DevSuite
         private
 
         def resolve_profilers(value)
-          Profiler.create_multiple(value)
+          Profiler.build_all(value)
         end
 
         def resolve_reporter(value)
-          Reporter.create(value)
+          Reporter.build(value)
         end
       end
     end
