@@ -1,11 +1,8 @@
 {
   "recommendations": [
-    "rebornix.ruby",
-    "castwide.solargraph", // Provides Ruby language server support
+    "Shopify.ruby-lsp",
     "misogi.ruby-rubocop",
-    "wingrunr21.vscode-ruby",
-    "EditorConfig.EditorConfig", // Maintains consistent coding styles
+    "KoichiSasada.vscode-rdbg",                
     "streetsidesoftware.code-spell-checker",
-    "esbenp.prettier-vscode"
   ]
 }

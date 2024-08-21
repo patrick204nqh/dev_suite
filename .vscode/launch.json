@@ -2,12 +2,38 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug RSpec",
-      "type": "Ruby",
+      "name": "Debug all tests",
+      "type": "rdbg",
       "request": "launch",
-      "program": "${workspaceRoot}/bin/rspec",
-      "args": ["${relativeFile}"],
-      "useBundler": true
+      "useBundler": true,
+      "script": "${workspaceFolder}/bin/rspec",
+      "args": [
+        "--color",
+        "--require",
+        "rspec",
+        "--format",
+        "progress",
+        "${workspaceFolder}/spec"
+      ],
+      "useTerminal": false,
+      "env": { "DEBUG": "true" }
+    },
+    {
+      "name": "Debug current line",
+      "type": "rdbg",
+      "request": "launch",
+      "useBundler": true,
+      "script": "${workspaceFolder}/bin/rspec",
+      "args": [
+        "--color",
+        "--require",
+        "rspec",
+        "--format",
+        "progress",
+        "${file}:${lineNumber}"
+      ],
+      "useTerminal": false,
+      "env": { "DEBUG": "true" }
     }
   ]
 }

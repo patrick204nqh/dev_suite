@@ -1,17 +1,28 @@
 {
-  "ruby.lint": {
-    "rubocop": true,  // Enable RuboCop linting
-    "reek": false,    // Disable reek linting
-    "fasterer": false // Disable fasterer linting
+  "[ruby]": {
+    "editor.defaultFormatter": "Shopify.ruby-lsp", // Use the Ruby LSP as the default formatter
+    "editor.formatOnSave": true, // Format files automatically when saving
+    "editor.tabSize": 2, // Use 2 spaces for indentation
+    "editor.insertSpaces": true, // Use spaces and not tabs for indentation
+    "editor.semanticHighlighting.enabled": true, // Enable semantic highlighting
+    "editor.formatOnType": true // Enable formatting while typing
   },
-  "ruby.useBundler": true, // Use Bundler to manage gems
-  "editor.formatOnSave": true, // Automatically format code on save
-  "editor.rulers": [80], // Show vertical rulers at 80 characters
-  "editor.tabSize": 2, // Set tab size to 2 spaces for Ruby
-  "files.exclude": {
-    "**/.git": true,
-    "**/.DS_Store": true,
-    "**/node_modules": true,
-    "**/coverage": true // Exclude coverage directory
-  }
+  "rubyLsp.enabledFeatures": {
+    "codeActions": true,
+    "diagnostics": true,
+    "documentHighlights": true,
+    "documentLink": true,
+    "documentSymbols": true,
+    "foldingRanges": true,
+    "formatting": true,
+    "hover": true,
+    "inlayHint": true,
+    "onTypeFormatting": true,
+    "selectionRanges": true,
+    "semanticHighlighting": true,
+    "completion": true,
+    "codeLens": true
+  },
+  "rubyLsp.formatter": "rubocop", // Use RuboCop for formatting within Ruby LSP
+  "ruby.rubocop.configFilePath": ".rubocop.yml" // Use the .rubocop.yml file in the root of the project
 }

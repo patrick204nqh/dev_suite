@@ -1,31 +1,33 @@
-require 'spec_helper'
-require 'faraday'
+# frozen_string_literal: true
 
-RSpec.describe DevSuite::RequestLogger do
-  let(:url) { 'https://jsonplaceholder.typicode.com/todos/1' }
+require "spec_helper"
+require "faraday"
+
+RSpec.describe(DevSuite::RequestLogger) do
+  let(:url) { "https://jsonplaceholder.typicode.com/todos/1" }
   let(:uri) { URI.parse(url) }
 
-  describe '.with_logging' do
-    context 'when adapter :net_http is enabled' do
+  describe ".with_logging" do
+    context "when adapter :net_http is enabled" do
       before do
         DevSuite::RequestLogger::Config.configure do |config|
           config.adapters = [:net_http]
         end
       end
 
-      it 'logs the request' do
-        expect {
+      it "logs the request" do
+        expect do
           DevSuite::RequestLogger.with_logging do
             Net::HTTP.get(uri)
           end
-        }.to output.to_stdout
+        end.to(output.to_stdout)
       end
 
-      it 'calls enable and disable on the adapter' do
+      it "calls enable and disable on the adapter" do
         adapter = DevSuite::RequestLogger::Config.configuration.adapters.first
 
-        expect(adapter).to receive(:enable).ordered.and_call_original
-        expect(adapter).to receive(:disable).ordered.and_call_original
+        expect(adapter).to(receive(:enable).ordered.and_call_original)
+        expect(adapter).to(receive(:disable).ordered.and_call_original)
 
         DevSuite::RequestLogger.with_logging do
           Net::HTTP.get(uri)
@@ -33,10 +35,10 @@ RSpec.describe DevSuite::RequestLogger do
       end
     end
 
-    context 'when adapter :faraday is enabled' do
+    context "when adapter :faraday is enabled" do
       let(:connection) do
         Faraday.new(url: url) do |faraday|
-          faraday.adapter Faraday.default_adapter
+          faraday.adapter(Faraday.default_adapter)
         end
       end
 
@@ -46,22 +48,22 @@ RSpec.describe DevSuite::RequestLogger do
         end
       end
 
-      it 'logs the request' do
-        expect {
+      it "logs the request" do
+        expect do
           DevSuite::RequestLogger.with_logging do
-            connection.get('/')
+            connection.get("/")
           end
-        }.to output.to_stdout
+        end.to(output.to_stdout)
       end
 
-      it 'calls enable and disable on the adapter' do
+      it "calls enable and disable on the adapter" do
         adapter = DevSuite::RequestLogger::Config.configuration.adapters.first
 
-        expect(adapter).to receive(:enable).ordered.and_call_original
-        expect(adapter).to receive(:disable).ordered.and_call_original
+        expect(adapter).to(receive(:enable).ordered.and_call_original)
+        expect(adapter).to(receive(:disable).ordered.and_call_original)
 
         DevSuite::RequestLogger.with_logging do
-          connection.get('/')
+          connection.get("/")
         end
       end
     end
