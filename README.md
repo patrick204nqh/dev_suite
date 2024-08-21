@@ -57,15 +57,13 @@ DevSuite also provides a command-line interface for various utilities. Below are
 ## Features Overview
 
 ### Performance Analysis
+**Analyze the performance of Ruby code blocks, capturing metrics like execution time and memory usage.**
+
 <details>
   <summary>Show more</summary>
   
-  **Purpose**: Quickly analyze the performance of Ruby code blocks, capturing metrics like execution time and memory usage.
-
   **How to Use**:
   ```ruby
-  require 'dev_suite'
-  
   DevSuite::Performance.analyze(description: "Example Analysis") do
     sum = 0
     1_000_000.times { |i| sum += i }
@@ -88,15 +86,13 @@ DevSuite also provides a command-line interface for various utilities. Below are
 </details>
 
 ### Directory Tree Visualization
+**Visualize the file structure of directories and subdirectories to better understand project organization.**
+
 <details>
   <summary>Show more</summary>
   
-  **Purpose**: Visualize the file structure of directories and subdirectories to better understand project organization.
-
   **How to Use**:
   ```ruby
-  require 'dev_suite'
-
   # Define the directory path
   base_path = "/path/to/your/directory"
 
@@ -154,15 +150,13 @@ DevSuite also provides a command-line interface for various utilities. Below are
 </details>
 
 ### Request Logging
+**Log detailed HTTP requests and responses across different adapters like Net::HTTP and Faraday for debugging and monitoring**
+
 <details>
   <summary>Show more</summary>
   
-  **Purpose**: The `RequestLogger` feature enables detailed logging of HTTP requests and responses across different adapters (e.g., `Net::HTTP`, `Faraday`). This can be useful for debugging, monitoring, and auditing API interactions.
-
   **How to Use**:
   ```ruby
-  require 'dev_suite'
-
   DevSuite::RequestLogger.with_logging do 
     # Make an HTTP request using Net::HTTP
     uri = URI('https://jsonplaceholder.typicode.com/posts')
@@ -173,36 +167,50 @@ DevSuite also provides a command-line interface for various utilities. Below are
   **Configuration Guide**:
   Customize the request logging behavior by setting configuration options:
   ```ruby
-  DevSuite::RequestLogger.configure do |config|
+  DevSuite::RequestLogger::Config.configure do |config|
     config.adapters = [:net_http]
-    ...
+    config.settings.set(:log_level, :debug)
+    config.settings.set(:log_headers, true)
+    config.settings.set(:log_cookies, true)
+    config.settings.set(:log_body, true)
   end
   ```
 
   **Configuration Options**:
   
-  Below is a table describing the available configuration settings:
+  Below is a table describing the general configuration options available:
 
-  | Setting        | Description                                        | Example Values                     |
-  |----------------|----------------------------------------------------|------------------------------------|
-  | `:adapters` | List of adapters for which logging is enabled.    | `[:net_http, :faraday]`            |
-  <!-- | `:log_level`       | Set the logging level (e.g., info, debug).         | `:info`, `:debug`, `:warn`, `:error` |
-  | `:log_response`    | Enable or disable response logging.                | `true`, `false`                    |
-  | `:log_emoji`       | Customize emojis for request and response logs.    | `{ request: :globe, response: :envelope }` | -->
+  | Setting        | Description                                           | Default Value | Example Values                     |
+  |----------------|-------------------------------------------------------|---------------|------------------------------------|
+  | `:adapters`    | List of adapters for which logging is enabled.        | `[:net_http]` | `[:net_http, :faraday]`            |
 
-  **Adapters Supported**:
-  
-  The `RequestLogger` currently supports the following adapters:
-  
-  | Adapter      | Description                                | Example Usage                                      |
-  |--------------|--------------------------------------------|---------------------------------------------------|
-  | `Net::HTTP`  | Logs requests made with the Net::HTTP class.| `DevSuite::RequestLogger::Adapter::NetHttp.new(config)` |
-<!--   | `Faraday`    | Logs requests made with the Faraday gem.    | `DevSuite::RequestLogger::Adapter::Faraday.new(config)` | -->
+  **Settings Options**:
+
+  The `settings` key allows you to customize various logging behaviors. Below is a table describing these settings:
+
+  | Setting        | Description                                           | Default Value | Example Values                     |
+  |----------------|-------------------------------------------------------|---------------|------------------------------------|
+  | `:log_level`   | Set the logging level.                                | `:debug`      | `:info`, `:debug`, `:warn`, `:error` |
+  | `:log_headers` | Enable or disable logging of HTTP headers.            | `true`        | `true`, `false`                    |
+  | `:log_cookies` | Enable or disable logging of cookies.                 | `true`        | `true`, `false`                    |
+  | `:log_body`    | Enable or disable logging of HTTP bodies.             | `true`        | `true`, `false`                    |
 
   **Sample Output**:
   ```bash
-  [INFO] 🌐 Net::HTTP Request: GET http://example.com
-  [DEBUG] 📄 Net::HTTP Response: 200 OK
+[DEBUG] 🚀 Net::HTTP Request: GET https://jsonplaceholder.typicode.com/posts
+[DEBUG] 📄 Headers: {"accept-encoding"=>"gzip;q=1.0,deflate;q=0.6,identity;q=0.3", "accept"=>"*/*", "user-agent"=>"Ruby", "host"=>"jsonplaceholder.typicode.com"}
+[DEBUG] 🍪 Cookies: None
+[DEBUG] ✅ Net::HTTP Response: 200 OK
+[DEBUG] 📄 Headers: {"date"=>"Wed, 21 Aug 2024 10:33:59 GMT", "content-type"=>"application/json; charset=utf-8", "transfer-encoding"=>"chunked", "connection"=>"keep-alive", "report-to"=>"{\"group\":\"heroku-nel\",\"max_age\":3600,\"endpoints\":[{\"url\":\"https://nel.heroku.com/reports?ts=1723379558&sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&s=LYnyHXQQqBH310%2FAbzjH0MN%2BaFoA6Ntqh94a3%2F5J54E%3D\"}]}", "reporting-endpoints"=>"heroku-nel=https://nel.heroku.com/reports?ts=1723379558&sid=e11707d5-02a7-43ef-b45e-2cf4d2036f7d&s=LYnyHXQQqBH310%2FAbzjH0MN%2BaFoA6Ntqh94a3%2F5J54E%3D", "nel"=>"{\"report_to\":\"heroku-nel\",\"max_age\":3600,\"success_fraction\":0.005,\"failure_fraction\":0.05,\"response_headers\":[\"Via\"]}", "x-powered-by"=>"Express", "x-ratelimit-limit"=>"1000", "x-ratelimit-remaining"=>"999", "x-ratelimit-reset"=>"1723379596", "vary"=>"Origin, Accept-Encoding", "access-control-allow-credentials"=>"true", "cache-control"=>"max-age=43200", "pragma"=>"no-cache", "expires"=>"-1", "x-content-type-options"=>"nosniff", "etag"=>"W/\"6b80-Ybsq/K6GwwqrYkAsFxqDXGC7DoM\"", "via"=>"1.1 vegur", "cf-cache-status"=>"HIT", "age"=>"4620", "server"=>"cloudflare", "cf-ray"=>"8b69f7d4ad941fa4-HKG", "alt-svc"=>"h3=\":443\"; ma=86400"}
+[DEBUG] 💻 Response Body: [
+  {
+    "userId": 1,
+    "id": 1,
+    "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+    "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+  },
+  ...
+]
   ```
 </details>
 
