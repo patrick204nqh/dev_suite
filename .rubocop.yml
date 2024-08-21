@@ -5,13 +5,12 @@ AllCops:
   NewCops: enable
   TargetRubyVersion: 2.7
   Exclude:
+    - '.git/**/*'
     - 'bin/**/*'
-    - 'db/schema.rb'
     - 'node_modules/**/*'
-    - 'vendor/**/*'
-    - 'spec/**/*'
-    - 'test/**/*'
-    - 'lib/dev_suite/version.rb'
+    - 'coverage/**/*'
+    - 'tmp/**/*'
+    - 'log/**/*'
 
 Metrics/LineLength:
   Max: 120
