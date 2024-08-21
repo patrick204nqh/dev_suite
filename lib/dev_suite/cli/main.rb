@@ -25,11 +25,7 @@ module DevSuite
       def execute_command(command_class, *args, **kargs)
         command_class.new.execute(*args, **kargs)
       rescue StandardError => e
-        handle_error(e)
-      end
-
-      def handle_error(error)
-        puts "An error occurred: #{error.message}"
+        Utils::ErrorHandler.handle_error(e)
       end
     end
   end

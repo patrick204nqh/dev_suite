@@ -31,10 +31,7 @@ Gem::Specification.new do |spec|
 
   # Runtime dependencies
   spec.add_dependency("benchmark", "~> 0.1")
+  spec.add_dependency("faraday", "~> 1.0")
   spec.add_dependency("get_process_mem", "~> 1.0")
   spec.add_dependency("thor", "~> 1.1")
-
-  # Development dependencies
-  spec.add_development_dependency("rspec", "~> 3.9")
-  spec.add_development_dependency("simplecov", "~> 0.21")
 end

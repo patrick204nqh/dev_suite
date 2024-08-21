@@ -153,6 +153,59 @@ DevSuite also provides a command-line interface for various utilities. Below are
   ```
 </details>
 
+### Request Logging
+<details>
+  <summary>Show more</summary>
+  
+  **Purpose**: The `RequestLogger` feature enables detailed logging of HTTP requests and responses across different adapters (e.g., `Net::HTTP`, `Faraday`). This can be useful for debugging, monitoring, and auditing API interactions.
+
+  **How to Use**:
+  ```ruby
+  require 'dev_suite'
+
+  DevSuite::RequestLogger.with_logging do 
+    # Make an HTTP request using Net::HTTP
+    uri = URI('https://jsonplaceholder.typicode.com/posts')
+    response = Net::HTTP.get(uri)
+  end
+  ```
+
+  **Configuration Guide**:
+  Customize the request logging behavior by setting configuration options:
+  ```ruby
+  DevSuite::RequestLogger.configure do |config|
+    config.adapters = [:net_http]
+    ...
+  end
+  ```
+
+  **Configuration Options**:
+  
+  Below is a table describing the available configuration settings:
+
+  | Setting        | Description                                        | Example Values                     |
+  |----------------|----------------------------------------------------|------------------------------------|
+  | `:adapters` | List of adapters for which logging is enabled.    | `[:net_http, :faraday]`            |
+  <!-- | `:log_level`       | Set the logging level (e.g., info, debug).         | `:info`, `:debug`, `:warn`, `:error` |
+  | `:log_response`    | Enable or disable response logging.                | `true`, `false`                    |
+  | `:log_emoji`       | Customize emojis for request and response logs.    | `{ request: :globe, response: :envelope }` | -->
+
+  **Adapters Supported**:
+  
+  The `RequestLogger` currently supports the following adapters:
+  
+  | Adapter      | Description                                | Example Usage                                      |
+  |--------------|--------------------------------------------|---------------------------------------------------|
+  | `Net::HTTP`  | Logs requests made with the Net::HTTP class.| `DevSuite::RequestLogger::Adapter::NetHttp.new(config)` |
+<!--   | `Faraday`    | Logs requests made with the Faraday gem.    | `DevSuite::RequestLogger::Adapter::Faraday.new(config)` | -->
+
+  **Sample Output**:
+  ```bash
+  [INFO] 🌐 Net::HTTP Request: GET http://example.com
+  [DEBUG] 📄 Net::HTTP Response: 200 OK
+  ```
+</details>
+
 ## Development
 
 After checking out the repo, run `bin/setup`for an interactive prompt that will allow you to experiment.

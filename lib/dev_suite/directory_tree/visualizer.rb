@@ -2,21 +2,15 @@
 
 module DevSuite
   module DirectoryTree
-    class Visualizer
-      # Visualizes the directory tree
-      # @param path [String] The base path of the directory
-      def visualize(path)
-        root = Config.configuration.builder.build(Pathname.new(path))
-        renderer = Config.configuration.renderer
-        puts renderer.render(node: root)
-      end
-    end
+    module Visualizer
+      require "pathname"
 
-    class << self
-      def visualize(path)
-        visualizer = Visualizer.new
-        visualizer.visualize(path)
-      end
+      require_relative "visualizer/base"
+      require_relative "visualizer/tree"
+
+      include Utils::Construct::ComponentManager
+
+      register_component(:tree, Tree)
     end
   end
 end

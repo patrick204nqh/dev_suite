@@ -2,8 +2,6 @@
 
 module DevSuite
   module Utils
-    require_relative "utils/config_tools"
-    require_relative "utils/color"
-    require_relative "utils/table"
+    require_relative "utils/utils"
   end
 end

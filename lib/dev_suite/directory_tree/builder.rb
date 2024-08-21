@@ -5,16 +5,9 @@ module DevSuite
     module Builder
       require_relative "builder/base"
 
-      class << self
-        def create(type)
-          case type
-          when :base
-            Base.new
-          else
-            raise ArgumentError, "Unknown renderer type: #{type}"
-          end
-        end
-      end
+      include Utils::Construct::ComponentManager
+
+      register_component(:base, Base)
     end
   end
 end
