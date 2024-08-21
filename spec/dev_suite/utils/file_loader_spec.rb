@@ -7,7 +7,7 @@ RSpec.describe(DevSuite::Utils::FileLoader) do
     context "when the file is a TXT file" do
       let(:path) { "spec/fixtures/files/test.txt" }
 
-      it "loads the file" do
+      it "loads the TXT file correctly" do
         expect(described_class.load(path)).to(eq("This is a test text file."))
       end
     end
@@ -15,7 +15,7 @@ RSpec.describe(DevSuite::Utils::FileLoader) do
     context "when the file is a JSON file" do
       let(:path) { "spec/fixtures/files/test.json" }
 
-      it "loads the file" do
+      it "loads the JSON file correctly" do
         expect(described_class.load(path)).to(eq({ "key" => "value" }))
       end
     end
@@ -23,7 +23,7 @@ RSpec.describe(DevSuite::Utils::FileLoader) do
     context "when the file is a YAML file" do
       let(:path) { "spec/fixtures/files/test.yaml" }
 
-      it "loads the file" do
+      it "loads the YAML file correctly" do
         expect(described_class.load(path)).to(eq({ "key" => "value" }))
       end
     end
