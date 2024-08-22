@@ -33,6 +33,16 @@ module DevSuite
           def build_all(keys, **options)
             keys.map { |key| build(key, **options) }
           end
+
+          def find_component(instance)
+            component_class = registered_components.find do |klass, _|
+              instance.is_a?(klass)
+            end
+
+            raise ArgumentError, "Component not found for instance: #{instance.class}" unless component_class
+
+            component_class.last.new
+          end
         end
       end
     end

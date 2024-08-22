@@ -33,12 +33,12 @@ module DevSuite
         end
 
         def extract_request(adapter, request)
-          extractor = Extractor.choose_extractor(adapter)
+          extractor = Extractor.find_component(adapter)
           extractor.extract_request(request)
         end
 
         def extract_response(adapter, response)
-          extractor = Extractor.choose_extractor(adapter)
+          extractor = Extractor.find_component(adapter)
           extractor.extract_response(response)
         end
 
