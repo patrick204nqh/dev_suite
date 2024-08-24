@@ -16,7 +16,7 @@ module DevSuite
 
               store_original_value(attr, value)
               validated_value = validate_config_attr(attr, value, attr_details)
-              resolved_value = resolve_config_attr_value(attr, validated_value, attr_details)
+              resolved_value = resolve_config_attr_value(validated_value, attr_details)
 
               store_resolved_value(attr, resolved_value)
             end
@@ -49,7 +49,7 @@ module DevSuite
             end
 
             # Resolves the value of a configuration attribute
-            def resolve_config_attr_value(attr_name, value, attr_details)
+            def resolve_config_attr_value(value, attr_details)
               if attr_details[:resolver]
                 resolve_config_attr(
                   value: value,
