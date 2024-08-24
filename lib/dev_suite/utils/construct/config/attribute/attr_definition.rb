@@ -36,6 +36,7 @@ module DevSuite
             def define_config_attr_methods(attr)
               define_getter_methods(attr)
               define_setter_methods(attr)
+              define_delete_method(attr)
             end
 
             def define_getter_methods(attr)
@@ -52,6 +53,36 @@ module DevSuite
               define_method("#{attr}=") do |value|
                 set_config_attr(attr: attr, value: value)
               end
+            end
+
+            def define_delete_method(attr)
+              define_method("#{attr}.delete") do |*keys|
+                current_value = instance_variable_get("@#{attr}")
+                original_value = instance_variable_get("@original_#{attr}")
+
+                if current_value.is_a?(Array) && original_value.is_a?(Array)
+                  delete_from_container(current_value, original_value, keys)
+                elsif current_value.is_a?(Hash) && original_value.is_a?(Hash)
+                  delete_from_container(current_value, original_value, keys)
+                else
+                  raise TypeError, "#{attr} is neither an Array nor a Hash"
+                end
+              end
+            end
+
+            def delete_from_container(current_container, original_container, keys)
+              keys.flatten.each do |key|
+                if validate_key_exists(current_container, key)
+                  current_container.delete(key)
+                  original_container.delete(key)
+                else
+                  raise ArgumentError, "Key #{key} does not exist in the container"
+                end
+              end
+            end
+
+            def validate_key_exists(container, key)
+              container.include?(key)
             end
           end
         end
