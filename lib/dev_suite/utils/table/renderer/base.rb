@@ -4,7 +4,7 @@ module DevSuite
   module Utils
     module Table
       module Renderer
-        class Base
+        class Base < Structure::Component
           def render(table)
             raise NotImplementedError, "Render method must be implemented in subclasses"
           end

@@ -5,9 +5,18 @@ module DevSuite
     module Construct
       module Config
         module Attribute
-          require_relative "validator"
-          require_relative "resolver"
-          require_relative "manager"
+          require_relative "attr_definition"
+          require_relative "attr_initialization"
+          require_relative "attr_resolving"
+
+          class << self
+            def included(base)
+              base.extend(AttrDefinition)
+            end
+          end
+
+          include AttrInitialization
+          include AttrResolving
         end
       end
     end

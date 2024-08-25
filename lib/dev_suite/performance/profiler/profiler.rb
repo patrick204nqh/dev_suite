@@ -9,8 +9,8 @@ module DevSuite
       require_relative "execution_time"
       require_relative "memory"
 
-      register_component(:execution_time, ExecutionTime)
-      register_component(:memory, Memory)
+      register_component(ExecutionTime)
+      register_component(Memory)
     end
   end
 end

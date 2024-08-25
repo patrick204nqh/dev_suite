@@ -4,7 +4,7 @@ module DevSuite
   module Utils
     module FileLoader
       module Config
-        class Configuration < BaseConfiguration
+        class Configuration < Structure::Configuration
           config_attr :loaders, default_value: [:text, :json, :yaml], type: :array
 
           register_hook :after_initialize do

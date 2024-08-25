@@ -4,7 +4,7 @@ module DevSuite
   module Utils
     module FileLoader
       module Loader
-        class Base
+        class Base < Structure::Component
           class << self
             def extensions
               raise NotImplementedError, "You must implement the extensions method"

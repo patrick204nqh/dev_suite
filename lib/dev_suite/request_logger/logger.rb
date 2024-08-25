@@ -4,20 +4,20 @@ module DevSuite
   module RequestLogger
     module Logger
       class << self
-        def log_request(adapter, request)
-          request = extract_request(adapter, request)
-          log_entry(format_request_line(adapter, request), :start)
+        def log_request(instance, request)
+          request = extract_request(instance, request)
+          log_entry(format_request_line(instance, request), :start)
           log_headers(request) if settings.get(:log_headers)
           log_cookies(request) if settings.get(:log_cookies)
           log_body(request.body, "Request") if settings.get(:log_body)
         end
 
-        def log_response(adapter, response)
-          response = extract_response(adapter, response)
+        def log_response(instance, response)
+          response = extract_response(instance, response)
           status_emoji = determine_status_emoji(response)
           log_level = determine_log_level(response)
 
-          log_entry(format_response_line(adapter, response), status_emoji, log_level)
+          log_entry(format_response_line(instance, response), status_emoji, log_level)
           log_headers(response) if settings.get(:log_headers)
           log_body(response.body, "Response") if settings.get(:log_body)
         end
@@ -32,13 +32,13 @@ module DevSuite
           config.settings
         end
 
-        def extract_request(adapter, request)
-          extractor = Extractor.choose_extractor(adapter)
+        def extract_request(instance, request)
+          extractor = Extractor.build_component_from_instance(instance)
           extractor.extract_request(request)
         end
 
-        def extract_response(adapter, response)
-          extractor = Extractor.choose_extractor(adapter)
+        def extract_response(instance, response)
+          extractor = Extractor.build_component_from_instance(instance)
           extractor.extract_response(response)
         end
 

@@ -6,12 +6,21 @@ module DevSuite
       module Component
         class Base
           class << self
-            class << self
-              def key
-                raise NotImplementedError, "#{name} must define KEY" unless const_defined?(:KEY)
+            # Returns the key for the class. If the COMPONENT_KEY constant is defined, it returns its value.
+            # Otherwise, it generates a key based on the class name.
+            def component_key
+              return const_get(:COMPONENT_KEY) if const_defined?(:COMPONENT_KEY)
 
-                const_get(:KEY)
-              end
+              generate_key_from_class_name
+            end
+
+            private
+
+            # Generates a key from the class name by converting it to snake_case and symbolizing it.
+            def generate_key_from_class_name
+              class_name = name.split("::").last
+              snake_case_class_name = class_name.gsub(/([a-z\d])([A-Z])/, '\1_\2').downcase
+              snake_case_class_name.to_sym
             end
           end
         end

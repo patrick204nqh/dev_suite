@@ -57,7 +57,7 @@ DevSuite also provides a command-line interface for various utilities. Below are
 ## Features Overview
 
 ### Performance Analysis
-**Analyze the performance of Ruby code blocks, capturing metrics like execution time and memory usage.**
+Analyze the performance of Ruby code blocks, capturing metrics like execution time and memory usage.
 
 <details>
   <summary>Show more</summary>
@@ -86,7 +86,7 @@ DevSuite also provides a command-line interface for various utilities. Below are
 </details>
 
 ### Directory Tree Visualization
-**Visualize the file structure of directories and subdirectories to better understand project organization.**
+Visualize the file structure of directories and subdirectories to better understand project organization.
 
 <details>
   <summary>Show more</summary>
@@ -150,7 +150,7 @@ DevSuite also provides a command-line interface for various utilities. Below are
 </details>
 
 ### Request Logging
-**Log detailed HTTP requests and responses across different adapters like Net::HTTP and Faraday for debugging and monitoring**
+Log detailed HTTP requests and responses across different adapters like Net::HTTP and Faraday for debugging and monitoring
 
 <details>
   <summary>Show more</summary>

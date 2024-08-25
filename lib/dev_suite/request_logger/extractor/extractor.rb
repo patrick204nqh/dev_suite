@@ -3,26 +3,22 @@
 module DevSuite
   module RequestLogger
     module Extractor
-      require_relative "base"
-      require_relative "net_http"
-      require_relative "faraday"
-
       include Utils::Construct::Component
 
-      class << self
-        def choose_extractor(instance)
-          extractor_class = registered_components.find do |klass, _|
-            instance.is_a?(klass)
-          end
+      require_relative "base"
+      require_relative "net_http"
 
-          raise ArgumentError, "Extractor not found for instance: #{instance.class}" unless extractor_class
+      register_component(NetHttp)
 
-          extractor_class.last.new
-        end
+      Utils::DependencyLoader.safe_load_dependencies(
+        "faraday",
+        on_failure: ->(missing_dependencies) {
+          Config.configuration.delete_option_on_failure(:adapters, :faraday, *missing_dependencies)
+        },
+      ) do
+        require_relative "faraday"
+        register_component(Faraday)
       end
-
-      register_component(::Net::HTTP, NetHttp)
-      register_component(::Faraday::Middleware, Faraday)
     end
   end
 end

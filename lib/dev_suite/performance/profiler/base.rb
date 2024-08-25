@@ -3,7 +3,7 @@
 module DevSuite
   module Performance
     module Profiler
-      class Base
+      class Base < Structure::Component
         def run(&block)
           raise NotImplementedError, "Subclasses must implement the run method"
         end

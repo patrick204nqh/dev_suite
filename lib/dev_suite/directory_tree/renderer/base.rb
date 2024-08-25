@@ -3,7 +3,7 @@
 module DevSuite
   module DirectoryTree
     module Renderer
-      class Base
+      class Base < Structure::Component
         def render
           raise NotImplementedError
         end

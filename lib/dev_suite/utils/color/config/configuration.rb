@@ -4,7 +4,7 @@ module DevSuite
   module Utils
     module Color
       module Config
-        class Configuration < BaseConfiguration
+        class Configuration < Structure::Configuration
           config_attr :strategy,
             default_value: :theme,
             type: :symbol,
@@ -18,11 +18,11 @@ module DevSuite
           private
 
           def resolve_strategy(value)
-            Strategy.build(value)
+            Strategy.build_component(value)
           end
 
           def resolve_palette(value)
-            Palette.build(value)
+            Palette.build_component(value)
           end
         end
       end

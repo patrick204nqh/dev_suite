@@ -7,7 +7,7 @@ module DevSuite
 
       require_relative "base"
 
-      register_component(:base, Base)
+      register_component(Base)
     end
   end
 end

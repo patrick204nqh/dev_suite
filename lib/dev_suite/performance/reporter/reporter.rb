@@ -9,7 +9,7 @@ module DevSuite
       require_relative "simple"
       require_relative "helpers"
 
-      register_component(:simple, Simple)
+      register_component(Simple)
     end
   end
 end

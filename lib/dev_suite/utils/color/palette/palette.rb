@@ -2,14 +2,14 @@
 
 module DevSuite
   module Utils
-    module Table
-      module Renderer
+    module Color
+      module Palette
         include Construct::Component
 
         require_relative "base"
-        require_relative "simple"
+        require_relative "default"
 
-        register_component(Simple)
+        register_component(Default)
       end
     end
   end

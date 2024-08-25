@@ -3,14 +3,25 @@
 module DevSuite
   module RequestLogger
     module Adapter
-      require_relative "base"
-      require_relative "net_http"
-      require_relative "faraday"
-
       include Utils::Construct::Component
 
-      register_component(:net_http, NetHttp)
-      register_component(:faraday, Faraday)
+      require_relative "base"
+
+      # Load and register `net/http` adapter
+      require "net/http"
+      require_relative "net_http"
+      register_component(NetHttp)
+
+      # Load and register `faraday` adapter
+      Utils::DependencyLoader.safe_load_dependencies(
+        "faraday",
+        on_failure: ->(missing_dependencies) {
+          Config.configuration.delete_option_on_failure(:adapters, :faraday, *missing_dependencies)
+        },
+      ) do
+        require_relative "faraday"
+        register_component(Faraday)
+      end
     end
   end
 end
