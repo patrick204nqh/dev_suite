@@ -3,12 +3,8 @@
 module DevSuite
   module Utils
     module Construct
-      module Config
-        require_relative "attribute"
-        require_relative "hook"
+      module Component
         require_relative "base"
-        require_relative "settings"
-        require_relative "configuration"
         require_relative "manager"
         require_relative "initializer"
 

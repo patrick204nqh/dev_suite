@@ -3,14 +3,8 @@
 module DevSuite
   module Utils
     module Construct
-      module ComponentManager
-        class << self
-          def included(base)
-            base.extend(ClassMethods)
-          end
-        end
-
-        module ClassMethods
+      module Component
+        module Manager
           # Stores a mapping of component symbols to their respective classes
           def registered_components
             @registered_components ||= {}

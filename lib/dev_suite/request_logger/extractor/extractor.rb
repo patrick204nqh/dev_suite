@@ -3,7 +3,7 @@
 module DevSuite
   module RequestLogger
     module Extractor
-      include Utils::Construct::ComponentManager
+      include Utils::Construct::Component
 
       require_relative "base"
       require_relative "net_http"

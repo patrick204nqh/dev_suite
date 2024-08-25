@@ -2,8 +2,8 @@
 
 module DevSuite
   module Performance
-    module Profiler
-      require_relative "profiler/profiler"
+    module Data
+      require_relative "memory_usage"
     end
   end
 end
