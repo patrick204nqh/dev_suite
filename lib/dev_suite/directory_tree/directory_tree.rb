@@ -2,8 +2,6 @@
 
 module DevSuite
   module DirectoryTree
-    require "pathname"
-
     require_relative "node"
     require_relative "config"
     require_relative "renderer"

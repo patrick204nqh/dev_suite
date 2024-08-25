@@ -9,7 +9,7 @@ module DevSuite
         require_relative "strategy/rgb"
         require_relative "strategy/theme"
 
-        include Construct::ComponentManager
+        include Construct::Component
 
         register_component(:basic, Basic)
         register_component(:rgb, Rgb)

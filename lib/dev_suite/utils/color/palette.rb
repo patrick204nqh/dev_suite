@@ -7,7 +7,7 @@ module DevSuite
         require_relative "palette/base"
         require_relative "palette/default"
 
-        include Construct::ComponentManager
+        include Construct::Component
 
         register_component(:default, Default)
       end
