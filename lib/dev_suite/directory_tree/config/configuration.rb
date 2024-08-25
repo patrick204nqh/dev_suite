@@ -3,7 +3,7 @@
 module DevSuite
   module DirectoryTree
     module Config
-      class Configuration < BaseConfiguration
+      class Configuration < Structure::Configuration
         set_default_settings(
           skip_hidden: false,
           skip_types: [],
@@ -18,15 +18,15 @@ module DevSuite
         private
 
         def resolve_builder(value)
-          Builder.build(value)
+          Builder.build_component(value)
         end
 
         def resolve_renderer(value)
-          Renderer.build(value)
+          Renderer.build_component(value)
         end
 
         def resolve_visualizer(value)
-          Visualizer.build(value)
+          Visualizer.build_component(value)
         end
       end
     end

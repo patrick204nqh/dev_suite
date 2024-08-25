@@ -10,7 +10,7 @@ module DevSuite
       require_relative "base"
       require_relative "tree"
 
-      register_component(:tree, Tree)
+      register_component(Tree)
     end
   end
 end

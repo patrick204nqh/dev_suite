@@ -4,6 +4,8 @@ module DevSuite
   module RequestLogger
     module Extractor
       class Faraday < Base
+        COMPONENT_KEY = ::Faraday::Middleware
+
         def extract_request(native_request)
           Request.new(
             method: native_request.method.to_s.upcase,

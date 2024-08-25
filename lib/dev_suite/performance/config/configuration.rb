@@ -3,7 +3,7 @@
 module DevSuite
   module Performance
     module Config
-      class Configuration < BaseConfiguration
+      class Configuration < Structure::Configuration
         # Define configuration attributes
         config_attr :profilers,
           default_value: [:execution_time, :memory],
@@ -18,11 +18,11 @@ module DevSuite
         private
 
         def resolve_profilers(value)
-          Profiler.build_all(value)
+          Profiler.build_components(value)
         end
 
         def resolve_reporter(value)
-          Reporter.build(value)
+          Reporter.build_component(value)
         end
       end
     end

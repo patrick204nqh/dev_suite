@@ -4,6 +4,8 @@ module DevSuite
   module RequestLogger
     module Extractor
       class NetHttp < Base
+        COMPONENT_KEY = ::Net::HTTP
+
         def extract_request(native_request)
           Request.new(
             method: native_request.method,

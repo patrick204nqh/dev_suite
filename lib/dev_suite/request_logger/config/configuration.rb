@@ -3,7 +3,7 @@
 module DevSuite
   module RequestLogger
     module Config
-      class Configuration < BaseConfiguration
+      class Configuration < Structure::Configuration
         set_default_settings(
           log_headers: true,
           log_cookies: true,
@@ -16,7 +16,7 @@ module DevSuite
         private
 
         def resolve_adapters(value)
-          Adapter.build_all(value)
+          Adapter.build_components(value)
         end
       end
     end

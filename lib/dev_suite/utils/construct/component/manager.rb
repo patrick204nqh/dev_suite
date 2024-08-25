@@ -11,29 +11,32 @@ module DevSuite
           end
 
           # Register a new component
-          def register_component(key, component_class)
-            registered_components[key] = component_class
+          def register_component(component_class)
+            raise ArgumentError, "#{component_class} must define a component_key" unless component_class.respond_to?(:component_key)
+
+            registered_components[component_class.component_key] = component_class
           end
 
           # Build a single component
-          def build(key, **options)
-            component_class = registered_components[key]
-            raise ArgumentError, "Component not found: #{key}" unless component_class
+          def build_component(component_key, **options)
+            component_class = registered_components[component_key]
+
+            raise ArgumentError, "Component not found for key: #{component_key}" unless component_class
 
             component_class.new(**options)
           end
 
           # Build multiple components
-          def build_all(keys, **options)
-            keys.map { |key| build(key, **options) }
+          def build_components(component_keys, **options)
+            component_keys.map { |key| build_component(key, **options) }
           end
 
-          def find_component(instance)
+          def find_component(instance_component_key)
             component_class = registered_components.find do |klass, _|
-              instance.is_a?(klass)
+              instance_component_key.is_a?(klass)
             end
 
-            raise ArgumentError, "Component not found for instance: #{instance.class}" unless component_class
+            raise ArgumentError, "Component not found for instance: #{instance_component_key.class}" unless component_class
 
             component_class.last.new
           end

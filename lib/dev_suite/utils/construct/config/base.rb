@@ -5,8 +5,13 @@ module DevSuite
     module Construct
       module Config
         class Base
+          # Foundation for all configurations
           include Attribute
           include Hook
+
+          # Include the settings manager and dependency handler
+          include Settings::Manager
+          include DependencyHandler
 
           def initialize
             run_hooks(:before_initialize)

@@ -8,22 +8,16 @@ module DevSuite
       require_relative "base"
       require_relative "net_http"
 
-      register_component(::Net::HTTP, NetHttp)
+      register_component(NetHttp)
 
-      begin
+      Utils::DependencyLoader.safe_load_dependencies(
+        "faraday",
+        on_failure: ->(missing_dependencies) {
+          Config.configuration.delete_option_on_failure(:adapters, :faraday, *missing_dependencies)
+        },
+      ) do
         require_relative "faraday"
-        register_component(::Faraday::Middleware, Faraday)
-      rescue LoadError
-        Utils::Logger.log(
-          "Faraday gem not installed. Skipping Faraday adapter registration.",
-          level: :warn,
-          emoji: :warning,
-        )
-        Utils::Logger.log(
-          "To install Faraday, add `gem 'faraday'` to your Gemfile and run `bundle install`.",
-          level: :warn,
-          emoji: :update,
-        )
+        register_component(Faraday)
       end
     end
   end

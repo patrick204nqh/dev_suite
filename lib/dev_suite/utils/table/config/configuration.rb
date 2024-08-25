@@ -4,7 +4,7 @@ module DevSuite
   module Utils
     module Table
       module Config
-        class Configuration < BaseConfiguration
+        class Configuration < Structure::Configuration
           set_default_settings(
             colors: {
               title: :cyan,
@@ -23,7 +23,7 @@ module DevSuite
           private
 
           def resolve_renderer(value)
-            Renderer.build(value)
+            Renderer.build_component(value)
           end
         end
       end

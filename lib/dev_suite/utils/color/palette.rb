@@ -4,12 +4,7 @@ module DevSuite
   module Utils
     module Color
       module Palette
-        require_relative "palette/base"
-        require_relative "palette/default"
-
-        include Construct::Component
-
-        register_component(:default, Default)
+        require_relative "palette/palette"
       end
     end
   end
