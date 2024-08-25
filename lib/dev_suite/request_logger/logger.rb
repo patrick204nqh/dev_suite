@@ -33,12 +33,12 @@ module DevSuite
         end
 
         def extract_request(instance, request)
-          extractor = Extractor.find_component(instance)
+          extractor = Extractor.build_component_from_instance(instance)
           extractor.extract_request(request)
         end
 
         def extract_response(instance, response)
-          extractor = Extractor.find_component(instance)
+          extractor = Extractor.build_component_from_instance(instance)
           extractor.extract_response(response)
         end
 

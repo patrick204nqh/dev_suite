@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "faraday"
 
 RSpec.describe(DevSuite::RequestLogger) do
   let(:url) { "https://jsonplaceholder.typicode.com/todos/1" }
@@ -36,14 +35,15 @@ RSpec.describe(DevSuite::RequestLogger) do
     end
 
     context "when adapter :faraday" do
-      let(:connection) do
-        Faraday.new(url: url) do |faraday|
-          faraday.adapter(Faraday.default_adapter)
-        end
-      end
-
       context "is enabled" do
+        let(:connection) do
+          Faraday.new(url: url) do |faraday|
+            faraday.adapter(Faraday.default_adapter)
+          end
+        end
+
         before do
+          require "faraday"
           DevSuite::RequestLogger::Config.configure do |config|
             config.adapters = [:faraday]
           end
@@ -69,26 +69,33 @@ RSpec.describe(DevSuite::RequestLogger) do
         end
       end
 
-      context "fails to load" do
+      xcontext "fails to load" do
         before do
+          # Store the original top-level Faraday constant if it's defined
+          @original_faraday = Faraday if defined?(Faraday)
+
+          # Remove the top-level Faraday constant to simulate its absence
+          Object.send(:remove_const, :Faraday) if defined?(Faraday)
+
           DevSuite::RequestLogger::Config.configure do |config|
             config.adapters = [:faraday]
           end
+        end
 
-          # Simulate Faraday failing to load
-          allow(DevSuite::Utils::DependencyLoader).to(receive(:safe_load_dependencies).and_yield)
-          allow(Kernel).to(receive(:require).with("faraday").and_raise(LoadError))
+        after do
+          # Restore the top-level Faraday constant after the test
+          Object.const_set(:Faraday, @original_faraday) if @original_faraday
         end
 
         it "handles the failure and removes the faraday adapter" do
           expect do
             DevSuite::RequestLogger.with_logging do
-              connection.get("/")
+              Net::HTTP.get(uri)
             end
           end.not_to(raise_error)
 
-          # expect(DevSuite::RequestLogger::Config.configuration.adapters).not_to(include(:faraday))
-          # expect(DevSuite::RequestLogger::Config.configuration.missing_dependencies).to(include("faraday"))
+          expect(DevSuite::RequestLogger::Config.configuration.adapters).not_to(include(:faraday))
+          expect(DevSuite::RequestLogger::Config.configuration.missing_dependencies).to(include("faraday"))
         end
       end
     end

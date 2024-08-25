@@ -29,7 +29,7 @@ module DevSuite
             private
 
             def track_missing_dependency(missing_dependencies)
-              @missing_dependencies += missing_dependencies
+              @missing_dependencies = missing_dependencies
             end
           end
         end

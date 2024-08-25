@@ -60,29 +60,13 @@ module DevSuite
                 current_value = instance_variable_get("@#{attr}")
                 original_value = instance_variable_get("@original_#{attr}")
 
-                if current_value.is_a?(Array) && original_value.is_a?(Array)
-                  delete_from_container(current_value, original_value, keys)
-                elsif current_value.is_a?(Hash) && original_value.is_a?(Hash)
-                  delete_from_container(current_value, original_value, keys)
-                else
-                  raise TypeError, "#{attr} is neither an Array nor a Hash"
+                if original_value.is_a?(Array) && current_value.is_a?(Array)
+                  keys.each do |key|
+                    original_value.delete(key)
+                    set_config_attr(attr: attr, value: original_value)
+                  end
                 end
               end
-            end
-
-            def delete_from_container(current_container, original_container, keys)
-              keys.flatten.each do |key|
-                if validate_key_exists(current_container, key)
-                  current_container.delete(key)
-                  original_container.delete(key)
-                else
-                  raise ArgumentError, "Key #{key} does not exist in the container"
-                end
-              end
-            end
-
-            def validate_key_exists(container, key)
-              container.include?(key)
             end
           end
         end

@@ -11,8 +11,6 @@ end
 
 require "bundler/setup"
 require "rspec"
-require "rspec/support"
-require "rspec/support/differ"
 require "dev_suite"
 require "pry"
 
