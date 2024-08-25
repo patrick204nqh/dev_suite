@@ -10,8 +10,11 @@ unless ENV["DEBUG"]
 end
 
 require "bundler/setup"
-require "pry"
+require "rspec"
+require "rspec/support"
+require "rspec/support/differ"
 require "dev_suite"
+require "pry"
 
 RSpec.configure do |config|
   # Use the expect syntax for cleaner and more modern syntax

@@ -128,6 +128,8 @@ DEPENDENCIES
   pry (~> 0.14)
   rake (~> 13.0)
   rspec (~> 3.9)
+  rspec-core (~> 3.9)
+  rspec-support (~> 3.9)
   rubocop (~> 1.65)
   rubocop-shopify (~> 2.15)
   simplecov (~> 0.21)

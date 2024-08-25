@@ -11,6 +11,8 @@ gem "faraday", "~> 1.4"
 # Additional development tools not required as part of the gem's runtime
 group :development, :test do
   gem "rspec", "~> 3.9"
+  gem "rspec-core", "~> 3.9"
+  gem "rspec-support", "~> 3.9"
   gem "simplecov", "~> 0.21"
   gem "rake", "~> 13.0"
 end
