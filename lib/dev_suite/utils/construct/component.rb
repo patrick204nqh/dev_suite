@@ -3,8 +3,9 @@
 module DevSuite
   module Utils
     module Construct
-      require_relative "config"
-      require_relative "component"
+      module Component
+        require_relative "component/component"
+      end
     end
   end
 end

@@ -5,13 +5,13 @@ module DevSuite
     module Construct
       module Config
         module Initializer
-          class << self
-            def define_config_constants(base)
-              base.const_set(:BaseConfiguration, Configuration)
+          extend self
 
-              unless base.const_defined?(:Configuration)
-                base.const_set(:Configuration, Class.new(base::BaseConfiguration))
-              end
+          def define_constants(base)
+            base.const_set(:BaseConfiguration, Configuration)
+
+            unless base.const_defined?(:Configuration)
+              base.const_set(:Configuration, Class.new(base::BaseConfiguration))
             end
           end
         end

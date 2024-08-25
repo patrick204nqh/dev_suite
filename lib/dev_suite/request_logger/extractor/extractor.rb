@@ -7,7 +7,7 @@ module DevSuite
       require_relative "net_http"
       require_relative "faraday"
 
-      include Utils::Construct::ComponentManager
+      include Utils::Construct::Component
 
       class << self
         def choose_extractor(instance)

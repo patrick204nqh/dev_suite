@@ -5,6 +5,7 @@ module DevSuite
     class ProfilerManager
       attr_reader :results
 
+      # TODO: building as function in Construct::Component
       def initialize
         @results = {}
       end
