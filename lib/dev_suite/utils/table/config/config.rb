@@ -4,7 +4,7 @@ module DevSuite
   module Utils
     module Table
       module Config
-        include Construct::Config
+        include Construct::Config::Manager
 
         require_relative "configuration"
       end

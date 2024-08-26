@@ -4,7 +4,7 @@ module DevSuite
   module Utils
     module Color
       module Strategy
-        class Base < Structure::Component
+        class Base < Utils::Construct::Component::Base
           def colorize(text, **kwargs)
             raise NotImplementedError
           end

@@ -4,7 +4,7 @@ module DevSuite
   module Utils
     module Table
       module Renderer
-        include Construct::Component
+        include Construct::Component::Manager
 
         require_relative "base"
         require_relative "simple"

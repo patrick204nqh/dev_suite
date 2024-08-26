@@ -3,7 +3,7 @@
 module DevSuite
   module DirectoryTree
     module Builder
-      include Utils::Construct::Component
+      include Utils::Construct::Component::Manager
 
       require_relative "base"
 

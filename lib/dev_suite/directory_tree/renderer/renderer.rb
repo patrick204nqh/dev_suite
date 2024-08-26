@@ -3,7 +3,7 @@
 module DevSuite
   module DirectoryTree
     module Renderer
-      include Utils::Construct::Component
+      include Utils::Construct::Component::Manager
 
       require_relative "base"
       require_relative "simple"

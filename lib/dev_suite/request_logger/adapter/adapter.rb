@@ -3,7 +3,7 @@
 module DevSuite
   module RequestLogger
     module Adapter
-      include Utils::Construct::Component
+      include Utils::Construct::Component::Manager
 
       require_relative "base"
 

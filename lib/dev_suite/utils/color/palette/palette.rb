@@ -4,7 +4,7 @@ module DevSuite
   module Utils
     module Color
       module Palette
-        include Construct::Component
+        include Construct::Component::Manager
 
         require_relative "base"
         require_relative "default"

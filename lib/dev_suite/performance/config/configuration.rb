@@ -3,7 +3,7 @@
 module DevSuite
   module Performance
     module Config
-      class Configuration < Structure::Configuration
+      class Configuration < Utils::Construct::Config::Base
         # Define configuration attributes
         config_attr :profilers,
           default_value: [:execution_time, :memory],

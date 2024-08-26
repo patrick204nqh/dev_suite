@@ -3,7 +3,7 @@
 module DevSuite
   module DirectoryTree
     module Visualizer
-      include Utils::Construct::Component
+      include Utils::Construct::Component::Manager
 
       require "pathname"
 

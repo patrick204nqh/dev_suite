@@ -4,7 +4,7 @@ module DevSuite
   module Utils
     module FileLoader
       module Loader
-        include Construct::Component
+        include Construct::Component::Manager
 
         require_relative "loader/loader"
       end

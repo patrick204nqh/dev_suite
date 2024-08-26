@@ -4,7 +4,7 @@ module DevSuite
   module Utils
     module Color
       module Config
-        class Configuration < Structure::Configuration
+        class Configuration < Utils::Construct::Config::Base
           config_attr :strategy,
             default_value: :theme,
             type: :symbol,

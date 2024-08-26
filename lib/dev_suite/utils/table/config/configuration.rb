@@ -4,7 +4,7 @@ module DevSuite
   module Utils
     module Table
       module Config
-        class Configuration < Structure::Configuration
+        class Configuration < Utils::Construct::Config::Base
           set_default_settings(
             colors: {
               title: :cyan,

@@ -4,7 +4,7 @@ module DevSuite
   module Utils
     module Color
       module Palette
-        class Base < Structure::Component
+        class Base < Utils::Construct::Component::Base
           def colors
             unless self.class.const_defined?(:COLORS)
               raise NotImplementedError, "#{self.class} must define COLORS constant"
