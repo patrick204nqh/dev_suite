@@ -26,17 +26,17 @@ module DevSuite
             end
 
             # Build a single component
-            def build_component(component_key, **options)
+            def build_component(component_key)
               component_class = registered_components[component_key]
 
               raise ArgumentError, "Component not found for key: #{component_key}" unless component_class
 
-              component_class.new(**options)
+              component_class.new
             end
 
             # Build multiple components
-            def build_components(component_keys, **options)
-              component_keys.map { |key| build_component(key, **options) }
+            def build_components(component_keys)
+              component_keys.map { |key| build_component(key) }
             end
 
             def build_component_from_instance(instance)
