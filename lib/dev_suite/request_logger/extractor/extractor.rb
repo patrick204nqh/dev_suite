@@ -12,9 +12,7 @@ module DevSuite
 
       Utils::DependencyLoader.safe_load_dependencies(
         "faraday",
-        on_failure: ->(missing_dependencies) {
-          Config.configuration.delete_option_on_failure(:adapters, :faraday, *missing_dependencies)
-        },
+        on_failure: ->(_) {}, # Empty lambda to do nothing on failure
       ) do
         require_relative "faraday"
         register_component(Faraday)
