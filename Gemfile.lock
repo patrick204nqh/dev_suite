@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dev_suite (0.2.5)
+    dev_suite (0.2.6)
       benchmark (~> 0.1)
       get_process_mem (~> 1.0)
       thor (~> 1.1)
