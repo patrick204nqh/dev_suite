@@ -3,7 +3,7 @@
 module DevSuite
   module RequestLogger
     module Adapter
-      class Base < Structure::Component
+      class Base < Utils::Construct::Component::Base
         def enable
           raise NotImplementedError
         end

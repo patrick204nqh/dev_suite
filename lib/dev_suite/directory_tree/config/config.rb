@@ -3,7 +3,7 @@
 module DevSuite
   module DirectoryTree
     module Config
-      include Utils::Construct::Config
+      include Utils::Construct::Config::Manager
 
       require_relative "configuration"
     end

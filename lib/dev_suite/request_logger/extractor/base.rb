@@ -3,7 +3,7 @@
 module DevSuite
   module RequestLogger
     module Extractor
-      class Base < Structure::Component
+      class Base < Utils::Construct::Component::Base
         def extract_request(native_request)
           raise NotImplementedError
         end

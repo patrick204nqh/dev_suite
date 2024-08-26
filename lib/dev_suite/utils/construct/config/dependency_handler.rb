@@ -21,7 +21,10 @@ module DevSuite
             end
 
             def delete_option_on_failure(attr_name, option_key, *missing_dependencies)
-              puts "Deleting option #{option_key} from #{attr_name} due to missing dependencies: #{missing_dependencies.join(", ")}"
+              message = "Deleting option #{option_key} from #{attr_name} due to missing dependencies: "
+              message += missing_dependencies.join(", ")
+              puts message
+
               send(attr_name).delete(option_key)
               track_missing_dependency(missing_dependencies)
             end

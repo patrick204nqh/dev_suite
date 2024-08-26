@@ -3,7 +3,7 @@
 module DevSuite
   module DirectoryTree
     module Config
-      class Configuration < Structure::Configuration
+      class Configuration < Utils::Construct::Config::Base
         set_default_settings(
           skip_hidden: false,
           skip_types: [],

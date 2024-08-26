@@ -3,7 +3,7 @@
 module DevSuite
   module DirectoryTree
     module Visualizer
-      class Base < Structure::Component
+      class Base < Utils::Construct::Component::Base
         def visualize(path)
           raise NotImplementedError, "You must implement #{self.class}##{__method}"
         end

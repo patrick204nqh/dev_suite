@@ -3,7 +3,7 @@
 module DevSuite
   module RequestLogger
     module Config
-      class Configuration < Structure::Configuration
+      class Configuration < Utils::Construct::Config::Base
         set_default_settings(
           log_headers: true,
           log_cookies: true,
