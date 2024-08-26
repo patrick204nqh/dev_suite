@@ -21,10 +21,7 @@ module DevSuite
             end
 
             def delete_option_on_failure(attr_name, option_key, *missing_dependencies)
-              message = "Deleting option #{option_key} from #{attr_name} due to missing dependencies: "
-              message += missing_dependencies.join(", ")
-              puts message
-
+              log_missing_dependency(attr_name, option_key, missing_dependencies)
               send(attr_name).delete(option_key)
               track_missing_dependency(missing_dependencies)
             end
@@ -33,6 +30,23 @@ module DevSuite
 
             def track_missing_dependency(missing_dependencies)
               @missing_dependencies = missing_dependencies
+            end
+
+            def log_missing_dependency(attr_name, option_key, missing_dependencies)
+              missing_dependencies.each do |dependency|
+                Utils::Logger.log(
+                  "Missing dependency: #{dependency}. " \
+                    "Please add `gem '#{dependency}'` to your Gemfile and run `bundle install`.",
+                  level: :warn,
+                  emoji: :warning,
+                )
+
+                Utils::Logger.log(
+                  "Deleting option #{option_key} from `config.#{attr_name}`",
+                  level: :warn,
+                  emoji: :warning,
+                )
+              end
             end
           end
         end
