@@ -19,6 +19,7 @@ module DevSuite
         fix: "🔧",        # For fixes or repairs
         bug: "🐞",        # For bugs or issues
         code: "💻",       # For code or technical content
+        stop: "🛑",       # For stopping or halting
       }.freeze
 
       # Notification-related emojis
