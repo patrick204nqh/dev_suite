@@ -85,7 +85,7 @@ module DevSuite
 
         def log_response_time(response)
           response_time = response.response_time
-          log_entry("Response Time: #{response_time} seconds", :stop)
+          log_entry("Response Time: #{response_time} seconds", :stop) if response_time
         end
       end
     end

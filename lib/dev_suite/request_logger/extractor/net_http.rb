@@ -23,13 +23,13 @@ module DevSuite
         # @param http [Net::HTTP] The Net::HTTP object that received the response
         # @param response [Net::HTTPResponse] The response object received
         # @return [Response] The extracted response details
-        def extract_response(http, response)
+        def extract_response(_http, response)
           Response.new(
             status: response.code.to_i,
             message: response.message,
             headers: response.each_header.to_h,
             body: response.body,
-            response_time: calculate_response_time(http),
+            response_time: calculate_response_time(response),
           )
         end
 
@@ -57,9 +57,9 @@ module DevSuite
 
         # Calculates the response time (if available)
         # This example assumes response time is tracked separately and stored in the `http` object
-        def calculate_response_time(http)
-          if http.respond_to?(:start_time) && http.respond_to?(:end_time)
-            http.end_time - http.start_time
+        def calculate_response_time(response)
+          if response.respond_to?(:start_time) && response.respond_to?(:end_time)
+            response.end_time - response.start_time
           end
         end
 

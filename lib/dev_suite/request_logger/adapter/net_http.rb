@@ -13,16 +13,25 @@ module DevSuite
 
             # Override the request method to add logging functionality
             def request(request, body = nil, &block)
-              # Log the full URL of the HTTP request using the DevSuite::Utils::Logger
+              start_time = Time.now
+
               Logger.log_request(self, request)
 
-              # Call the original request method (now aliased as _original_request) to perform the actual HTTP request
-              response = _original_request(request, body, &block)
+              response = nil
+              begin
+                # Call the original request method (now aliased as _original_request) to perform the actual HTTP request
+                response = _original_request(request, body, &block)
+              ensure
+                end_time = Time.now
+                response ||= Net::HTTPResponse.new("1.1", "500", "Internal Server Error")
+                response.instance_variable_set(:@start_time, start_time)
+                response.instance_variable_set(:@end_time, end_time)
+                response.define_singleton_method(:start_time) { @start_time }
+                response.define_singleton_method(:end_time) { @end_time }
 
-              # Optionally log the response details
-              Logger.log_response(self, response)
+                Logger.log_response(self, response)
+              end
 
-              # Return the response object so that the calling code receives the expected result
               response
             end
           end
