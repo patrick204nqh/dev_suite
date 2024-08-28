@@ -5,6 +5,7 @@ module DevSuite
     require_relative "emoji"
     require_relative "logger"
     require_relative "error_handler"
+    require_relative "warning_handler"
     require_relative "dependency_loader"
     require_relative "construct"
     require_relative "color"
