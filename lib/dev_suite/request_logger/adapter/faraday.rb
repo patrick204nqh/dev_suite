@@ -20,7 +20,7 @@ module DevSuite
 
               Middleware::Faraday.new(lambda do |e|
                 _original_run_request(e.method, e.url, e.body, e.request_headers, &block)
-              end).call(env)
+              end).call(env, self)
             end
           end
         end

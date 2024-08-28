@@ -34,12 +34,12 @@ module DevSuite
 
         def extract_request(instance, request)
           extractor = Extractor.build_component_from_instance(instance)
-          extractor.extract_request(request)
+          extractor.extract_request(instance, request)
         end
 
         def extract_response(instance, response)
           extractor = Extractor.build_component_from_instance(instance)
-          extractor.extract_response(response)
+          extractor.extract_response(instance, response)
         end
 
         def log_entry(message, emoji, level = settings.get(:log_level))
@@ -64,7 +64,7 @@ module DevSuite
 
         def log_headers(request)
           headers = request.headers
-          log_entry("Headers: #{headers}", :document) unless headers.empty?
+          log_entry("Headers: #{headers}", :document)
         end
 
         def log_cookies(request)

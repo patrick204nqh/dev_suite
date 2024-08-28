@@ -69,6 +69,9 @@ RSpec.describe(DevSuite::RequestLogger) do
         end
       end
 
+      # This context is a bit tricky.
+      # It simulates the absence of the Faraday constant by removing it from the Object namespace.
+      # This is done to test the behavior of the RequestLogger when the Faraday constant is not available.
       xcontext "fails to load" do
         before do
           # Store the original top-level Faraday constant if it's defined
