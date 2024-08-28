@@ -9,7 +9,7 @@ module DevSuite
 
       class << self
         def handle_missing_dependencies(missing_dependencies)
-          Config.configuration.delete_option_on_failure(:adapters, :faraday, *missing_dependencies)
+          Config.configuration.remove_failed_dependency_option(:adapters, :faraday, *missing_dependencies)
         end
       end
 
