@@ -40,14 +40,10 @@ module DevSuite
         # @param request [Net::HTTP::Request] The request object
         # @return [String] The fully constructed URL
         def build_url(http, request)
-          scheme = http.use_ssl? ? "https" : "http"
+          scheme = determine_scheme(http)
           host = http.address
-          port = http.port
+          port_part = determine_port(http, scheme)
           path = request.path
-
-          # Only include the port if it's non-standard
-          default_port = (scheme == "https" ? 443 : 80)
-          port_part = port == default_port ? nil : ":#{port}"
 
           "#{scheme}://#{host}#{port_part}#{path}"
         end
@@ -65,6 +61,15 @@ module DevSuite
           if http.respond_to?(:start_time) && http.respond_to?(:end_time)
             http.end_time - http.start_time
           end
+        end
+
+        def determine_scheme(http)
+          http.use_ssl? ? "https" : "http"
+        end
+
+        def determine_port(http, scheme)
+          default_port = (scheme == "https" ? 443 : 80)
+          http.port == default_port ? nil : ":#{http.port}"
         end
       end
     end
