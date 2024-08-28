@@ -12,7 +12,7 @@ module DevSuite
         def extract_request(http, request)
           Request.new(
             method: request.method,
-            url: request.uri.to_s,
+            url: build_url(http, request),
             headers: request.each_header.to_h,
             cookies: build_cookies(request),
             body: request.body,

@@ -8,6 +8,7 @@ module DevSuite
           log_headers: true,
           log_cookies: true,
           log_body: true,
+          log_response_time: true,
           log_level: :debug,
         )
 

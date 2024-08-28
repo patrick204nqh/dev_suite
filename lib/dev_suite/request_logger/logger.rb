@@ -20,6 +20,7 @@ module DevSuite
           log_entry(format_response_line(instance, response), status_emoji, log_level)
           log_headers(response) if settings.get(:log_headers)
           log_body(response.body, "Response") if settings.get(:log_body)
+          log_response_time(response) if settings.get(:log_response_time)
         end
 
         private
@@ -80,6 +81,11 @@ module DevSuite
           return unless body && !body.empty?
 
           log_entry("#{type} Body: #{body}", :code)
+        end
+
+        def log_response_time(response)
+          response_time = response.response_time
+          log_entry("Response Time: #{response_time} seconds", :stop)
         end
       end
     end
