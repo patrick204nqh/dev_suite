@@ -17,14 +17,6 @@ module DevSuite
               @registered_components ||= {}
             end
 
-            # Register a new component
-            def register_component(component_class)
-              raise ArgumentError,
-                "#{component_class} must define a component_key" unless component_class.respond_to?(:component_key)
-
-              registered_components[component_class.component_key] = component_class
-            end
-
             # Build a single component
             def build_component(component_key)
               component_class = registered_components[component_key]
@@ -48,6 +40,21 @@ module DevSuite
                 "Component not found for instance: #{instance.class}" unless component_class
 
               component_class.last.new
+            end
+
+            private
+
+            # Register a new component
+            def register_component(component_class)
+              raise ArgumentError,
+                "#{component_class} must define a component_key" unless component_class.respond_to?(:component_key)
+
+              registered_components[component_class.component_key] = component_class
+            end
+
+            # Load a dependency and execute a block if successful
+            def load_dependency(*dependencies, on_failure:, &block)
+              DependencyLoader.safe_load_dependencies(*dependencies, on_failure: on_failure, &block)
             end
           end
         end

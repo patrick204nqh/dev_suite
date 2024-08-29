@@ -8,21 +8,23 @@ module DevSuite
       require_relative "base"
 
       class << self
-        def handle_missing_dependencies(missing_dependencies)
-          Config.configuration.remove_failed_dependency_option(:adapters, :faraday, *missing_dependencies)
+        def handle_missing_nethttp(missing_dependencies)
+          Config.configuration.remove_failed_dependency(:adapters, :net_http, *missing_dependencies)
+        end
+
+        def handle_missing_faraday(missing_dependencies)
+          Config.configuration.remove_failed_dependency(:adapters, :faraday, *missing_dependencies)
         end
       end
 
       # Load and register `net/http` adapter
-      require "net/http"
-      require_relative "net_http"
-      register_component(NetHttp)
+      load_dependency("net/http", on_failure: method(:handle_missing_nethttp)) do
+        require_relative "net_http"
+        register_component(NetHttp)
+      end
 
       # Load and register `faraday` adapter
-      Utils::DependencyLoader.safe_load_dependencies(
-        "faraday",
-        on_failure: method(:handle_missing_dependencies),
-      ) do
+      load_dependency("faraday", on_failure: method(:handle_missing_faraday)) do
         require_relative "faraday"
         register_component(Faraday)
       end
