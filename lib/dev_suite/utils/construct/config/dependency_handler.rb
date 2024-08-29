@@ -20,7 +20,7 @@ module DevSuite
               @missing_dependencies ||= []
             end
 
-            def remove_failed_dependency_option(attr_name, option_key, *missing_dependencies)
+            def remove_failed_dependency(attr_name, option_key, *missing_dependencies)
               log_missing_dependency(attr_name, option_key, missing_dependencies)
               send(attr_name).delete(option_key)
               track_missing_dependency(missing_dependencies)

@@ -3,10 +3,6 @@
 module DevSuite
   module Utils
     module FileLoader
-      require "pathname"
-      require "json"
-      require "yaml"
-
       require_relative "loader"
       require_relative "loader_registry"
       require_relative "loader_manager"
