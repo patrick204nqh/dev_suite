@@ -3,9 +3,15 @@
 module DevSuite
   module RequestBuilder
     module Tool
-      class Base
+      class Base < Utils::Construct::Component::Base
         def build_command(http_method:, url:, headers:, body: nil)
-          raise NotImplementedError, "Subclasses must implement the `build_command` method"
+          raise NotImplementedError
+        end
+
+        private
+
+        def fetch_setting(key, default = nil)
+          Config.configuration.settings.get(key, default)
         end
       end
     end

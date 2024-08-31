@@ -2,6 +2,7 @@
 
 module DevSuite
   module RequestBuilder
+    require_relative "config"
     require_relative "formatter"
     require_relative "tool"
     require_relative "builder"

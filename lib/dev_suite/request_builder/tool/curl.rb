@@ -5,38 +5,52 @@ module DevSuite
     module Tool
       class Curl < Base
         def build_command(http_method:, url:, headers:, body: nil)
-          # TODO: need to move those ones to config.settings
-          use_insecure = false
-          raw_data = false
-          verbose = false
-          follow_redirects = true
-          cookie = nil
-          user_agent = "Mozilla/5.0 (compatible; RequestBuilder/1.0)"
-          max_time = nil
-          connect_timeout = nil
-
           command = ["curl"]
           command << "-X #{http_method}"
           command << "'#{url}'"
 
-          # Add headers
+          add_headers(command, headers)
+          add_body(command, body)
+          add_curl_options(command)
+
+          command.join(" ").strip
+        end
+
+        private
+
+        def add_headers(command, headers)
           headers.each do |key, value|
             command << "-H '#{key}: #{value}'"
           end
+        end
 
-          # Add data payload
-          command << (raw_data ? "--data-raw '#{body}'" : "-d '#{body}'") if body
+        def add_body(command, body)
+          return unless body
 
-          # Add other curl options
-          command << "--insecure" if use_insecure
-          command << "-v" if verbose
-          command << "-L" if follow_redirects
-          command << "-b '#{cookie}'" if cookie
-          command << "-A '#{user_agent}'" if user_agent
-          command << "--max-time #{max_time}" if max_time
-          command << "--connect-timeout #{connect_timeout}" if connect_timeout
+          command << (raw_data? ? "--data-raw '#{body}'" : "-d '#{body}'")
+        end
 
-          command.join(" ").strip
+        def add_curl_options(command)
+          append_option(command, "--insecure", "tool.curl.use_insecure")
+          append_option(command, "-v", "tool.curl.verbose")
+          append_option(command, "-L", "tool.curl.follow_redirects", default: true)
+          append_option(command, "-b '#{fetch_setting("tool.curl.cookie")}'", "tool.curl.cookie")
+          append_option(command, "-A '#{fetch_setting("tool.curl.user_agent")}'", "tool.curl.user_agent")
+          append_option(command, "--max-time #{fetch_setting("tool.curl.max_time")}", "tool.curl.max_time")
+          append_option(
+            command,
+            "--connect-timeout #{fetch_setting("tool.curl.connect_timeout")}",
+            "tool.curl.connect_timeout",
+          )
+        end
+
+        def raw_data?
+          fetch_setting("tool.curl.raw_data", false)
+        end
+
+        def append_option(command, option, setting_key, default: nil)
+          value = fetch_setting(setting_key, default)
+          command << option if value
         end
       end
     end
