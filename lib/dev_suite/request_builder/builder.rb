@@ -2,8 +2,8 @@
 
 module DevSuite
   module RequestBuilder
-    module Generator
-      require_relative "generator/generator"
+    module Builder
+      require_relative "builder/builder"
     end
   end
 end

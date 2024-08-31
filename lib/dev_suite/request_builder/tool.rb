@@ -2,9 +2,8 @@
 
 module DevSuite
   module RequestBuilder
-    module Generator
-      require_relative "base"
-      require_relative "curl"
+    module Tool
+      require_relative "tool/tool"
     end
   end
 end
