@@ -23,6 +23,14 @@ module DevSuite
               snake_case_class_name.to_sym
             end
           end
+
+          private
+
+          def fetch_setting(key, default = nil)
+            # Example implementation
+            # Config.configuration.settings.get(key, default)
+            raise NotImplementedError
+          end
         end
       end
     end
