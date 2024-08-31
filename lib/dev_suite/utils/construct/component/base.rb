@@ -26,7 +26,12 @@ module DevSuite
 
           private
 
-          def fetch_setting(key, default = nil)
+          # Fetches a setting based on the provided key.
+          # This method should be overridden by subclasses to provide specific behavior.
+          #
+          # @param key [String] The key for the setting.
+          # @param default [Object] The default value to return if the key is not found.
+          def fetch_setting(_key, _default = nil)
             # Example implementation
             # Config.configuration.settings.get(key, default)
             raise NotImplementedError
