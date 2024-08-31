@@ -4,9 +4,9 @@ module DevSuite
   module Utils
     module Construct
       module Component
-        require_relative "base"
-        require_relative "manager"
-        require_relative "validator"
+        module Validator
+          require_relative "validator/validator"
+        end
       end
     end
   end
