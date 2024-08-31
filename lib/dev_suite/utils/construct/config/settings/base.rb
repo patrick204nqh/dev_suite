@@ -20,11 +20,10 @@ module DevSuite
               target[last_key] = value
             end
 
-            def get(*keys)
+            def get(*keys, default_value)
               key_path = normalize_keys(keys)
-              key_path.reduce(@settings) do |nested, key|
-                nested.is_a?(Hash) ? nested[key] : nil
-              end
+              value = fetch_value_from_path(key_path)
+              value.nil? ? default_value : value
             end
 
             def reset!
@@ -49,6 +48,14 @@ module DevSuite
                 else
                   newval
                 end
+              end
+            end
+
+            def fetch_value_from_path(key_path)
+              key_path.reduce(@settings) do |nested, key|
+                return nil unless nested.is_a?(Hash)
+
+                nested[key]
               end
             end
           end
