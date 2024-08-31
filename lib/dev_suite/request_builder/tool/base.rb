@@ -10,8 +10,8 @@ module DevSuite
 
         private
 
-        def fetch_setting(key, default = nil)
-          Config.configuration.settings.get(key, default)
+        def fetch_setting(key, default: nil)
+          Config.configuration.settings.get(key, default: default)
         end
       end
     end

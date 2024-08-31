@@ -3,9 +3,9 @@
 module DevSuite
   module RequestBuilder
     module Tool
-      require_relative "validator"
-      require_relative "base"
-      require_relative "curl"
+      module Validator
+        require_relative "validator/validator"
+      end
     end
   end
 end
