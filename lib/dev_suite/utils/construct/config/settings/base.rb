@@ -20,10 +20,10 @@ module DevSuite
               target[last_key] = value
             end
 
-            def get(*keys, default_value)
+            def get(*keys, default: nil)
               key_path = normalize_keys(keys)
               value = fetch_value_from_path(key_path)
-              value.nil? ? default_value : value
+              value.nil? ? default : value
             end
 
             def reset!
