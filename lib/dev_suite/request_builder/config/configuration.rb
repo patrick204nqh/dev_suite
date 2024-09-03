@@ -18,12 +18,6 @@ module DevSuite
             },
           },
         )
-
-        private
-
-        def resolve_adapters(value)
-          Adapter.build_components(value)
-        end
       end
     end
   end
