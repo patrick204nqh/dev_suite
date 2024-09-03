@@ -7,6 +7,7 @@ module DevSuite
   require_relative "performance"
   require_relative "directory_tree"
   require_relative "request_logger"
+  require_relative "request_builder"
 
   class Error < StandardError; end
 end
