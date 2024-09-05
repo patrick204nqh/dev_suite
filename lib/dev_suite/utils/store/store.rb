@@ -40,6 +40,10 @@ module DevSuite
         def store
           @store ||= Store.new
         end
+
+        def reset!
+          @store = nil
+        end
       end
     end
   end
