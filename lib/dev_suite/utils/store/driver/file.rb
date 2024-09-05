@@ -7,9 +7,9 @@ module DevSuite
         class File < Base
           def initialize
             super
-            @path = "#{Dir.pwd}/tmp/store.yml"
+            @path = fetch_setting("driver.file.path")
             @data = {}
-            load_data
+            load_data if ::File.exist?(@path)
           end
 
           def store(key, value)
@@ -44,13 +44,15 @@ module DevSuite
           private
 
           def load_data
-            raise ArgumentError, "The file does not exist" unless ::File.exist?(@path)
-
             @data = FileLoader.load(@path)
           end
 
           def save_data
             FileWriter.write(@path, @data)
+          end
+
+          def fetch_setting(key, default: nil)
+            Config.configuration.settings.get(key, default: default)
           end
         end
       end

@@ -5,6 +5,14 @@ module DevSuite
     module Store
       module Config
         class Configuration < Utils::Construct::Config::Base
+          set_default_settings(
+            driver: {
+              file: {
+                path: "#{Dir.pwd}/tmp/store.json",
+              },
+            },
+          )
+
           config_attr :driver,
             default_value: :memory,
             type: :symbol,
