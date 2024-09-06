@@ -25,6 +25,16 @@ module DevSuite
           def clear
             @data.clear
           end
+
+          def import(source)
+            raise ArgumentError, "The file does not exist" unless ::File.exist?(source)
+
+            @data = FileLoader.load(source)
+          end
+
+          def export(destination)
+            FileWriter.write(destination, @data)
+          end
         end
       end
     end
