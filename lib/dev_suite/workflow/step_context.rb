@@ -7,7 +7,7 @@ module DevSuite
 
       def initialize(data = {})
         @data = data
-        @store = Utils::Store.create
+        @store = Utils::Store.create(driver: :file)
       end
 
       # Update the context with new data

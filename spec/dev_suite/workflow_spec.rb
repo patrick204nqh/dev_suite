@@ -44,24 +44,26 @@ RSpec.describe(DevSuite::Workflow) do
   end
 
   describe ".create_conditional_step" do
+    CONDITION_MET_MESSAGE = "condition met"
+
     it "executes the step only if the condition is met" do
       conditional_step = described_class.create_conditional_step("Conditional Step", ->(ctx) {
         ctx.get(:user_id) == 123
       }) do |ctx|
-        ctx.update(test: "condition met")
+        ctx.update(test: CONDITION_MET_MESSAGE)
       end
 
       engine.add_step(conditional_step)
       engine.execute
 
-      expect(engine.context.get(:test)).to(eq("condition met"))
+      expect(engine.context.get(:test)).to(eq(CONDITION_MET_MESSAGE))
     end
 
     it "skips the step if the condition is not met" do
       conditional_step = described_class.create_conditional_step("Conditional Step", ->(ctx) {
         ctx.get(:user_id) != 123
       }) do |ctx|
-        ctx.update(test: "condition met")
+        ctx.update(test: CONDITION_MET_MESSAGE)
       end
 
       engine.add_step(conditional_step)

@@ -11,8 +11,8 @@ module DevSuite
           @driver = initialize_driver(driver)
         end
 
-        def store(key, value)
-          @driver.store(key, value)
+        def set(key, value)
+          @driver.set(key, value)
         end
 
         def fetch(key)
@@ -50,7 +50,7 @@ module DevSuite
 
       class << self
         # Retrieve the singleton store instance
-        def store
+        def instance
           @store ||= Store.new
         end
 
@@ -60,8 +60,8 @@ module DevSuite
         end
 
         # Create a new store instance (isolated from the singleton)
-        def create
-          Store.new
+        def create(**options)
+          Store.new(**options)
         end
       end
     end

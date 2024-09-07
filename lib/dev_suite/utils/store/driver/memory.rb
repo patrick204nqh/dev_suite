@@ -10,7 +10,7 @@ module DevSuite
             @data = {}
           end
 
-          def store(key, value)
+          def set(key, value)
             @data[key] = value
           end
 
