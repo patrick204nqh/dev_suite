@@ -13,16 +13,16 @@ module DevSuite
           end
 
           def set(key, value)
-            @data[key] = value
+            Data.set_value_by_path(@data, key, value)
             save_data
           end
 
           def fetch(key)
-            @data[key]
+            Data.get_value_by_path(@data, key)
           end
 
           def delete(key)
-            @data.delete(key)
+            Data.delete_key_by_path(@data, key)
             save_data
           end
 
