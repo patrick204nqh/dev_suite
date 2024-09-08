@@ -23,8 +23,18 @@ module DevSuite
 
         # Parse the path into an array of keys/symbols/integers
         def parse_path(path)
+          # If path is already an array, return it
           return path if path.is_a?(Array)
 
+          # If path is a symbol without dots, return it as a single-element array
+          return [path] if path.is_a?(Symbol) && !path.to_s.include?(".")
+
+          # Handle symbols like :"test.1" by splitting on the dot
+          if path.is_a?(Symbol) && path.to_s.include?(".")
+            return path.to_s.split(".").map { |part| part.match?(/^\d+$/) ? part.to_i : part.to_sym }
+          end
+
+          # Handle string paths like 'users.1.name'
           path.to_s.split(/\.|\[|\]/).reject(&:empty?).map do |part|
             part.match?(/^\d+$/) ? part.to_i : part.to_sym
           end

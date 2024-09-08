@@ -12,12 +12,12 @@ module DevSuite
 
       # Update the context with new data
       def update(new_data)
-        @data.merge!(new_data)
+        Utils::Data.deep_merge!(@data, new_data)
       end
 
       # Retrieve data by key
       def get(key)
-        @data[key]
+        Utils::Data.get_value_by_path(@data, key)
       end
     end
   end
