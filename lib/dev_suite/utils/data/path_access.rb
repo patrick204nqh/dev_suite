@@ -40,6 +40,8 @@ module DevSuite
               fetch_from_hash(current_data, key)
             when Array
               fetch_from_array(current_data, key)
+            else
+              raise KeyError, "Invalid data type at '#{key}'"
             end
           end
         end
