@@ -12,7 +12,10 @@ module DevSuite
           end
 
           def load(path)
-            ::JSON.parse(::File.read(path))
+            content = ::File.read(path)
+            return {} if content.strip.empty?
+
+            ::JSON.parse(content)
           end
         end
       end
