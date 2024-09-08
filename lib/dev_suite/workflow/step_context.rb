@@ -7,7 +7,7 @@ module DevSuite
 
       def initialize(data = {}, **options)
         @data = data
-        @store = Utils::Store.create(driver: options[:driver], path: options[:path])
+        @store = create_store(options)
       end
 
       # Update the context with new data
@@ -18,6 +18,14 @@ module DevSuite
       # Retrieve data by key
       def get(key)
         Utils::Data.get_value_by_path(@data, key)
+      end
+
+      private
+
+      def create_store(options)
+        driver = options[:driver] || :file
+        path = options[:path]
+        Utils::Store.create(driver: driver, path: path)
       end
     end
   end
