@@ -13,51 +13,58 @@ module DevSuite
             raise NotImplementedError, "Subclasses must implement the `write` method"
           end
 
-          # Update a particular part of the structured data (e.g., JSON) in the file
-          # Supports appending new data if 'append' is true
-          def update_data_structure(path, key_path = nil, new_value = nil, append: false)
-            retries = 0
-            begin
-              create_directory_if_missing(path)
+          # Updates or appends structured data in the file
+          def update_file_structure(file_path, key_path = nil, new_value = nil, append: false)
+            with_retries do
+              ensure_directory_exists(file_path)
 
-              # Load existing data
-              current_data = read_file(path, append: append)
+              # Load existing data from the file
+              current_data = read_or_initialize_file(file_path)
 
-              # If append is true, append the new data; otherwise, update the specific key path
-              updated_data =
-                if append
-                  append_to_structure(current_data, new_value)
-                else
-                  Utils::Data.set_value_by_path(current_data, key_path, new_value)
-                end
+              # Modify data based on append or update operation
+              updated_data = modify_structure(current_data, key_path, new_value, append)
 
               # Write the modified data back to the file
-              perform_atomic_write(path, updated_data.to_json)
-            rescue IOError, Errno::ENOSPC => e
-              retries += 1
-              retry_on_failure(e, retries)
-            rescue StandardError => e
-              log_error("Unhandled error while writing to file: #{e.message}")
-              raise
+              atomic_write(file_path, updated_data)
             end
           end
 
           private
 
-          # Read and parse the file content as JSON, or initialize a new structure if the file doesn't exist
-          def read_file(path, append: false)
-            if ::File.exist?(path)
-              FileLoader.load(path)
+          # Reads and parses the file, or initializes a new structure if the file doesn't exist
+          def read_or_initialize_file(file_path)
+            if file_exists?(file_path)
+              load_file_content(file_path)
             else
-              log_error("File does not exist, initializing new structure.") unless append
-              {} # Initialize a new data structure if the file does not exist
+              initialize_new_structure
             end
-          rescue JSON::ParserError => e
-            log_error("Failed to parse JSON: #{e.message}")
-            raise
           end
 
-          # Append new data to the structure (only appends if the structure is an array or hash)
+          # Check if the file exists
+          def file_exists?(file_path)
+            ::File.exist?(file_path)
+          end
+
+          # Load the file content using a file loader
+          def load_file_content(file_path)
+            FileLoader.load(file_path)
+          end
+
+          # Initializes a new structure (hash by default) if the file is missing
+          def initialize_new_structure
+            {}
+          end
+
+          # Modifies the data structure by either appending or updating
+          def modify_structure(data, key_path, new_value, append)
+            if append
+              append_to_structure(data, new_value)
+            else
+              Utils::Data.set_value_by_path(data, key_path, new_value)
+            end
+          end
+
+          # Appends new data to the structure (array or hash)
           def append_to_structure(data, new_value)
             case data
             when Array
@@ -70,68 +77,73 @@ module DevSuite
             data
           end
 
-          # Perform atomic write with locking and retries
-          def perform_atomic_write(path, content, mode: 0o644)
-            retries = 0
-            begin
-              create_directory_if_missing(path)
+          # Performs an atomic write operation with file locking and retries
+          def atomic_write(file_path, content, mode: 0o644)
+            with_retries do
+              ensure_directory_exists(file_path)
 
-              # Acquire a file lock to prevent race conditions
-              ::File.open(path, "w") do |file|
+              # Perform atomic write with file locking
+              ::File.open(file_path, "w") do |file|
                 file.flock(::File::LOCK_EX) # Lock for exclusive write access
-                write_to_tempfile_and_replace(path, content, mode)
-              end
-            rescue IOError, Errno::ENOSPC => e
-              retries += 1
-              if retries <= MAX_RETRIES
-                delay = exponential_backoff_delay(retries)
-                log_error_and_retry("I/O error or space issue: #{e.message}. Retrying in #{delay}s...", retries)
-                sleep(delay)
-                retry
-              else
-                log_error("I/O error after #{MAX_RETRIES} retries: #{e.message}")
-                raise
+                write_to_tempfile_and_replace(file_path, content, mode)
               end
             end
           end
 
-          # Handles the actual writing to a tempfile and renaming it for atomic write
-          def write_to_tempfile_and_replace(path, content, mode)
-            # Use Tempfile in the same directory to ensure atomicity
-            ::Tempfile.create(::File.basename(path), ::File.dirname(path)) do |tempfile|
+          # Writes to a tempfile and atomically replaces the original file
+          def write_to_tempfile_and_replace(file_path, content, mode)
+            ::Tempfile.create(::File.basename(file_path), ::File.dirname(file_path)) do |tempfile|
               tempfile.write(content)
               tempfile.flush
               tempfile.fsync  # Ensure data is physically written to disk
               tempfile.close  # Close tempfile before renaming
 
-              # Replace the original file with the tempfile atomically
-              ::File.rename(tempfile.path, path)
+              # Atomically replace the original file with the tempfile
+              ::File.rename(tempfile.path, file_path)
             end
 
-            # Set the correct permissions for the final file
-            ::File.chmod(mode, path)
+            # Set correct file permissions
+            ::File.chmod(mode, file_path)
           rescue IOError, Errno::ENOSPC => e
-            log_error("I/O error during tempfile creation or replacement: #{e.message}")
+            log_error("Failed to write or replace the original file: #{e.message}")
             raise
           end
 
-          # Create the directory if it doesn't exist
-          def create_directory_if_missing(path)
-            directory = ::File.dirname(path)
+          # Ensures the directory for the file exists
+          def ensure_directory_exists(file_path)
+            directory = ::File.dirname(file_path)
             ::FileUtils.mkdir_p(directory) unless ::Dir.exist?(directory)
           end
 
-          # Exponential backoff delay for retries
-          def exponential_backoff_delay(retries)
+          # Retry logic with exponential backoff for transient errors
+          def with_retries
+            retries = 0
+            begin
+              yield
+            rescue IOError, Errno::ENOSPC => e
+              retries += 1
+              if retries <= MAX_RETRIES
+                retry_with_backoff(retries, e)
+              else
+                log_error("Max retries reached. Error: #{e.message}")
+                raise
+              end
+            end
+          end
+
+          # Retry operation with exponential backoff
+          def retry_with_backoff(retries, error)
+            delay = exponential_backoff(retries)
+            log_error("Retrying due to error: #{error.message}. Retry #{retries}/#{MAX_RETRIES} in #{delay}s")
+            sleep(delay)
+          end
+
+          # Exponential backoff calculation for retries
+          def exponential_backoff(retries)
             RETRY_BASE_DELAY * (2**(retries - 1))
           end
 
-          # Log errors and retry attempts
-          def log_error_and_retry(message, retry_count)
-            puts "[Retry #{retry_count}] #{message}"
-          end
-
-          # Log any error messages with context
+          # Logs error messages
           def log_error(message)
             puts "[Error] #{message}"
           end

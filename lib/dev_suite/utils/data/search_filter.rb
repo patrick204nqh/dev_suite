@@ -52,8 +52,6 @@ module DevSuite
             end
           when Array
             data.each { |item| traverse_and_collect(item, &block) }
-          else
-            raise ArgumentError, "Unsupported data type: #{data.class}"
           end
         end
       end
