@@ -16,23 +16,23 @@ module DevSuite
           end
         end
 
-        # Deep merge two hashes, including nested keys
+        # Non-destructive deep merge
         def deep_merge(hash1, hash2)
-          hash1.merge(hash2) do |_key, old_val, new_val|
-            if old_val.is_a?(Hash) && new_val.is_a?(Hash)
-              deep_merge(old_val, new_val)
-            else
-              new_val
-            end
-          end
+          hash1 = hash1.dup # Ensure we don't modify the original hash1
+          deep_merge!(hash1, hash2)
         end
 
+        # Destructive deep merge (modifies hash1)
         def deep_merge!(hash1, hash2)
+          return hash1 if hash2.nil? # If hash2 is nil, return hash1 as-is
+
           hash2.each do |key, new_val|
             if hash1[key].is_a?(Hash) && new_val.is_a?(Hash)
-              deep_merge!(hash1[key], new_val) # Recursively merge nested hashes
+              # Recursively merge nested hashes
+              deep_merge!(hash1[key], new_val)
             else
-              hash1[key] = new_val # Overwrite or add the value from hash2
+              # Overwrite or add the value from hash2
+              hash1[key] = new_val
             end
           end
           hash1

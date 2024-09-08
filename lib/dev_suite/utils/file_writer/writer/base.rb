@@ -96,23 +96,28 @@ module DevSuite
             end
           end
 
-          # Writes to a tempfile and atomically replaces the original file
+          # Writes to a temporary file and atomically replaces the original file
           def write_to_tempfile_and_replace(file_path, content, mode)
-            ::Tempfile.create(::File.basename(file_path), ::File.dirname(file_path)) do |tempfile|
-              tempfile.write(content)
-              tempfile.flush
-              tempfile.fsync  # Ensure data is physically written to disk
-              tempfile.close  # Close tempfile before renaming
+            temp_file_path = "#{file_path}.tmp"
+            begin
+              ::File.open(temp_file_path, "w") do |tempfile|
+                tempfile.write(content)
+                tempfile.flush
+                tempfile.fsync # Ensure data is physically written to disk
+              end
 
-              # Atomically replace the original file with the tempfile
-              ::File.rename(tempfile.path, file_path)
+              # Atomically replace the original file with the temporary file
+              ::File.rename(temp_file_path, file_path)
+
+              # Set correct file permissions
+              ::File.chmod(mode, file_path)
+            rescue IOError, Errno::ENOSPC => e
+              log_error("Failed to write or replace the original file: #{e.message}")
+              raise
+            ensure
+              # Clean up the temporary file if it still exists
+              ::File.delete(temp_file_path) if ::File.exist?(temp_file_path)
             end
-
-            # Set correct file permissions
-            ::File.chmod(mode, file_path)
-          rescue IOError, Errno::ENOSPC => e
-            log_error("Failed to write or replace the original file: #{e.message}")
-            raise
           end
 
           # Ensures the directory for the file exists
