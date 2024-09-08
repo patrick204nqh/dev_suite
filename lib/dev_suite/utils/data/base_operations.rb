@@ -27,6 +27,17 @@ module DevSuite
           end
         end
 
+        def deep_merge!(hash1, hash2)
+          hash2.each do |key, new_val|
+            if hash1[key].is_a?(Hash) && new_val.is_a?(Hash)
+              deep_merge!(hash1[key], new_val) # Recursively merge nested hashes
+            else
+              hash1[key] = new_val # Overwrite or add the value from hash2
+            end
+          end
+          hash1
+        end
+
         private
 
         # Helper method to delete a key from a hash recursively

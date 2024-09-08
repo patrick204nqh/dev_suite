@@ -10,7 +10,7 @@ module DevSuite
             @data = {}
           end
 
-          def store(key, value)
+          def set(key, value)
             @data[key] = value
           end
 
@@ -24,6 +24,16 @@ module DevSuite
 
           def clear
             @data.clear
+          end
+
+          def import(source)
+            raise ArgumentError, "The file does not exist" unless ::File.exist?(source)
+
+            @data = FileLoader.load(source)
+          end
+
+          def export(destination)
+            FileWriter.write(destination, @data)
           end
         end
       end

@@ -5,8 +5,8 @@ module DevSuite
     module Store
       module Driver
         class Base < Construct::Component::Base
-          def store(key, value)
-            raise NotImplementedError, "Subclasses must implement the `store` method"
+          def set(key, value)
+            raise NotImplementedError, "Subclasses must implement the `set` method"
           end
 
           def fetch(key)

@@ -9,10 +9,10 @@ module DevSuite
             super
             @path = fetch_setting("driver.file.path")
             @data = {}
-            load_data if ::File.exist?(@path)
+            load_data
           end
 
-          def store(key, value)
+          def set(key, value)
             @data[key] = value
             save_data
           end
@@ -44,7 +44,7 @@ module DevSuite
           private
 
           def load_data
-            @data = FileLoader.load(@path)
+            @data = FileLoader.load(@path) if ::File.exist?(@path)
           end
 
           def save_data

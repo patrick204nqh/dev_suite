@@ -8,6 +8,7 @@ module DevSuite
   require_relative "directory_tree"
   require_relative "request_logger"
   require_relative "request_builder"
+  require_relative "workflow"
 
   class Error < StandardError; end
 end

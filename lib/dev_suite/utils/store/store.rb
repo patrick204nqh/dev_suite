@@ -7,12 +7,12 @@ module DevSuite
       require_relative "driver"
 
       class Store
-        def initialize
-          @driver = Config.configuration.driver
+        def initialize(driver: nil)
+          @driver = initialize_driver(driver)
         end
 
-        def store(key, value)
-          @driver.store(key, value)
+        def set(key, value)
+          @driver.set(key, value)
         end
 
         def fetch(key)
@@ -34,15 +34,34 @@ module DevSuite
         def clear
           @driver.clear
         end
+
+        private
+
+        def config_driver
+          Config.configuration.driver
+        end
+
+        def initialize_driver(driver)
+          return config_driver if driver.nil?
+
+          Driver.build_component(driver)
+        end
       end
 
       class << self
-        def store
+        # Retrieve the singleton store instance
+        def instance
           @store ||= Store.new
         end
 
+        # Reset the singleton store instance
         def reset!
           @store = nil
+        end
+
+        # Create a new store instance (isolated from the singleton)
+        def create(**options)
+          Store.new(**options)
         end
       end
     end
