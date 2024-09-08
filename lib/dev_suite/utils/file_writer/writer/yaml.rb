@@ -5,16 +5,12 @@ module DevSuite
     module FileWriter
       module Writer
         class Yaml < Base
-          # Write a hash or array of hashes as YAML content to a file
-          def write(path, content, normalize: false, create_backup: false, yaml_options: {})
+          def write(path, content, normalize: false, backup: false, yaml_options: {})
             validate_content(content)
-            create_backup_if_needed(path, create_backup)
+            create_backup(path) if backup
+
             yaml_content = prepare_yaml_content(content, normalize, yaml_options)
-            perform_atomic_write(path, yaml_content)
-          rescue IOError => e
-            handle_write_error("YAML", path, e, specific_error: "I/O error")
-          rescue ::YAML::SyntaxError => e
-            handle_write_error("YAML", path, e, specific_error: "YAML syntax error")
+            AtomicWriter.new(path, yaml_content).write
           end
 
           private
@@ -23,13 +19,6 @@ module DevSuite
           def prepare_yaml_content(content, normalize, yaml_options)
             normalized_content = normalize ? normalize_yaml(content) : content
             ::YAML.dump(normalized_content, yaml_options)
-          end
-
-          # Log and raise errors during the write process
-          def handle_write_error(format, path, error, specific_error: nil)
-            message = specific_error || "Error writing #{format} to #{path}: #{error.message}"
-            log_error(message)
-            raise
           end
 
           # Validates that content is a Hash or an Array of Hashes

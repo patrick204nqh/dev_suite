@@ -5,18 +5,20 @@ module DevSuite
     module FileWriter
       module Writer
         class Text < Base
-          # Ensure the text content is written as plain text without extra quotes
-          def write(path, content, create_backup: false)
-            # Step 1: Create a backup if required
-            create_backup(path) if create_backup && file_exists?(path)
+          def write(path, content, backup: false)
+            create_backup(path) if backup
 
-            # Step 2: Perform atomic write
-            atomic_write(path, content) # Write content directly without serialization
-          rescue StandardError => e
-            log_error("Error writing text to #{path}: #{e.message}")
-            raise
-          else
-            log_info("Successfully wrote text content to #{path}")
+            AtomicWriter.new(path, content).write
+          end
+
+          # Updates a key-like pattern in a plain text file (find and replace)
+          def update_key(path, key, value, backup: false)
+            content = load_file_content(path)
+
+            # Simple pattern matching and replacement (e.g., `key: value`)
+            updated_content = content.gsub(/^#{Regexp.escape(key)}:.*/, "#{key}: #{value}")
+
+            write(path, updated_content, backup: backup)
           end
         end
       end

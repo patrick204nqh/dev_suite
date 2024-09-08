@@ -81,7 +81,7 @@ module DevSuite
 
             case current_data
             when Hash
-              current_data[key.to_sym] ||= {}
+              current_data[find_existing_key(current_data, key)] ||= {}
             when Array
               current_data[key.to_i] ||= {}
             else
@@ -109,7 +109,7 @@ module DevSuite
         def set_final_value(target, last_key, value)
           case target
           when Hash
-            target[last_key.to_sym] = value
+            target[find_existing_key(target, last_key)] = value
           when Array
             if last_key.is_a?(Integer)
               target[last_key] = value
@@ -119,6 +119,15 @@ module DevSuite
           else
             raise KeyError, "Invalid target type for path at '#{last_key}'"
           end
+        end
+
+        # Check if the key already exists and return the key in its original type (symbol or string)
+        def find_existing_key(hash, key)
+          return key if hash.key?(key) # Key already exists in original form
+          return key.to_s if hash.key?(key.to_s) # Exists as a string
+          return key.to_sym if hash.key?(key.to_sym) # Exists as a symbol
+
+          key # Otherwise, return the key as-is (use the incoming type)
         end
       end
     end
