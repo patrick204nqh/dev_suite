@@ -5,9 +5,14 @@ require "dev_suite"
 
 # Create the workflow engine with an initial context
 engine = DevSuite::Workflow.create_engine(
-  user: "Alice",
-  role: "admin",
-  iteration_count: 0,
+  {
+    user: "Alice",
+    role: "admin",
+    iteration_count: 0,
+  },
+  store: {
+    path: "tmp/workflow_store.json",
+  },
 )
 
 # Step 1: Create a basic step to greet the user

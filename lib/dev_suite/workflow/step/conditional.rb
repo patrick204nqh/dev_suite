@@ -14,7 +14,7 @@ module DevSuite
           if @condition.call(context)
             super
           else
-            Logger.log(@name, "Skipped due to condition")
+            Utils::Logger.log("Step: #{@name} - Skipped due to condition", level: :info)
           end
         end
       end

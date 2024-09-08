@@ -5,9 +5,9 @@ module DevSuite
     module Store
       module Driver
         class File < Base
-          def initialize
-            super
-            @path = fetch_setting("driver.file.path")
+          def initialize(**options)
+            super()
+            @path = options[:path] || fetch_setting(:path, default: "tmp/store.json")
             @data = {}
             load_data
           end

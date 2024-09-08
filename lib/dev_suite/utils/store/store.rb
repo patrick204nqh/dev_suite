@@ -7,8 +7,8 @@ module DevSuite
       require_relative "driver"
 
       class Store
-        def initialize(driver: nil)
-          @driver = initialize_driver(driver)
+        def initialize(**options)
+          @driver = initialize_driver(**options)
         end
 
         def set(key, value)
@@ -37,14 +37,14 @@ module DevSuite
 
         private
 
-        def config_driver
-          Config.configuration.driver
+        def initialize_driver(**options)
+          return Config.configuration.driver unless options.key?(:driver)
+
+          build_driver(options)
         end
 
-        def initialize_driver(driver)
-          return config_driver if driver.nil?
-
-          Driver.build_component(driver)
+        def build_driver(options)
+          Driver.build_component(options.fetch(:driver), **options.except(:driver))
         end
       end
 

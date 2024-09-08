@@ -15,7 +15,7 @@ module DevSuite
         # Executes the step and moves to the next step
         def execute(context)
           result = perform_action(context)
-          log_step(result)
+          Utils::Logger.log("Step: #{@name} - Result: #{result}", level: :info)
           update_context(context, result)
           execute_next_step(context)
         end
@@ -41,11 +41,6 @@ module DevSuite
         # Execute the next step if it exists
         def execute_next_step(context)
           @next_step&.execute(context)
-        end
-
-        # Log the result of the step
-        def log_step(result)
-          Logger.log(@name, result)
         end
       end
     end

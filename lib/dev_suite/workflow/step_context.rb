@@ -5,9 +5,9 @@ module DevSuite
     class StepContext
       attr_accessor :data, :store
 
-      def initialize(data = {})
+      def initialize(data = {}, **options)
         @data = data
-        @store = Utils::Store.create(driver: :file)
+        @store = Utils::Store.create(driver: :file, path: options[:store]&.[](:path))
       end
 
       # Update the context with new data
