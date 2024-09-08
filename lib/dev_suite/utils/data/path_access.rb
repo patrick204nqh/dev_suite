@@ -23,21 +23,39 @@ module DevSuite
 
         # Parse the path into an array of keys/symbols/integers
         def parse_path(path)
-          # If path is already an array, return it
           return path if path.is_a?(Array)
+          return [path] if single_symbol_path?(path)
 
-          # If path is a symbol without dots, return it as a single-element array
-          return [path] if path.is_a?(Symbol) && !path.to_s.include?(".")
+          parse_symbol_or_string_path(path)
+        end
 
-          # Handle symbols like :"test.1" by splitting on the dot
-          if path.is_a?(Symbol) && path.to_s.include?(".")
-            return path.to_s.split(".").map { |part| part.match?(/^\d+$/) ? part.to_i : part.to_sym }
+        # Check if the path is a symbol without dots
+        def single_symbol_path?(path)
+          path.is_a?(Symbol) && !path.to_s.include?(".")
+        end
+
+        # Parse a symbol or string path into an array of keys
+        def parse_symbol_or_string_path(path)
+          if path.is_a?(Symbol)
+            parse_symbol_path(path)
+          else
+            parse_string_path(path)
           end
+        end
 
-          # Handle string paths like 'users.1.name'
-          path.to_s.split(/\.|\[|\]/).reject(&:empty?).map do |part|
-            part.match?(/^\d+$/) ? part.to_i : part.to_sym
-          end
+        # Parse a symbol path that contains dots (e.g., :"test.1")
+        def parse_symbol_path(path)
+          path.to_s.split(".").map { |part| parse_part(part) }
+        end
+
+        # Parse a string path into keys (e.g., 'users.1.name')
+        def parse_string_path(path)
+          path.to_s.split(/\.|\[|\]/).reject(&:empty?).map { |part| parse_part(part) }
+        end
+
+        # Parse each part into either a symbol or integer
+        def parse_part(part)
+          part.match?(/^\d+$/) ? part.to_i : part.to_sym
         end
 
         # Helper to traverse the path for getting values
