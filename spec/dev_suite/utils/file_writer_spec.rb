@@ -2,16 +2,18 @@
 
 require "spec_helper"
 
+TMP_DIR = "spec/tmp"
+
 RSpec.describe(DevSuite::Utils::FileWriter) do
   describe ".write" do
     let(:content) { "This is a test content." }
 
     before(:each) do
-      FileUtils.mkdir_p("spec/tmp")
+      FileUtils.mkdir_p(TMP_DIR)
     end
 
     after(:each) do
-      FileUtils.rm_rf("spec/tmp")
+      FileUtils.rm_rf(TMP_DIR)
     end
 
     context "when the file is a TXT file" do
@@ -48,11 +50,11 @@ RSpec.describe(DevSuite::Utils::FileWriter) do
     let(:content) { { "key" => "value" } }
 
     before(:each) do
-      FileUtils.mkdir_p("spec/tmp")
+      FileUtils.mkdir_p(TMP_DIR)
     end
 
     after(:each) do
-      FileUtils.rm_rf("spec/tmp")
+      FileUtils.rm_rf(TMP_DIR)
     end
 
     context "when the file is a TXT file" do
