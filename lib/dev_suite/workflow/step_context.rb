@@ -7,7 +7,7 @@ module DevSuite
 
       def initialize(data = {}, **options)
         @data = data
-        @store = Utils::Store.create(driver: :file, path: options[:store]&.[](:path))
+        @store = Utils::Store.create(driver: options[:driver], path: options[:path])
       end
 
       # Update the context with new data
