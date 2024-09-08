@@ -32,4 +32,18 @@ RSpec.describe(DevSuite::Utils::Data::PathAccess) do
       expect(data[:users][1][:name]).to(eq("Charlie"))
     end
   end
+
+  describe "#delete_key_by_path" do
+    it "deletes a key using dot notation" do
+      data = { users: [{ name: "Alice" }, { name: "Bob" }] }
+      dummy_class.delete_key_by_path(data, "users[1].name")
+      expect(data[:users][1]).to(eq({}))
+    end
+
+    it "deletes a key using array path notation" do
+      data = { users: [{ name: "Alice" }, { name: "Bob" }] }
+      dummy_class.delete_key_by_path(data, [:users, 1, :name])
+      expect(data[:users][1]).to(eq({}))
+    end
+  end
 end

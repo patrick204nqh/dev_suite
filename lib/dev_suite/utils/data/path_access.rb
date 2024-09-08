@@ -19,6 +19,15 @@ module DevSuite
           set_final_value(target, last_key, value)
         end
 
+        # Delete a key from a nested structure using a path
+        def delete_key_by_path(data, path)
+          keys = parse_path(path)
+          last_key = keys.pop
+          target = traverse_path_for_delete(data, keys)
+
+          delete_final_key(target, last_key)
+        end
+
         private
 
         # Parse the path into an array of keys/symbols/integers
@@ -128,6 +137,34 @@ module DevSuite
           return key.to_sym if hash.key?(key.to_sym) # Exists as a symbol
 
           key # Otherwise, return the key as-is (use the incoming type)
+        end
+
+        # Helper to traverse the path for deletion
+        def traverse_path_for_delete(data, keys)
+          keys.reduce(data) do |current_data, key|
+            check_invalid_path(current_data, key)
+
+            case current_data
+            when Hash
+              current_data[find_existing_key(current_data, key)]
+            when Array
+              current_data[key.to_i]
+            else
+              raise KeyError, "Invalid data type at '#{key}'"
+            end
+          end
+        end
+
+        # Helper to delete the final key in a hash or array
+        def delete_final_key(target, last_key)
+          case target
+          when Hash
+            target.delete(find_existing_key(target, last_key))
+          when Array
+            target.delete_at(last_key.to_i) if last_key.is_a?(Integer)
+          else
+            raise KeyError, "Cannot delete key from unsupported data type"
+          end
         end
       end
     end

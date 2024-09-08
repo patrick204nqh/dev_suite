@@ -2,14 +2,13 @@
 
 module DevSuite
   module Workflow
-    require_relative "logger"
     require_relative "step_context"
     require_relative "step"
     require_relative "engine"
 
     class << self
-      def create_engine(context = {})
-        Engine.new(context)
+      def create_engine(context = {}, **options)
+        Engine.new(context, **options)
       end
 
       def create_step(name, &block)
