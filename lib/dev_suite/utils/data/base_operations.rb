@@ -8,13 +8,9 @@ module DevSuite
         def deep_delete_key(data, key_to_delete)
           case data
           when Hash
-            # Remove the key and recurse into nested structures
-            data.each_with_object({}) do |(key, value), result|
-              result[key] = deep_delete_key(value, key_to_delete) unless key == key_to_delete
-            end
+            delete_key_from_hash(data, key_to_delete)
           when Array
-            # Recurse into array elements
-            data.map { |item| deep_delete_key(item, key_to_delete) }
+            delete_key_from_array(data, key_to_delete)
           else
             data
           end
@@ -32,6 +28,20 @@ module DevSuite
         end
 
         private
+
+        # Helper method to delete a key from a hash recursively
+        def delete_key_from_hash(hash, key_to_delete)
+          hash.each_with_object({}) do |(key, value), result|
+            unless key == key_to_delete
+              result[key] = deep_delete_key(value, key_to_delete)
+            end
+          end
+        end
+
+        # Helper method to recursively delete keys from array elements
+        def delete_key_from_array(array, key_to_delete)
+          array.map { |item| deep_delete_key(item, key_to_delete) }
+        end
 
         # Helper: Traverse a nested hash or array
         def traverse_data(data, &block)

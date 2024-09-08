@@ -8,16 +8,66 @@ module DevSuite
           MAX_RETRIES = 5           # Max retry attempts for transient errors
           RETRY_BASE_DELAY = 0.2    # Base delay between retries (will use backoff)
 
+          # Abstract method that subclasses must implement for custom file write operations
           def write(_path, _content)
             raise NotImplementedError, "Subclasses must implement the `write` method"
           end
 
+          # Update a particular part of the structured data (e.g., JSON) in the file
+          # Supports appending new data if 'append' is true
+          def update_data_structure(path, key_path = nil, new_value = nil, append: false)
+            retries = 0
+            begin
+              create_directory_if_missing(path)
+
+              # Load existing data
+              current_data = read_file(path, append: append)
+
+              # If append is true, append the new data; otherwise, update the specific key path
+              updated_data =
+                if append
+                  append_to_structure(current_data, new_value)
+                else
+                  Utils::Data.set_value_by_path(current_data, key_path, new_value)
+                end
+
+              # Write the modified data back to the file
+              perform_atomic_write(path, updated_data.to_json)
+            rescue IOError, Errno::ENOSPC => e
+              retries += 1
+              retry_on_failure(e, retries)
+            rescue StandardError => e
+              log_error("Unhandled error while writing to file: #{e.message}")
+              raise
+            end
+          end
+
           private
 
-          # Ensures the directory for the file exists
-          def create_directory_if_missing(path)
-            directory = ::File.dirname(path)
-            ::FileUtils.mkdir_p(directory) unless ::Dir.exist?(directory)
+          # Read and parse the file content as JSON, or initialize a new structure if the file doesn't exist
+          def read_file(path, append: false)
+            if ::File.exist?(path)
+              FileLoader.load(path)
+            else
+              log_error("File does not exist, initializing new structure.") unless append
+              {} # Initialize a new data structure if the file does not exist
+            end
+          rescue JSON::ParserError => e
+            log_error("Failed to parse JSON: #{e.message}")
+            raise
+          end
+
+          # Append new data to the structure (only appends if the structure is an array or hash)
+          def append_to_structure(data, new_value)
+            case data
+            when Array
+              data << new_value
+            when Hash
+              data.merge!(new_value)
+            else
+              raise TypeError, "Unsupported data structure for append operation"
+            end
+            data
           end
 
           # Perform atomic write with locking and retries
@@ -29,8 +79,6 @@ module DevSuite
               # Acquire a file lock to prevent race conditions
               ::File.open(path, "w") do |file|
                 file.flock(::File::LOCK_EX) # Lock for exclusive write access
-
-                # Atomic write to tempfile and replace the original file
                 write_to_tempfile_and_replace(path, content, mode)
               end
             rescue IOError, Errno::ENOSPC => e
@@ -44,9 +92,6 @@ module DevSuite
                 log_error("I/O error after #{MAX_RETRIES} retries: #{e.message}")
                 raise
               end
-            rescue StandardError => e
-              log_error("Unhandled error while writing to file: #{e.message}")
-              raise
             end
           end
 
@@ -59,25 +104,21 @@ module DevSuite
               tempfile.fsync  # Ensure data is physically written to disk
               tempfile.close  # Close tempfile before renaming
 
-              # Lock the target file during the rename to avoid race conditions
-              begin
-                ::File.rename(tempfile.path, path)
-              rescue StandardError => e
-                raise IOError, "Failed to rename tempfile to target: #{e.message}"
-              end
+              # Replace the original file with the tempfile atomically
+              ::File.rename(tempfile.path, path)
             end
 
             # Set the correct permissions for the final file
             ::File.chmod(mode, path)
-          rescue IOError => e
+          rescue IOError, Errno::ENOSPC => e
             log_error("I/O error during tempfile creation or replacement: #{e.message}")
             raise
-          rescue Errno::ENOSPC => e
-            log_error("No space left during tempfile creation: #{e.message}")
-            raise
-          rescue StandardError => e
-            log_error("Unexpected error during atomic write: #{e.message}")
-            raise
+          end
+
+          # Create the directory if it doesn't exist
+          def create_directory_if_missing(path)
+            directory = ::File.dirname(path)
+            ::FileUtils.mkdir_p(directory) unless ::Dir.exist?(directory)
           end
 
           # Exponential backoff delay for retries

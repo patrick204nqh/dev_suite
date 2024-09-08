@@ -17,23 +17,30 @@ module DevSuite
         def deep_filter_by_key_value(data, filter_key, filter_value)
           case data
           when Hash
-            # Only include the hash if it has the matching key-value pair
-            return data if data[filter_key] == filter_value
-
-            # Continue to filter nested hashes
-            data.each_with_object({}) do |(key, value), result|
-              filtered_value = deep_filter_by_key_value(value, filter_key, filter_value)
-              result[key] = filtered_value unless filtered_value.nil? || filtered_value.empty?
-            end
+            filter_hash_by_key_value(data, filter_key, filter_value)
           when Array
-            # Recursively filter each item in the array
-            data.map { |v| deep_filter_by_key_value(v, filter_key, filter_value) }.compact
+            filter_array_by_key_value(data, filter_key, filter_value)
           else
             raise ArgumentError, "Unsupported data type: #{data.class}"
           end
         end
 
         private
+
+        # Helper method to filter a hash by a key-value condition
+        def filter_hash_by_key_value(hash, filter_key, filter_value)
+          return hash if hash[filter_key] == filter_value
+
+          hash.each_with_object({}) do |(key, value), result|
+            filtered_value = deep_filter_by_key_value(value, filter_key, filter_value)
+            result[key] = filtered_value unless filtered_value.nil? || filtered_value.empty?
+          end
+        end
+
+        # Helper method to filter an array by a key-value condition
+        def filter_array_by_key_value(array, filter_key, filter_value)
+          array.map { |item| deep_filter_by_key_value(item, filter_key, filter_value) }.compact
+        end
 
         # Helper method to traverse and collect values
         def traverse_and_collect(data, &block)
