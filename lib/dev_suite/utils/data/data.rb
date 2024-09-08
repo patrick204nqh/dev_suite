@@ -8,6 +8,12 @@ module DevSuite
       require_relative "search_filter"
       require_relative "path_access"
       require_relative "serialization"
+
+      extend BaseOperations
+      extend Transformations
+      extend SearchFilter
+      extend PathAccess
+      extend Serialization
     end
   end
 end
