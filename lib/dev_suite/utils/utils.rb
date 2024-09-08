@@ -14,5 +14,6 @@ module DevSuite
     require_relative "file_writer"
     require_relative "path_matcher"
     require_relative "store"
+    require_relative "data"
   end
 end
