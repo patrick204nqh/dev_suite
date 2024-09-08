@@ -18,23 +18,6 @@ module DevSuite
           else
             log_info("Successfully wrote text content to #{path}")
           end
-
-          private
-
-          # Creates a backup of the existing file before overwriting it
-          def create_backup(path)
-            backup_path = "#{path}.bak"
-            log_info("Creating backup of #{path} at #{backup_path}")
-            ::FileUtils.cp(path, backup_path)
-          rescue StandardError => e
-            log_error("Failed to create backup for #{path}: #{e.message}")
-            raise
-          end
-
-          # Logs successful operations
-          def log_info(message)
-            puts "[Info] #{message}"
-          end
         end
       end
     end

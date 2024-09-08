@@ -77,6 +77,12 @@ module DevSuite
             data
           end
 
+          # Perform atomic write and log success
+          def perform_atomic_write(path, content)
+            atomic_write(path, content)
+            log_info("Successfully wrote content to #{path}")
+          end
+
           # Performs an atomic write operation with file locking and retries
           def atomic_write(file_path, content, mode: 0o644)
             with_retries do
@@ -146,6 +152,26 @@ module DevSuite
           # Logs error messages
           def log_error(message)
             puts "[Error] #{message}"
+          end
+
+          # Logs successful operations
+          def log_info(message)
+            puts "[Info] #{message}"
+          end
+
+          # Creates a backup of the existing file before overwriting it
+          def create_backup(path)
+            backup_path = "#{path}.bak"
+            log_info("Creating backup of #{path} at #{backup_path}")
+            ::FileUtils.cp(path, backup_path)
+          rescue IOError => e
+            log_error("Failed to create backup for #{path}: #{e.message}")
+            raise
+          end
+
+          # Create a backup if enabled
+          def create_backup_if_needed(path, create_backup)
+            create_backup(path) if create_backup && file_exists?(path)
           end
         end
       end
