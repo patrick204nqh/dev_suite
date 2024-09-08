@@ -8,62 +8,57 @@ module DevSuite
           class Base
             def initialize(settings = {})
               @default_settings = settings
-              @settings = merge_settings(@default_settings, settings)
+              @settings = Utils::Data.deep_merge(@default_settings, settings)
             end
 
             def set(*keys, value)
-              key_path, _kwargs = normalize_keys(keys)
-              last_key = key_path.pop
-              target = key_path.each_with_object(@settings) do |key, nested|
-                nested[key] ||= {}
-              end
-              target[last_key] = value
+              key_path = extract_path_from_keys(keys)
+              Utils::Data.set_value_by_path(@settings, key_path, value)
             end
 
             def get(*keys, default: nil)
-              key_path, _kwargs = normalize_keys(keys)
-              value = fetch_value_from_path(key_path)
+              key_path = extract_path_from_keys(keys)
+              value = Utils::Data.get_value_by_path(@settings, key_path)
               value.nil? ? default : value
             end
 
             def reset!
-              @settings = @default_settings
+              @settings = Utils::Data.deep_merge(@default_settings, {})
             end
 
             private
 
-            def normalize_keys(keys)
-              # If the last element is a hash (keyword arguments), separate it
-              kwargs = keys.last.is_a?(Hash) ? keys.pop : {}
+            # Extract path from mixed input (strings or arrays) and handle array-like syntax
+            def extract_path_from_keys(keys)
+              keys = keys.flatten
 
-              key_path = keys.flatten
+              # Handle case where keys is a single dot-separated string with array-like notation
+              if keys.size == 1 && keys.first.is_a?(String)
+                return parse_string_key(keys.first)
+              end
 
-              normalized_keys = if key_path.size == 1 && key_path.first.is_a?(String)
-                # Split the single string key (e.g., "tool.curl.raw_data") into components
-                key_path.first.to_s.split(".").map(&:to_sym)
+              # Otherwise, symbolize all keys and convert string-based array indices
+              keys.map { |key| parse_key_component(key) }
+            end
+
+            # Parse dot-separated strings and handle array-like notation (e.g., "users[1].avt")
+            def parse_string_key(key)
+              key.split(".").flat_map { |segment| parse_key_component(segment) }
+            end
+
+            # Parse individual components of the key (convert "users[1]" to [:users, 1])
+            def parse_key_component(component)
+              if component.match?(/\[\d+\]/)
+                # Handle array-like notation in strings like "users[1]"
+                component.scan(/[^\[\]]+/).map { |part| integer_or_symbol(part) }
               else
-                key_path.map(&:to_sym)
-              end
-
-              [normalized_keys, kwargs]
-            end
-
-            def merge_settings(defaults, overrides)
-              defaults.merge(overrides) do |_key, oldval, newval|
-                if oldval.is_a?(Hash) && newval.is_a?(Hash)
-                  merge_settings(oldval, newval)
-                else
-                  newval
-                end
+                integer_or_symbol(component)
               end
             end
 
-            def fetch_value_from_path(key_path)
-              key_path.reduce(@settings) do |nested, key|
-                return nil unless nested.is_a?(Hash)
-
-                nested[key]
-              end
+            # Convert to integer if it's a number, otherwise symbolize
+            def integer_or_symbol(part)
+              part.match?(/^\d+$/) ? part.to_i : part.to_sym
             end
           end
         end
