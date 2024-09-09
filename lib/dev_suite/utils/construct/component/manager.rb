@@ -53,7 +53,7 @@ module DevSuite
             end
 
             # Load a dependency and execute a block if successful
-            def load_dependency(*dependencies, on_failure:, &block)
+            def load_dependency(*dependencies, on_failure: -> {}, &block)
               DependencyLoader.safe_load_dependencies(*dependencies, on_failure: on_failure, &block)
             end
           end
