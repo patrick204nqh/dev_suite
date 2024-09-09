@@ -214,118 +214,6 @@ Log detailed HTTP requests and responses across different adapters like Net::HTT
   ```
 </details>
 
-Manage complex workflows consisting of multiple sequential steps, including handling data between steps and supporting dynamic operations like conditionals, loops, and parallel execution.
-
-<details>
-  <summary>Show more</summary>
-  
-  **How to Use**:
-  ```ruby
-  workflow = DevSuite::Workflow.create_engine(initial_context)
-
-  # Define steps
-  step1 = DevSuite::Workflow.create_step("Step 1") do |context|
-    context.set(result: "Step 1 Complete")
-  end
-
-  step2 = DevSuite::Workflow.create_step("Step 2") do |context|
-    puts "Previous Result: #{context.get(:result)}"
-    context.set(result: "Step 2 Complete")
-  end
-
-  # Chain steps together
-  workflow.add_step(step1).add_step(step2)
-
-  # Execute workflow
-  workflow.execute
-  ```
-
-  **Chaining Steps**:
-  You can chain multiple steps together to create a workflow:
-  ```ruby
-  workflow = DevSuite::Workflow.create_engine(initial_context)
-  
-  step1 = DevSuite::Workflow.create_step("Step 1") { |ctx| ctx.set(data: 'Data from Step 1') }
-  step2 = DevSuite::Workflow.create_step("Step 2") { |ctx| puts "Received: #{ctx.get(:data)}" }
-
-  workflow.add_step(step1)
-          .add_step(step2)
-          .execute
-  ```
-
-  **Data Handling**:
-  Each step in the workflow has access to a shared context, where you can store and retrieve data:
-  ```ruby
-  workflow = DevSuite::Workflow.create_engine({ some_key: 'initial_value' })
-
-  step1 = DevSuite::Workflow.create_step("Step 1") do |ctx|
-    # Retrieve data
-    puts ctx.get(:some_key)  # Output: initial_value
-    # Update data
-    ctx.set(new_key: 'new_value')
-  end
-
-  step2 = DevSuite::Workflow.create_step("Step 2") do |ctx|
-    # Use updated data
-    puts ctx.get(:new_key)  # Output: new_value
-  end
-
-  workflow.add_step(step1).add_step(step2).execute
-  ```
-
-  **Parallel Execution**:
-  You can execute multiple steps in parallel:
-  ```ruby
-  parallel_step = DevSuite::Workflow.create_parallel_step("Parallel Step") do |ctx|
-    [
-      ->(context) { context.set(task1: "Task 1 done") },
-      ->(context) { context.set(task2: "Task 2 done") }
-    ]
-  end
-
-  workflow.add_step(parallel_step).execute
-  ```
-
-  **Save and Load Context**:
-  Save the workflow's context to a file and reload it for later use:
-  ```ruby
-  # Saving context to a YAML file
-  workflow = DevSuite::Workflow.create_engine({ user: 'John' })
-  workflow.add_step(DevSuite::Workflow.create_step("Example") { |ctx| ctx.set(status: 'completed') })
-  workflow.execute
-
-  File.open('context.yml', 'w') { |file| file.write(YAML.dump(workflow.context.data)) }
-
-  # Loading context from a YAML file
-  loaded_data = YAML.load_file('context.yml')
-  workflow = DevSuite::Workflow.create_engine(loaded_data)
-  ```
-
-  **Looping**:
-  You can loop steps in the workflow, for instance, if you need to repeat a step multiple times:
-  ```ruby
-  loop_step = DevSuite::Workflow.create_loop_step("Repeat 5 Times", 5) do |ctx|
-    count = ctx.get(:count) || 0
-    ctx.set(count: count + 1)
-    puts "Iteration: #{ctx.get(:count)}"
-  end
-
-  workflow.add_step(loop_step).execute
-  ```
-
-  **Sample Output**:
-  ```bash
-  Step 1 executed: result => Step 1 Complete
-  Step 2 executed: Previous Result: Step 1 Complete
-  Task 1 done
-  Task 2 done
-  Iteration: 1
-  Iteration: 2
-  ...
-  ```
-
-</details>
-
 ### Workflow Engine
 Manage complex workflows consisting of multiple sequential steps, including handling data between steps and supporting dynamic operations like conditionals, loops, and parallel execution.
 
@@ -337,13 +225,13 @@ Manage complex workflows consisting of multiple sequential steps, including hand
   workflow = DevSuite::Workflow.create_engine(initial_context)
 
   # Define steps
-  step1 = DevSuite::Workflow.create_step("Step 1") do |context|
-    context.update(result: "Step 1 Complete")
+  step1 = DevSuite::Workflow.create_step("Step 1") do |ctx|
+    ctx.update({ result: "Step 1 Complete" })
   end
 
-  step2 = DevSuite::Workflow.create_step("Step 2") do |context|
-    puts "Previous Result: #{context.get(:result)}"
-    context.update(result: "Step 2 Complete")
+  step2 = DevSuite::Workflow.create_step("Step 2") do |ctx|
+    puts "Previous Result: #{ctx.get(:result)}"
+    ctx.update({ result: "Step 2 Complete" })
   end
 
   # Chain steps together
@@ -358,7 +246,7 @@ Manage complex workflows consisting of multiple sequential steps, including hand
   ```ruby
   workflow = DevSuite::Workflow.create_engine(initial_context)
   
-  step1 = DevSuite::Workflow.create_step("Step 1") { |ctx| ctx.update(data: 'Data from Step 1') }
+  step1 = DevSuite::Workflow.create_step("Step 1") { |ctx| ctx.update({ data: 'Data from Step 1' }) }
   step2 = DevSuite::Workflow.create_step("Step 2") { |ctx| puts "Received: #{ctx.get(:data)}" }
 
   workflow.add_step(step1)
@@ -375,7 +263,7 @@ Manage complex workflows consisting of multiple sequential steps, including hand
     # Retrieve data
     puts ctx.get(:some_key)  # Output: initial_value
     # Set data
-    ctx.update(new_key: 'new_value')
+    ctx.update({ new_key: 'new_value' })
   end
 
   step2 = DevSuite::Workflow.create_step("Step 2") do |ctx|
@@ -391,7 +279,7 @@ Manage complex workflows consisting of multiple sequential steps, including hand
   ```ruby
   conditional_step = DevSuite::Workflow.create_conditional_step("Conditional Step", ->(ctx) { ctx.get(:result) == "Step 1 Complete" }) do |ctx|
     puts "Condition met! Executing conditional step."
-    ctx.update(result: "Conditional Step Executed")
+    ctx.update({ result: "Conditional Step Executed" })
   end
 
   workflow.add_step(conditional_step).execute
@@ -402,8 +290,8 @@ Manage complex workflows consisting of multiple sequential steps, including hand
   ```ruby
   parallel_step = DevSuite::Workflow.create_parallel_step("Parallel Step") do |ctx|
     [
-      ->(context) { context.update(task1: "Task 1 done") },
-      ->(context) { context.update(task2: "Task 2 done") }
+      ->(ctx) { ctx.update({ task1: "Task 1 done" }) },
+      ->(ctx) { ctx.update({ task2: "Task 2 done" }) }
     ]
   end
 
@@ -415,7 +303,7 @@ Manage complex workflows consisting of multiple sequential steps, including hand
   ```ruby
   # Saving context to a YAML file
   workflow = DevSuite::Workflow.create_engine({ user: 'John' })
-  workflow.add_step(DevSuite::Workflow.create_step("Example") { |ctx| ctx.update(status: 'completed') })
+  workflow.add_step(DevSuite::Workflow.create_step("Example") { |ctx| ctx.update({ status: 'completed' }) })
   workflow.execute
 
   File.open('context.yml', 'w') { |file| file.write(YAML.dump(workflow.context.data)) }
@@ -430,7 +318,7 @@ Manage complex workflows consisting of multiple sequential steps, including hand
   ```ruby
   loop_step = DevSuite::Workflow.create_loop_step("Repeat 5 Times", 5) do |ctx|
     count = ctx.get(:count) || 0
-    ctx.update(count: count + 1)
+    ctx.update({ count: count + 1 })
     puts "Iteration: #{ctx.get(:count)}"
   end
 
