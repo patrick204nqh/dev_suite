@@ -14,8 +14,9 @@ module DevSuite
             track_missing_dependency(missing_dependencies)
 
             attribute = send(attr_name)
+            original_attribute = send("original_#{attr_name}")
 
-            if attribute.is_a?(Array) && attribute.include?(option_key)
+            if original_attribute.is_a?(Array) && original_attribute.include?(option_key)
               attribute.delete(option_key)
               log_missing_dependency(attr_name, option_key, missing_dependencies)
             end
