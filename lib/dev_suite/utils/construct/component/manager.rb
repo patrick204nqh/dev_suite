@@ -19,7 +19,11 @@ module DevSuite
 
             # Check if a component is registered
             def component_registered?(component_key)
-              registered_components.key?(component_key)
+              unless registered_components.key?(component_key)
+                Utils::Logger.log("Component not found for key: #{component_key}", level: :warn, emoji: :warning)
+                return false
+              end
+              true
             end
 
             # Build a single component
