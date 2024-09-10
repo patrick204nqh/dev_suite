@@ -6,14 +6,13 @@ module DevSuite
       include Utils::Construct::Component::Manager
 
       require_relative "base"
-      require_relative "net_http"
 
-      register_component(NetHttp)
+      load_dependency(["net/http"], on_failure: ->(_) {}) do
+        require_relative "net_http"
+        register_component(NetHttp)
+      end
 
-      Utils::DependencyLoader.safe_load_dependencies(
-        "faraday",
-        on_failure: ->(_) {}, # Empty lambda to do nothing on failure
-      ) do
+      load_dependency(["faraday"], on_failure: ->(_) {}) do
         require_relative "faraday"
         register_component(Faraday)
       end

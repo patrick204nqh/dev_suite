@@ -17,6 +17,11 @@ module DevSuite
               @registered_components ||= {}
             end
 
+            # Check if a component is registered
+            def component_registered?(component_key)
+              registered_components.key?(component_key)
+            end
+
             # Build a single component
             def build_component(component_key, **options)
               component_class = registered_components[component_key]
@@ -26,9 +31,10 @@ module DevSuite
               component_class.new(**options)
             end
 
-            # Build multiple components
+            # Build multiple components by filtering registered ones
             def build_components(component_keys)
-              component_keys.map { |key| build_component(key) }
+              component_keys.select { |key| component_registered?(key) }
+                .map { |key| build_component(key) }
             end
 
             def build_component_from_instance(instance)
@@ -53,8 +59,8 @@ module DevSuite
             end
 
             # Load a dependency and execute a block if successful
-            def load_dependency(*dependencies, on_failure:, &block)
-              DependencyLoader.safe_load_dependencies(*dependencies, on_failure: on_failure, &block)
+            def load_dependency(dependencies = [], on_failure: -> {}, &block)
+              DependencyLoader.safe_load_dependencies(dependencies, on_failure: on_failure, &block)
             end
           end
         end

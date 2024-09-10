@@ -3,10 +3,10 @@
 module DevSuite
   module Utils
     module FileLoader
+      require_relative "config"
       require_relative "loader"
       require_relative "loader_registry"
       require_relative "loader_manager"
-      require_relative "config"
 
       class << self
         def load(path)

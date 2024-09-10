@@ -2,18 +2,26 @@
 
 module DevSuite
   module Utils
+    PATH = "dev_suite/utils"
+
+    # Load essential modules immediately because they are critical for
+    # application startup and early functionality.
     require_relative "emoji"
     require_relative "logger"
+    require_relative "data"
     require_relative "error_handler"
     require_relative "warning_handler"
     require_relative "dependency_loader"
-    require_relative "construct"
-    require_relative "color"
-    require_relative "table"
-    require_relative "file_loader"
-    require_relative "file_writer"
-    require_relative "path_matcher"
-    require_relative "store"
-    require_relative "data"
+
+    # Core utilities
+    autoload :Construct, "#{PATH}/construct"
+
+    # Functional utilities
+    autoload :Store, "#{PATH}/store"
+    autoload :Color, "#{PATH}/color"
+    autoload :Table, "#{PATH}/table"
+    autoload :FileLoader, "#{PATH}/file_loader"
+    autoload :FileWriter, "#{PATH}/file_writer"
+    autoload :PathMatcher, "#{PATH}/path_matcher"
   end
 end

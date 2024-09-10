@@ -30,12 +30,12 @@ module DevSuite
         require_relative "text"
         register_component(Text)
 
-        load_dependency("json", on_failure: method(:handle_missing_dependencies)) do
+        load_dependency(["json"], on_failure: method(:handle_missing_dependencies)) do
           require_relative "json"
           register_component(Json)
         end
 
-        load_dependency("yaml", on_failure: method(:handle_missing_dependencies)) do
+        load_dependency(["yaml"], on_failure: method(:handle_missing_dependencies)) do
           require_relative "yaml"
           register_component(Yaml)
         end
