@@ -39,7 +39,7 @@ module DevSuite
         # @param dependencies [Array<String>] List of gem names to check.
         # @return [Array<String>] List of missing dependencies.
         def find_missing_dependencies(dependencies)
-          dependencies.reject { |gem_name| gem_installed?(gem_name) }
+          Array(dependencies).reject { |gem_name| gem_installed?(gem_name) }
         end
 
         # Default failure handler that logs missing dependencies.
