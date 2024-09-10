@@ -7,6 +7,8 @@ module DevSuite
 
       class Faraday < Base
         def enable
+          return unless faraday_defined?
+
           ::Faraday::Connection.class_eval do
             alias_method(:_original_run_request, :run_request)
 
@@ -26,10 +28,19 @@ module DevSuite
         end
 
         def disable
+          return unless faraday_defined?
+
           ::Faraday::Connection.class_eval do
             alias_method(:run_request, :_original_run_request)
             remove_method(:_original_run_request)
           end
+        end
+
+        private
+
+        # Check if Faraday is defined
+        def faraday_defined?
+          defined?(::Faraday::Connection) && defined?(::Faraday::Env)
         end
       end
     end

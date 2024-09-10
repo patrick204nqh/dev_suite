@@ -36,6 +36,8 @@ RSpec.describe(DevSuite::RequestLogger) do
 
     context "when adapter :faraday" do
       context "is enabled" do
+        require "faraday"
+
         let(:connection) do
           Faraday.new(url: url) do |faraday|
             faraday.adapter(Faraday.default_adapter)
@@ -43,7 +45,6 @@ RSpec.describe(DevSuite::RequestLogger) do
         end
 
         before do
-          require "faraday"
           DevSuite::RequestLogger::Config.configure do |config|
             config.adapters = [:faraday]
           end
@@ -66,39 +67,6 @@ RSpec.describe(DevSuite::RequestLogger) do
           DevSuite::RequestLogger.with_logging do
             connection.get("/")
           end
-        end
-      end
-
-      # This context is a bit tricky.
-      # It simulates the absence of the Faraday constant by removing it from the Object namespace.
-      # This is done to test the behavior of the RequestLogger when the Faraday constant is not available.
-      xcontext "fails to load" do
-        before do
-          # Store the original top-level Faraday constant if it's defined
-          @original_faraday = Faraday if defined?(Faraday)
-
-          # Remove the top-level Faraday constant to simulate its absence
-          Object.send(:remove_const, :Faraday) if defined?(Faraday)
-
-          DevSuite::RequestLogger::Config.configure do |config|
-            config.adapters = [:faraday]
-          end
-        end
-
-        after do
-          # Restore the top-level Faraday constant after the test
-          Object.const_set(:Faraday, @original_faraday) if @original_faraday
-        end
-
-        it "handles the failure and removes the faraday adapter" do
-          expect do
-            DevSuite::RequestLogger.with_logging do
-              Net::HTTP.get(uri)
-            end
-          end.not_to(raise_error)
-
-          expect(DevSuite::RequestLogger::Config.configuration.adapters).not_to(include(:faraday))
-          expect(DevSuite::RequestLogger::Config.configuration.missing_dependencies).to(include("faraday"))
         end
       end
     end
