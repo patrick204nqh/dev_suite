@@ -21,8 +21,16 @@ module DevSuite
             end
 
             def remove_failed_dependency(attr_name, option_key, *missing_dependencies)
+              attribute = send(attr_name)
+
+              # Ensure the attribute is an array and contains the option_key
+              return unless attribute.is_a?(Array) && attribute.include?(option_key)
+
+              # Delete the option_key from the attribute
+              attribute.delete(option_key)
+
+              # Log the missing dependency and track it
               log_missing_dependency(attr_name, option_key, missing_dependencies)
-              send(attr_name).delete(option_key)
               track_missing_dependency(missing_dependencies)
             end
 

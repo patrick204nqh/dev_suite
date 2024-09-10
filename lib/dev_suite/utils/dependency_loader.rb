@@ -11,7 +11,7 @@ module DevSuite
         # @param dependencies [Array<String>] List of gem names to load.
         # @param on_failure [Proc] Handler to call with missing dependencies if any are not found.
         # @yield Executes the block if all dependencies are loaded.
-        def safe_load_dependencies(*dependencies, on_failure: method(:default_failure_handler))
+        def safe_load_dependencies(dependencies = [], on_failure: method(:default_failure_handler))
           missing_dependencies = find_missing_dependencies(dependencies)
 
           if missing_dependencies.empty?
