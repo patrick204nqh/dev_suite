@@ -16,6 +16,10 @@ module DevSuite
         def execute(context)
           result = perform_action(context)
           Utils::Logger.log("Step: #{@name} - Result: #{result}", level: :info)
+
+          # If the result is nil or false, stop execution chain
+          return unless result
+
           update_context(context, result)
           execute_next_step(context)
         end
@@ -31,11 +35,22 @@ module DevSuite
         # Perform the action associated with this step
         def perform_action(context)
           @action.call(context)
+        rescue StandardError => e
+          Utils::Logger.log("Step: #{@name} - Error: #{e}", level: :error)
+          false
         end
 
         # Update the context with the result of the action
+        # If the context is cleared, the result is preserved and used to update the context
         def update_context(context, result)
-          context.update(result)
+          # Store the result before clearing the context to avoid losing data
+          stored_result = result.dup
+
+          # Clear the context
+          context.clear
+
+          # Update the context with the stored result
+          context.update(stored_result)
         end
 
         # Execute the next step if it exists

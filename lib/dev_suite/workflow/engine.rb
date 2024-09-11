@@ -5,9 +5,9 @@ module DevSuite
     class Engine
       attr_reader :steps, :context
 
-      def initialize(context = {}, **options)
+      def initialize(initial_context = {}, **options)
         @steps = []
-        @context = StepContext.new(context, **options)
+        @context = StepContext.new(initial_context, **options)
       end
 
       # Add steps to the engine

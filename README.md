@@ -329,7 +329,11 @@ Manage complex workflows consisting of multiple sequential steps, including hand
   By default, the workflow context provides access to an integrated store via ctx.store. You can save and retrieve data across steps:
   ```ruby
   # Using the store in the workflow
-  workflow = DevSuite::Workflow.create_engine
+  workflow = DevSuite::Workflow.create_engine(
+    {},
+    driver: :file,
+    path: "tmp/workflow.yml",
+  )
   step = DevSuite::Workflow.create_step("Store Example") do |ctx|
     ctx.store.set(:step_result, "Step 1 Completed")
   end
