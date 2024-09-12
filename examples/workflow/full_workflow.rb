@@ -55,7 +55,7 @@ sub_step2 = DevSuite::Workflow.create_step("Sub-Step 2") do |context|
 end
 
 # Add sub-steps to the composite step
-composite_step.add_step(sub_step1).add_step(sub_step2)
+composite_step.step(sub_step1).step(sub_step2)
 
 # Step 6: A step to store the final workflow result
 store_step = DevSuite::Workflow.create_step("Store Result") do |context|
@@ -64,12 +64,12 @@ store_step = DevSuite::Workflow.create_step("Store Result") do |context|
 end
 
 # Add all steps to the workflow engine
-engine.add_step(greet_step)
-  .add_step(admin_step)
-  .add_step(loop_step)
-  .add_step(parallel_step)
-  .add_step(composite_step)
-  .add_step(store_step)
+engine.step(greet_step)
+  .step(admin_step)
+  .step(loop_step)
+  .step(parallel_step)
+  .step(composite_step)
+  .step(store_step)
 
 # Execute the workflow
 puts "Executing workflow..."

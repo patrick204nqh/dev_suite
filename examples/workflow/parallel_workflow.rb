@@ -13,5 +13,5 @@ parallel_step = DevSuite::Workflow.create_parallel_step("Parallel Task") do |con
   ]
 end
 
-engine.add_step(parallel_step)
+engine.step(parallel_step)
 engine.execute

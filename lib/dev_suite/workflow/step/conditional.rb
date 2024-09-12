@@ -10,7 +10,7 @@ module DevSuite
         end
 
         # Only execute if the condition is met
-        def execute(context)
+        def run(context)
           if @condition.call(context)
             super
           else

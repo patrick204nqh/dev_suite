@@ -13,5 +13,5 @@ loop_step = DevSuite::Workflow.create_loop_step("Repeat Task", 3) do |context|
   puts "Iteration #{iteration}"
 end
 
-engine.add_step(loop_step)
+engine.step(loop_step)
 engine.execute

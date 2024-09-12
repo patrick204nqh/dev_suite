@@ -235,7 +235,7 @@ Manage complex workflows consisting of multiple sequential steps, including hand
   end
 
   # Chain steps together
-  workflow.add_step(step1).add_step(step2)
+  workflow.step(step1).step(step2)
 
   # Execute workflow
   workflow.execute
@@ -249,8 +249,8 @@ Manage complex workflows consisting of multiple sequential steps, including hand
   step1 = DevSuite::Workflow.create_step("Step 1") { |ctx| ctx.update({ data: 'Data from Step 1' }) }
   step2 = DevSuite::Workflow.create_step("Step 2") { |ctx| puts "Received: #{ctx.get(:data)}" }
 
-  workflow.add_step(step1)
-          .add_step(step2)
+  workflow.step(step1)
+          .step(step2)
           .execute
   ```
 
@@ -271,7 +271,7 @@ Manage complex workflows consisting of multiple sequential steps, including hand
     puts ctx.get(:new_key)  # Output: new_value
   end
 
-  workflow.add_step(step1).add_step(step2).execute
+  workflow.step(step1).step(step2).execute
   ```
 
   **Conditional Execution**:
@@ -282,7 +282,7 @@ Manage complex workflows consisting of multiple sequential steps, including hand
     ctx.update({ result: "Conditional Step Executed" })
   end
 
-  workflow.add_step(conditional_step).execute
+  workflow.step(conditional_step).execute
   ```
 
   **Parallel Execution**:
@@ -295,7 +295,7 @@ Manage complex workflows consisting of multiple sequential steps, including hand
     ]
   end
 
-  workflow.add_step(parallel_step).execute
+  workflow.step(parallel_step).execute
   ```
 
   **Save and Load Context**:
@@ -303,7 +303,7 @@ Manage complex workflows consisting of multiple sequential steps, including hand
   ```ruby
   # Saving context to a YAML file
   workflow = DevSuite::Workflow.create_engine({ user: 'John' })
-  workflow.add_step(DevSuite::Workflow.create_step("Example") { |ctx| ctx.update({ status: 'completed' }) })
+  workflow.step(DevSuite::Workflow.create_step("Example") { |ctx| ctx.update({ status: 'completed' }) })
   workflow.execute
 
   File.open('context.yml', 'w') { |file| file.write(YAML.dump(workflow.context.data)) }
@@ -322,7 +322,7 @@ Manage complex workflows consisting of multiple sequential steps, including hand
     puts "Iteration: #{ctx.get(:count)}"
   end
 
-  workflow.add_step(loop_step).execute
+  workflow.step(loop_step).execute
   ```
 
   **Using the Store**:
@@ -338,7 +338,7 @@ Manage complex workflows consisting of multiple sequential steps, including hand
     ctx.store.set(:step_result, "Step 1 Completed")
   end
 
-  workflow.add_step(step).execute
+  workflow.step(step).execute
 
   # Fetch data from the store
   puts ctx.store.fetch(:step_result)  # Output: Step 1 Completed

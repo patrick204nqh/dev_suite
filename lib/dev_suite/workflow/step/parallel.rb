@@ -5,7 +5,7 @@ module DevSuite
     module Step
       class Parallel < Base
         # Executes multiple tasks in parallel using threads
-        def execute(context)
+        def run(context)
           tasks = @action.call(context)
           threads = tasks.map do |task|
             Thread.new { task.call(context) }

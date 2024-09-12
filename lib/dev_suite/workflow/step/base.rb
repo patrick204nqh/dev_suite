@@ -13,7 +13,7 @@ module DevSuite
         end
 
         # Executes the step and moves to the next step
-        def execute(context)
+        def run(context)
           result = perform_action(context)
           Utils::Logger.log("Step: #{@name} - Result: #{result}", level: :info)
 
@@ -21,7 +21,7 @@ module DevSuite
           return unless result
 
           update_context(context, result)
-          execute_next_step(context)
+          run_next_step(context)
         end
 
         # Chain the next step
@@ -40,22 +40,14 @@ module DevSuite
           false
         end
 
-        # Update the context with the result of the action
-        # If the context is cleared, the result is preserved and used to update the context
+        # Update the context with the result of the action (without clearing it)
         def update_context(context, result)
-          # Store the result before clearing the context to avoid losing data
-          stored_result = result.dup
-
-          # Clear the context
-          context.clear
-
-          # Update the context with the stored result
-          context.update(stored_result)
+          context.update(result)
         end
 
         # Execute the next step if it exists
-        def execute_next_step(context)
-          @next_step&.execute(context)
+        def run_next_step(context)
+          @next_step&.run(context)
         end
       end
     end

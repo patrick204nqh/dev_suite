@@ -13,5 +13,5 @@ conditional_step = DevSuite::Workflow.create_conditional_step("Admin Greeting", 
   puts "Welcome Admin, #{context.get(:user)}!"
 end
 
-engine.add_step(conditional_step)
+engine.step(conditional_step)
 engine.execute

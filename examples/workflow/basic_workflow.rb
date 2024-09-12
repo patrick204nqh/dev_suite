@@ -11,5 +11,5 @@ basic_step = DevSuite::Workflow.create_step("Greet User") do |context|
   puts "Hello, #{context.get(:user)}!"
 end
 
-engine.add_step(basic_step)
+engine.step(basic_step)
 engine.execute

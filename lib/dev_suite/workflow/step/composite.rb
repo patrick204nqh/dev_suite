@@ -10,15 +10,15 @@ module DevSuite
         end
 
         # Add steps to the composite
-        def add_step(step)
+        def step(step)
           @steps << step
           self
         end
 
         # Override execute to run all steps in sequence
-        def execute(context)
+        def run(context)
           @steps.each do |step|
-            step.execute(context)
+            step.run(context)
           end
         end
       end

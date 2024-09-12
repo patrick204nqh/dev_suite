@@ -9,7 +9,7 @@ module DevSuite
           @iterations = iterations
         end
 
-        def execute(context)
+        def run(context)
           @iterations.times do |i|
             Utils::Logger.log("Step: #{@name} - Iteration: #{i + 1}", level: :info)
             super(context)
