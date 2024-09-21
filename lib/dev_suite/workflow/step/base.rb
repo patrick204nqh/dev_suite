@@ -3,10 +3,11 @@
 module DevSuite
   module Workflow
     module Step
-      class Base
+      class Base < Utils::Construct::Component::Base
         attr_accessor :name, :next_step
 
-        def initialize(name, &action)
+        def initialize(name:, &action)
+          super()
           @name = name
           @action = action
           @next_step = nil

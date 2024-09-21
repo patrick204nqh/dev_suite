@@ -4,7 +4,7 @@ module DevSuite
   module Workflow
     module Step
       class Composite < Base
-        def initialize(name)
+        def initialize(name:)
           super
           @steps = []
         end

@@ -54,9 +54,12 @@ RSpec.describe(DevSuite::Workflow) do
     CONDITION_MET_MESSAGE = "condition met"
 
     it "executes the step only if the condition is met" do
-      conditional_step = described_class.create_conditional_step("Conditional Step", ->(ctx) {
-        ctx.get(:user_id) == 123
-      }) do |ctx|
+      conditional_step = described_class.create_conditional_step(
+        "Conditional Step",
+        condition: ->(ctx) {
+          ctx.get(:user_id) == 123
+        },
+      ) do |ctx|
         ctx.update(test: CONDITION_MET_MESSAGE)
         ctx.data
       end
@@ -68,9 +71,12 @@ RSpec.describe(DevSuite::Workflow) do
     end
 
     it "skips the step if the condition is not met" do
-      conditional_step = described_class.create_conditional_step("Conditional Step", ->(ctx) {
-        ctx.get(:user_id) != 123
-      }) do |ctx|
+      conditional_step = described_class.create_conditional_step(
+        "Conditional Step",
+        condition: ->(ctx) {
+          ctx.get(:user_id) != 123
+        },
+      ) do |ctx|
         ctx.update(test: CONDITION_MET_MESSAGE)
         ctx.data
       end
@@ -85,7 +91,7 @@ RSpec.describe(DevSuite::Workflow) do
   describe ".create_loop_step" do
     it "executes the step multiple times based on the iteration count" do
       iterations = 3
-      loop_step = described_class.create_loop_step("Loop Step", iterations) do |ctx|
+      loop_step = described_class.create_loop_step("Loop Step", iterations: iterations) do |ctx|
         iteration = ctx.get(:iteration) || 0
         ctx.update(iteration: iteration + 1)
         ctx.data

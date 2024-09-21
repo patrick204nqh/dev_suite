@@ -4,8 +4,8 @@ module DevSuite
   module Workflow
     module Step
       class Loop < Base
-        def initialize(name, iterations, &action)
-          super(name, &action)
+        def initialize(name:, iterations:, &action)
+          super(name: name, &action)
           @iterations = iterations
         end
 

@@ -277,7 +277,7 @@ Manage complex workflows consisting of multiple sequential steps, including hand
   **Conditional Execution**:
   Conditionally execute steps based on logic defined in the workflow context:
   ```ruby
-  conditional_step = DevSuite::Workflow.create_conditional_step("Conditional Step", ->(ctx) { ctx.get(:result) == "Step 1 Complete" }) do |ctx|
+  conditional_step = DevSuite::Workflow.create_conditional_step("Conditional Step", condition: ->(ctx) { ctx.get(:result) == "Step 1 Complete" }) do |ctx|
     puts "Condition met! Executing conditional step."
     ctx.update({ result: "Conditional Step Executed" })
   end
@@ -316,7 +316,7 @@ Manage complex workflows consisting of multiple sequential steps, including hand
   **Looping**:
   You can loop steps in the workflow, for instance, if you need to repeat a step multiple times:
   ```ruby
-  loop_step = DevSuite::Workflow.create_loop_step("Repeat 5 Times", 5) do |ctx|
+  loop_step = DevSuite::Workflow.create_loop_step("Repeat 5 Times", iterations: 5) do |ctx|
     count = ctx.get(:count) || 0
     ctx.update({ count: count + 1 })
     puts "Iteration: #{ctx.get(:count)}"

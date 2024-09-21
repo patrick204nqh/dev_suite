@@ -4,8 +4,8 @@ module DevSuite
   module Workflow
     module Step
       class Conditional < Base
-        def initialize(name, condition, &action)
-          super(name, &action)
+        def initialize(name:, condition:, &action)
+          super(name: name, &action)
           @condition = condition
         end
 
