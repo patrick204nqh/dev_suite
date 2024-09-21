@@ -4,13 +4,13 @@ module DevSuite
   module Workflow
     module Step
       class Conditional < Base
-        def initialize(name, condition, &action)
-          super(name, &action)
+        def initialize(name:, condition:, &action)
+          super(name: name, &action)
           @condition = condition
         end
 
         # Only execute if the condition is met
-        def execute(context)
+        def run(context)
           if @condition.call(context)
             super
           else

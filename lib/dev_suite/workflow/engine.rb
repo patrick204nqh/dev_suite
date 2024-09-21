@@ -5,13 +5,13 @@ module DevSuite
     class Engine
       attr_reader :steps, :context
 
-      def initialize(context = {}, **options)
+      def initialize(initial_context = {}, **options)
         @steps = []
-        @context = StepContext.new(context, **options)
+        @context = StepContext.new(initial_context, **options)
       end
 
       # Add steps to the engine
-      def add_step(step)
+      def step(step)
         @steps << step
         self # Return the current engine instance to support chaining
       end
@@ -19,7 +19,7 @@ module DevSuite
       # Execute the workflow
       def execute
         @steps.each do |step|
-          step.execute(@context)
+          step.run(@context)
         end
       end
     end

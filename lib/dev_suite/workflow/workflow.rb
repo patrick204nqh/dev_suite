@@ -11,24 +11,28 @@ module DevSuite
         Engine.new(context, **options)
       end
 
-      def create_step(name, &block)
-        Step::Base.new(name, &block)
+      def create_step(name, type: :base, **args, &block)
+        Step.build_component(type, name: name, **args, &block)
+      end
+
+      def create_base_step(name, &block)
+        create_step(name, type: :base, &block)
       end
 
       def create_parallel_step(name, &block)
-        Step::Parallel.new(name, &block)
+        create_step(name, type: :parallel, &block)
       end
 
-      def create_conditional_step(name, condition, &block)
-        Step::Conditional.new(name, condition, &block)
+      def create_conditional_step(name, condition:, &block)
+        create_step(name, type: :conditional, condition: condition, &block)
       end
 
-      def create_loop_step(name, iterations, &block)
-        Step::Loop.new(name, iterations, &block)
+      def create_loop_step(name, iterations:, &block)
+        create_step(name, type: :loop, iterations: iterations, &block)
       end
 
       def create_composite_step(name)
-        Step::Composite.new(name)
+        create_step(name, type: :composite)
       end
     end
   end

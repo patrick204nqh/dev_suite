@@ -16,6 +16,6 @@ sub_step2 = DevSuite::Workflow.create_step("Sub-Step 2") do |context|
   puts "Executing Sub-Step 2"
 end
 
-composite_step.add_step(sub_step1).add_step(sub_step2)
-engine.add_step(composite_step)
+composite_step.step(sub_step1).step(sub_step2)
+engine.step(composite_step)
 engine.execute
