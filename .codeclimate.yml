@@ -1,0 +1,12 @@
+version: "2"
+checks:
+  argument_count:
+    enabled: true
+  file_lines:
+    enabled: true
+ratings:
+  paths:
+    - "**.rb"
+exclude_patterns:
+  - "examples/**"  # Ignore examples folder
+  - "tmp/**"       # Ignore temp files
