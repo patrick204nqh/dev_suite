@@ -3,13 +3,7 @@
 module DevSuite
   module DirectoryTree
     module Renderer
-      class Base
-        attr_reader :settings
-
-        def initialize(settings: Settings.new)
-          @settings = settings
-        end
-
+      class Base < Utils::Construct::Component::Base
         def render
           raise NotImplementedError
         end

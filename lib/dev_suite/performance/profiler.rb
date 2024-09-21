@@ -3,9 +3,7 @@
 module DevSuite
   module Performance
     module Profiler
-      require_relative "profiler/base"
-      require_relative "profiler/benchmark"
-      require_relative "profiler/memory"
+      require_relative "profiler/profiler"
     end
   end
 end

@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "Shopify.ruby-lsp",
+    "misogi.ruby-rubocop",
+    "KoichiSasada.vscode-rdbg",                
+    "streetsidesoftware.code-spell-checker",
+  ]
+}

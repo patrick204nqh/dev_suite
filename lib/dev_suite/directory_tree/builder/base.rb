@@ -3,7 +3,7 @@
 module DevSuite
   module DirectoryTree
     module Builder
-      class Base
+      class Base < Utils::Construct::Component::Base
         #
         # Recursive method to build the tree
         #

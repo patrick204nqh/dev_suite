@@ -4,8 +4,7 @@ module DevSuite
   module Utils
     module Table
       module Formatter
-        require_relative "formatter/column_width_calculator"
-        require_relative "formatter/text_aligner"
+        require_relative "formatter/formatter"
       end
     end
   end

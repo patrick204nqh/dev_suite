@@ -4,7 +4,7 @@ module DevSuite
   module Performance
     module Profiler
       class Memory < Base
-        attr_reader :max_memory, :min_memory, :average_memory
+        attr_reader :stats
 
         def initialize
           super
@@ -12,22 +12,13 @@ module DevSuite
           @memory_points = []
         end
 
-        def profile(&block)
-          yield
-          record_memory
-        end
+        def run(&block)
+          before_memory = record_memory
+          result = yield
+          after_memory = record_memory
 
-        def stats(before, after)
-          memory_used = after - before
-          @average_memory = @memory_points.sum / @memory_points.size
-          {
-            before: before,
-            after: after,
-            used: memory_used,
-            max: @memory_points.max,
-            min: @memory_points.min,
-            avg: @average_memory,
-          }
+          @stats = calculate_stats(before_memory, after_memory)
+          result
         end
 
         private
@@ -35,6 +26,21 @@ module DevSuite
         def record_memory
           current_mem = @memory_usage.current
           @memory_points << current_mem
+          current_mem
+        end
+
+        def calculate_stats(before, after)
+          memory_used = after - before
+          average_memory = @memory_points.sum / @memory_points.size
+
+          {
+            before: before,
+            after: after,
+            used: memory_used,
+            max: @memory_points.max,
+            min: @memory_points.min,
+            avg: average_memory,
+          }
         end
       end
     end

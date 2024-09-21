@@ -3,7 +3,7 @@
 module DevSuite
   module Performance
     module Profiler
-      class Base
+      class Base < Utils::Construct::Component::Base
         def run(&block)
           raise NotImplementedError, "Subclasses must implement the run method"
         end

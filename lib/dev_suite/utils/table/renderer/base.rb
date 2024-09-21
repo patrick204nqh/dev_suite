@@ -4,13 +4,7 @@ module DevSuite
   module Utils
     module Table
       module Renderer
-        class Base
-          attr_reader :settings
-
-          def initialize(settings: Settings.new)
-            @settings = settings
-          end
-
+        class Base < Utils::Construct::Component::Base
           def render(table)
             raise NotImplementedError, "Render method must be implemented in subclasses"
           end

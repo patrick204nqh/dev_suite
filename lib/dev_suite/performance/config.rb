@@ -2,15 +2,8 @@
 
 module DevSuite
   module Performance
-    class Config
-      include Utils::ConfigTools::Configuration
-
-      attr_reader :reportor
-
-      def initialize(reportor: :simple)
-        @reportor = Reportor.create(reportor)
-        freeze # Make the instance of this class immutable
-      end
+    module Config
+      require_relative "config/config"
     end
   end
 end

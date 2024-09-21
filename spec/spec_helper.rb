@@ -1,29 +1,54 @@
-require "bundler/setup"
-require "pry"
-require "dev_suite"
+# frozen_string_literal: true
 
-# Require support and shared files
-# Dir[File.join(__dir__, 'dev_suite', '**', 'shared', '*.rb')].each { |f| require f }
-# Dir[File.join(__dir__, 'dev_suite', '**', 'support', '*.rb')].each { |f| require f }
+# Start SimpleCov unless in debug mode
+unless ENV["DEBUG"]
+  require "simplecov"
+  SimpleCov.start do
+    add_filter "/spec/"           # Ignore spec directory from coverage
+    track_files "lib/**/*.rb"     # Only track files in the lib directory
+  end
+end
+
+require "bundler/setup"
+require "rspec"
+require "dev_suite"
+require "pry"
 
 RSpec.configure do |config|
-  config.expect_with :rspec do |expectations|
+  # Use the expect syntax for cleaner and more modern syntax
+  config.expect_with(:rspec) do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
     expectations.syntax = :expect
   end
 
-  config.mock_with :rspec do |mocks|
+  # Configure RSpec to only allow expect syntax to avoid confusion and ensure consistency
+  config.mock_with(:rspec) do |mocks|
     mocks.verify_partial_doubles = true
   end
+
+  # Apply shared context metadata globally to all groups and examples
   config.shared_context_metadata_behavior = :apply_to_host_groups
-  config.filter_run_when_matching :focus
-  # Enable flags like --only-failures and --next-failure
+
+  # Allow focusing on a specific test or group by setting `:focus` metadata
+  config.filter_run_when_matching(:focus)
+
+  # Persist the state of specs between runs (useful for --only-failures option)
   config.example_status_persistence_file_path = ".rspec_status"
-  # Disable RSpec exposing methods globally on `Module` and `main`
+
+  # Disable RSpec's monkey patching of the top-level DSL globally
   config.disable_monkey_patching!
-  # config.warnings = true
+
+  # Optionally enable a different formatter when running a single file
+  # Uncomment to enable a documentation formatter when running individual specs
   # config.default_formatter = "doc" if config.files_to_run.one?
+
+  # Randomize the order tests are executed
+  config.order = :random
+  Kernel.srand(config.seed)
+
+  # Output all global variables and method definitions from examples (can be noisy)
+  # config.warnings = true
+
+  # Print the 10 slowest examples and example groups at the end of the spec run
   # config.profile_examples = 10
-  # config.order = :random
-  Kernel.srand config.seed
 end

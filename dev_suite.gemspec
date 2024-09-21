@@ -29,6 +29,9 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  # Runtime dependencies
   spec.add_dependency("benchmark", "~> 0.1")
+  spec.add_dependency("csv", "~> 3.0")
   spec.add_dependency("get_process_mem", "~> 1.0")
+  spec.add_dependency("thor", "~> 1.1")
 end
