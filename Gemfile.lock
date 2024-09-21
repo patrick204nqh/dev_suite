@@ -14,9 +14,12 @@ GEM
     benchmark (0.3.0)
     bigdecimal (3.1.8)
     coderay (1.1.3)
+    concurrent-ruby (1.3.4)
     csv (3.3.0)
     diff-lcs (1.5.1)
     docile (1.4.1)
+    faker (2.23.0)
+      i18n (>= 1.8.11, < 2)
     faraday (1.10.3)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
@@ -40,20 +43,12 @@ GEM
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
-    ffi (1.17.0)
-    ffi (1.17.0-aarch64-linux-gnu)
-    ffi (1.17.0-aarch64-linux-musl)
-    ffi (1.17.0-arm-linux-gnu)
-    ffi (1.17.0-arm-linux-musl)
     ffi (1.17.0-arm64-darwin)
-    ffi (1.17.0-x86-linux-gnu)
-    ffi (1.17.0-x86-linux-musl)
-    ffi (1.17.0-x86_64-darwin)
-    ffi (1.17.0-x86_64-linux-gnu)
-    ffi (1.17.0-x86_64-linux-musl)
     get_process_mem (1.0.0)
       bigdecimal (>= 2.0)
       ffi (~> 1.0)
+    i18n (1.14.5)
+      concurrent-ruby (~> 1.0)
     json (2.7.2)
     language_server-protocol (3.17.0.3)
     method_source (1.1.0)
@@ -108,20 +103,11 @@ GEM
     unicode-display_width (2.5.0)
 
 PLATFORMS
-  aarch64-linux-gnu
-  aarch64-linux-musl
-  arm-linux-gnu
-  arm-linux-musl
-  arm64-darwin
-  ruby
-  x86-linux-gnu
-  x86-linux-musl
-  x86_64-darwin
-  x86_64-linux-gnu
-  x86_64-linux-musl
+  arm64-darwin-23
 
 DEPENDENCIES
   dev_suite!
+  faker (~> 2.18)
   faraday (~> 1.4)
   pry (~> 0.14)
   rake (~> 13.0)
