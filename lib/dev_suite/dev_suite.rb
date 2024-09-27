@@ -9,6 +9,7 @@ module DevSuite
   require_relative "request_logger"
   require_relative "request_builder"
   require_relative "workflow"
+  require_relative "method_tracer"
 
   class Error < StandardError; end
 end

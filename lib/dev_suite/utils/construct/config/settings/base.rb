@@ -26,6 +26,14 @@ module DevSuite
               @settings = Utils::Data.deep_merge(@default_settings, {})
             end
 
+            def to_h
+              @settings
+            end
+
+            def merge(options)
+              Utils::Data.deep_merge(@settings, options)
+            end
+
             private
 
             # Extract path from mixed input (strings or arrays) and handle array-like syntax
