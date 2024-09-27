@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dev_suite (0.2.9)
+    dev_suite (0.2.10)
       benchmark (~> 0.1)
       csv (~> 3.0)
       get_process_mem (~> 1.0)
@@ -44,7 +44,6 @@ GEM
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
     ffi (1.17.0-arm64-darwin)
-    ffi (1.17.0-x86_64-linux-gnu)
     get_process_mem (1.0.0)
       bigdecimal (>= 2.0)
       ffi (~> 1.0)
