@@ -32,7 +32,12 @@ module DevSuite
 
               raise ArgumentError, "Component not found for key: #{component_key}" unless component_class
 
-              component_class.new(**options, &block)
+              # Check if options are empty to avoid passing unnecessary keyword arguments in Ruby 2.6
+              if options.empty?
+                component_class.new(&block)
+              else
+                component_class.new(**options, &block)
+              end
             end
 
             # Build multiple components by filtering registered ones

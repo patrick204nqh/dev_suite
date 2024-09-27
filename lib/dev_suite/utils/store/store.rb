@@ -44,7 +44,9 @@ module DevSuite
         end
 
         def build_driver(options)
-          Driver.build_component(options.fetch(:driver), **options.except(:driver))
+          driver_type = options.fetch(:driver)
+          driver_options = options.reject { |key, _| key == :driver }
+          Driver.build_component(driver_type, **driver_options)
         end
       end
 
