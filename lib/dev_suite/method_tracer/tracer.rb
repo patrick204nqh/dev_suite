@@ -34,12 +34,25 @@ module DevSuite
         self.trace_point = TracePoint.new(:call, :return) do |tp|
           next if Helpers.internal_call?(tp)
 
-          if tp.event == :call
-            Logger.log_method_call(tp, self) if depth_within_limit?
-          elsif tp.event == :return
-            Logger.log_method_return(tp, self) if depth_within_limit?
-          end
+          handle_trace_point_event(tp)
         end
+      end
+
+      def handle_trace_point_event(tp)
+        case tp.event
+        when :call
+          handle_call_event(tp)
+        when :return
+          handle_return_event(tp)
+        end
+      end
+
+      def handle_call_event(tp)
+        Logger.log_method_call(tp, self) if depth_within_limit?
+      end
+
+      def handle_return_event(tp)
+        Logger.log_method_return(tp, self) if depth_within_limit?
       end
 
       def depth_within_limit?
