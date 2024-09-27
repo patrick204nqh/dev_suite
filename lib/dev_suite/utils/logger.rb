@@ -4,6 +4,7 @@ module DevSuite
   module Utils
     module Logger
       LOG_DETAILS = {
+        none: { prefix: "", color: :white },
         info: { prefix: "[INFO]", color: :green },
         warn: { prefix: "[WARNING]", color: :yellow },
         error: { prefix: "[ERROR]", color: :red },
@@ -16,9 +17,9 @@ module DevSuite
         # @param message [String] The message to log.
         # @param level [Symbol] The log level (:info, :warn, :error, :debug).
         # @param emoji [String, Symbol] Optional emoji to prepend to the message.
-        def log(message, level: :info, emoji: nil)
+        def log(message, level: :none, emoji: nil, prefix: nil, color: nil)
           emoji_icon = resolve_emoji(emoji)
-          formatted_message = format_message("#{emoji_icon} #{message}", level)
+          formatted_message = format_message("#{emoji_icon} #{message}", level, prefix, color)
           output_log(formatted_message)
         end
 
@@ -39,11 +40,12 @@ module DevSuite
         # @param message [String] The message to format.
         # @param level [Symbol] The log level (:info, :warn, :error, :debug).
         # @return [String] The formatted log message.
-        def format_message(message, level)
+        def format_message(message, level, custom_prefix, custom_color)
           details = LOG_DETAILS[level]
-          raise ArgumentError, "Invalid log level: #{level}" unless details
+          prefix = custom_prefix || details[:prefix]
+          color = custom_color || details[:color]
 
-          Utils::Color.colorize("#{details[:prefix]} #{message}", color: details[:color])
+          Utils::Color.colorize("#{prefix} #{message}", color: color)
         end
 
         # Outputs the formatted log message to the console.

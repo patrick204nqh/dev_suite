@@ -360,6 +360,76 @@ Manage complex workflows consisting of multiple sequential steps, including hand
 
 </details>
 
+### Method Tracer
+Trace all method calls within a specific block of code, including optional logging of parameters, results, and execution time. This feature is useful for debugging, profiling, and understanding the flow of method calls in your code.
+
+<details>
+  <summary>Show more</summary>
+  
+  **How to Use**:
+  ```ruby
+  # Sample class for demonstration
+  class MathOperations
+    def add(a, b)
+      multiply(a, b) + 3
+    end
+
+    def multiply(a, b)
+      a * b
+    end
+
+    def greet(name)
+      "Hello, #{name}!"
+    end
+  end
+
+  # Using MethodTracer to trace method calls
+  DevSuite::MethodTracer.trace(show_params: true, show_results: true, show_execution_time: true) do
+    math = MathOperations.new
+    result = math.add(5, 3)
+    puts result
+    
+    greeting = math.greet("Ruby")
+    puts greeting  # Should print the greeting
+  end
+  ```
+
+  **Configuration Guide**:
+  Customize the method tracing behavior by setting configuration options:
+  ```ruby
+  DevSuite::MethodTracer.trace(
+    show_params: true,
+    show_results: true,
+    show_execution_time: true,
+    max_depth: 2
+  ) do
+    # Code block to trace
+  end
+  ```
+
+  **Configuration Options**:
+  
+  Below is a table describing the available options for `MethodTracer`:
+
+  | Option               | Description                                         | Default Value | Example Values            |
+  |----------------------|-----------------------------------------------------|---------------|---------------------------|
+  | `:show_params`       | Enables logging of method parameters.               | `false`       | `true`, `false`           |
+  | `:show_results`      | Logs the return values of the methods.              | `false`       | `true`, `false`           |
+  | `:show_execution_time` | Logs the execution time for each method.          | `false`       | `true`, `false`           |
+  | `:max_depth`         | Limits the depth of method calls to log.            | `nil`         | `1`, `2`, `3`, ...        |
+
+  **Sample Output**:
+  ```bash
+   🚀 #depth:1 > MathOperations#add at (irb):2 (5, 3)
+      🚀 #depth:2 > MathOperations#multiply at (irb):6 (5, 3)
+      🏁 #depth:2 < MathOperations#multiply #=> 15 at (irb):8 in 0.02ms
+   🏁 #depth:1 < MathOperations#add #=> 23 at (irb):4 in 7.35ms
+   🚀 #depth:1 > MathOperations#greet at (irb):10 ("Ruby")
+   🏁 #depth:1 < MathOperations#greet #=> "Hello, Ruby!" at (irb):12 in 0.02ms
+Hello, Ruby!
+```
+</details>
+
 ## Development
 
 After checking out the repo, run `bin/setup`for an interactive prompt that will allow you to experiment.

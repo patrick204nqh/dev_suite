@@ -11,6 +11,25 @@ module DevSuite
         retry: "💥",
         warning: "⚠️", # For warnings
         caution: "🟡", # For caution or proceed with care
+        pending: "🕒", # For pending or waiting
+        paused: "⏸️",  # For paused or halted
+        running: "🏃",  # For running or in progress
+        done: "🎉",     # For done or completed
+        finish: "🏁",   # For finish or end
+        stop: "🛑",     # For stopping or halting
+        cancel: "🚫",   # For canceling or aborting
+        skip: "⏭️",    # For skipping or jumping
+        next: "⏩",     # For next or moving forward
+        previous: "⏪", # For previous or moving backward
+        up: "⬆️",      # For up or moving up
+        down: "⬇️",    # For down or moving down
+        left: "⬅️",    # For left or moving left
+        right: "➡️",   # For right or moving right
+        top: "🔝",      # For top or highest
+        bottom: "🔚",   # For bottom or lowest
+        middle: "🔽", # For middle or center
+        full: "🔴",     # For full or maximum
+        empty: "⚪",    # For empty or minimum
       }.freeze
 
       # Action-related emojis
@@ -19,7 +38,6 @@ module DevSuite
         fix: "🔧",        # For fixes or repairs
         bug: "🐞",        # For bugs or issues
         code: "💻",       # For code or technical content
-        stop: "🛑",       # For stopping or halting
       }.freeze
 
       # Notification-related emojis
