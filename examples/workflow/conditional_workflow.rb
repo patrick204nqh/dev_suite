@@ -7,7 +7,7 @@ require "dev_suite"
 engine = DevSuite::Workflow::Engine.new(user: "Bob", role: "admin")
 
 # Add a conditional step
-conditional_step = DevSuite::Workflow.create_conditional_step("Admin Greeting", ->(ctx) {
+conditional_step = DevSuite::Workflow.create_conditional_step("Admin Greeting", condition: ->(ctx) {
   ctx.get(:role) == "admin"
 }) do |context|
   puts "Welcome Admin, #{context.get(:user)}!"
