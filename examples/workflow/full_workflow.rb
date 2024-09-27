@@ -20,14 +20,14 @@ greet_step = DevSuite::Workflow.create_step("Greet User") do |context|
 end
 
 # Step 2: Create a conditional step to greet only admins
-admin_step = DevSuite::Workflow.create_conditional_step("Admin Greeting", ->(ctx) {
+admin_step = DevSuite::Workflow.create_conditional_step("Admin Greeting", condition: ->(ctx) {
   ctx.get(:role) == "admin"
 }) do |context|
   puts "Welcome, Admin #{context.get(:user)}!"
 end
 
 # Step 3: Create a loop step that repeats 3 times
-loop_step = DevSuite::Workflow.create_loop_step("Loop Step", 3) do |ctx|
+loop_step = DevSuite::Workflow.create_loop_step("Loop Step", iterations: 3) do |ctx|
   iteration = ctx.get(:iteration_count) + 1
   ctx.update({ iteration_count: iteration })
   puts "Iteration #{iteration} completed."

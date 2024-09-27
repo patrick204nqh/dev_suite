@@ -7,7 +7,7 @@ require "dev_suite"
 engine = DevSuite::Workflow::Engine.new(iteration_count: 0)
 
 # Add a loop step
-loop_step = DevSuite::Workflow.create_loop_step("Repeat Task", 3) do |context|
+loop_step = DevSuite::Workflow.create_loop_step("Repeat Task", iterations: 3) do |context|
   iteration = context.get(:iteration_count) + 1
   context.update({ iteration_count: iteration })
   puts "Iteration #{iteration}"

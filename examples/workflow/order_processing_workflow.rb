@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../helpers"
+require_relative "../setup"
 
 $LOAD_PATH.unshift(File.expand_path("../../lib", __dir__))
 require "dev_suite"
@@ -95,7 +95,7 @@ register_step = DevSuite::Workflow.create_step("Register Users") do |ctx|
   ctx.data
 end
 
-save_users_step = DevSuite::Workflow.create_conditional_step("Save Users to Store", ->(ctx) {
+save_users_step = DevSuite::Workflow.create_conditional_step("Save Users to Store", condition: ->(ctx) {
   ctx.get(:users)&.any?
 }) do |ctx|
   ctx.store.set(:users, ctx.get(:users))
@@ -103,7 +103,7 @@ save_users_step = DevSuite::Workflow.create_conditional_step("Save Users to Stor
   ctx.data
 end
 
-login_step = DevSuite::Workflow.create_conditional_step("Login Users", ->(ctx) {
+login_step = DevSuite::Workflow.create_conditional_step("Login Users", condition: ->(ctx) {
   ctx.get(:username) && ctx.get(:password)
 }) do |ctx|
   response = login_user(ctx.get(:username), ctx.get(:password))
@@ -119,7 +119,7 @@ login_step = DevSuite::Workflow.create_conditional_step("Login Users", ->(ctx) {
   ctx.data
 end
 
-fetch_order_step = DevSuite::Workflow.create_conditional_step("Fetch Orders", ->(ctx) {
+fetch_order_step = DevSuite::Workflow.create_conditional_step("Fetch Orders", condition: ->(ctx) {
   ctx.get(:token) && ctx.get(:user_id)
 }) do |ctx|
   response = fetch_order(ctx.get(:token), ctx.get(:user_id))
@@ -134,7 +134,7 @@ fetch_order_step = DevSuite::Workflow.create_conditional_step("Fetch Orders", ->
   ctx.data
 end
 
-process_payment_step = DevSuite::Workflow.create_conditional_step("Process Payment", ->(ctx) {
+process_payment_step = DevSuite::Workflow.create_conditional_step("Process Payment", condition: ->(ctx) {
   ctx.get(:order_id) && ctx.get(:token) && ctx.get(:user_id)
 }) do |ctx|
   response = process_payment(ctx.get(:order_id), ctx.get(:token), ctx.get(:user_id))
@@ -155,9 +155,11 @@ workflow = DevSuite::Workflow.create_engine(
   path: STORE_PATH,
 )
 
-workflow.step(register_step)
-  .step(save_users_step)
-  .step(login_step)
-  .step(fetch_order_step)
-  .step(process_payment_step)
-  .execute
+DevSuite::MethodTracer.trace do
+  workflow.step(register_step)
+    .step(save_users_step)
+    .step(login_step)
+    .step(fetch_order_step)
+    .step(process_payment_step)
+    .execute
+end
