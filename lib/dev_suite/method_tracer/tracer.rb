@@ -44,6 +44,8 @@ module DevSuite
           handle_call_event(tp)
         when :return
           handle_return_event(tp)
+        else
+          raise "Unknown event type: #{tp.event}"
         end
       end
 
