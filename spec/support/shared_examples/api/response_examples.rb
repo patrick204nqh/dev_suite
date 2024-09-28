@@ -10,7 +10,7 @@ module API
 
       if expected_body
         it "returns the expected body" do
-          expect(json_response).to(include_json(expected_body))
+          expect(response).to(include_json(expected_body))
         end
       end
     end

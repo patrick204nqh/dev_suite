@@ -21,3 +21,7 @@ group :development do
   gem "rubocop", "~> 1.65", require: false
   gem "rubocop-shopify", "~> 2.15", require: false
 end
+
+group :test do
+  gem "webmock", "~> 3.13"
+end
