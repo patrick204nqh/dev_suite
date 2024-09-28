@@ -47,3 +47,4 @@ exclude_patterns:
   - "log/"
   - "tmp/"
   - "coverage/"
+  - "examples/"
