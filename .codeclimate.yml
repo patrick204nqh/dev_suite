@@ -38,6 +38,10 @@ engines:
             - "lib/**/*.rb"
   fixme:
     enabled: true
+    config:
+      terms:
+        ignore:
+          - "TODO"
 
 exclude_patterns:
   - "spec/"
