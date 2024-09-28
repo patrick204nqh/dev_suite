@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module API
-  module IncludeJson
+  module IncludeJsonMatcher
     RSpec::Matchers.define(:include_json) do |expected_hash|
       match do |response|
         json = JSON.parse(response.body, symbolize_names: true)
@@ -20,5 +20,5 @@ module API
 end
 
 RSpec.configure do |config|
-  config.include(API::IncludeJson, type: :request)
+  config.include(API::IncludeJsonMatcher, type: :request)
 end

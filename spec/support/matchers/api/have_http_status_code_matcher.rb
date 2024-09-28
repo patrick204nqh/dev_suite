@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module API
-  module HaveHttpStatusCode
+  module HaveHttpStatusCodeMatcher
     RSpec::Matchers.define(:have_http_status_code) do |expected_code|
       match do |response|
         response.status == expected_code
@@ -19,5 +19,5 @@ module API
 end
 
 RSpec.configure do |config|
-  config.include(API::HaveHttpStatusCode, type: :request)
+  config.include(API::HaveHttpStatusCodeMatcher, type: :request)
 end
