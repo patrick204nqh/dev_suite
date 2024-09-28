@@ -1,12 +1,54 @@
 version: "2"
 checks:
-  argument_count:
+  argument-count:
     enabled: true
-  file_lines:
+  complexity:
     enabled: true
-ratings:
-  paths:
-    - "**.rb"
+  duplication:
+    enabled: true
+  file-lines:
+    enabled: true
+  method-lines:
+    enabled: true
+  return-statements:
+    enabled: true
+  similar-code:
+    enabled: true
+  npath-complexity:
+    enabled: true
+  identical-code:
+    enabled: true
+
+engines:
+  rubocop:
+    enabled: true
+    channel: rubocop-1-48-1
+    config:
+      file: .rubocop.yml
+  bundler-audit:
+    enabled: true
+    channel: bundler-audit-0-9-1
+  duplication:
+    enabled: true
+    config:
+      languages:
+        ruby:
+          mass_threshold: 50
+          paths:
+            - "lib/**/*.rb"
+  fixme:
+    enabled: false
+    config:
+      strings:
+        - "TODO"
+        - "FIXME"
+
 exclude_patterns:
-  - "examples/**"  # Ignore examples folder
-  - "tmp/**"       # Ignore temp files
+  - "spec/"
+  - "test/"
+  - "vendor/"
+  - "bin/"
+  - "log/"
+  - "tmp/"
+  - "coverage/"
+  - "examples/"
