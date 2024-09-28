@@ -428,6 +428,10 @@ Trace all method calls within a specific block of code, including optional loggi
    🏁 #depth:1 < MathOperations#greet #=> "Hello, Ruby!" at (irb):12 in 0.02ms
 Hello, Ruby!
 ```
+
+  **Tips**:
+
+  Use `max_depth` to Limit Tracing: If you have deeply nested method calls, use the `max_depth` option to limit the depth of tracing. This can help reduce the amount of log output and focus on the most relevant parts of your code. A recommended value for `max_depth` is between `2` and `5`, depending on the complexity of your code.
 </details>
 
 ## Development
