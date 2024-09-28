@@ -14,41 +14,43 @@ require "rspec"
 require "dev_suite"
 require "pry"
 
+# Load custom matchers and helper modules from the spec/support directory
+Dir[File.join(__dir__, "support/**/*.rb")].sort.each { |file| require file }
+
 RSpec.configure do |config|
-  # Use the expect syntax for cleaner and more modern syntax
+  # Expectation configuration
   config.expect_with(:rspec) do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
-    expectations.syntax = :expect
+    expectations.syntax = :expect # Use `expect` syntax exclusively
   end
 
-  # Configure RSpec to only allow expect syntax to avoid confusion and ensure consistency
+  # Mock configuration
   config.mock_with(:rspec) do |mocks|
     mocks.verify_partial_doubles = true
   end
 
-  # Apply shared context metadata globally to all groups and examples
+  # Shared context configuration
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
-  # Allow focusing on a specific test or group by setting `:focus` metadata
+  # Focus on examples with `:focus` metadata; useful for debugging specific tests
   config.filter_run_when_matching(:focus)
 
-  # Persist the state of specs between runs (useful for --only-failures option)
+  # Persist example statuses to support `--only-failures` and `--next-failure` options
   config.example_status_persistence_file_path = ".rspec_status"
 
-  # Disable RSpec's monkey patching of the top-level DSL globally
+  # Disable global monkey patching to promote cleaner syntax and reduce side effects
   config.disable_monkey_patching!
 
-  # Optionally enable a different formatter when running a single file
-  # Uncomment to enable a documentation formatter when running individual specs
-  # config.default_formatter = "doc" if config.files_to_run.one?
-
-  # Randomize the order tests are executed
+  # Randomize the order of test execution to surface order dependencies
   config.order = :random
   Kernel.srand(config.seed)
 
-  # Output all global variables and method definitions from examples (can be noisy)
+  # Uncomment the line below to enable a detailed output formatter when running a single spec file
+  # config.default_formatter = "doc" if config.files_to_run.one?
+
+  # Uncomment the line below to show Ruby warnings (e.g., global variable usage, etc.)
   # config.warnings = true
 
-  # Print the 10 slowest examples and example groups at the end of the spec run
+  # Uncomment the line below to profile the 10 slowest examples
   # config.profile_examples = 10
 end

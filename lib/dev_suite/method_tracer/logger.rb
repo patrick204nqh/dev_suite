@@ -7,38 +7,69 @@ module DevSuite
         def log_method_call(tp, tracer)
           tracer.depth += 1
 
-          method_name = Helpers.format_method_name(tp)
-          params_str = Helpers.format_params(tp) if tracer.show_params
-          indent = Helpers.calculate_indent(tracer.depth)
-
           # Store the start time for execution time calculation
           tracer.start_times[tp.method_id] = Time.now
 
-          message = "#{indent}#depth:#{tracer.depth} > #{method_name} at #{tp.path}:#{tp.lineno} #{params_str}"
-          Utils::Logger.log(
-            message,
-            emoji: :start,
-            color: :blue,
-          )
+          message = build_call_message(tp, tracer)
+          Utils::Logger.log(message, emoji: :start, color: :blue)
         end
 
         def log_method_return(tp, tracer)
           duration = Helpers.calculate_duration(tp, tracer.start_times)
 
-          method_name = Helpers.format_method_name(tp)
-          result_str = Helpers.format_result(tp) if tracer.show_results
-          exec_time_str = Helpers.format_execution_time(duration) if tracer.show_execution_time
-          indent = Helpers.calculate_indent(tracer.depth)
-
-          message = "#{indent}#depth:#{tracer.depth} < #{method_name}#{result_str} at #{tp.path}:#{tp.lineno}#{exec_time_str}"
-          Utils::Logger.log(
-            message,
-            emoji: :finish,
-            color: :cyan,
-          )
+          message = build_return_message(tp, tracer, duration)
+          Utils::Logger.log(message, emoji: :finish, color: :cyan)
 
           # Decrement depth safely
           tracer.depth = [tracer.depth - 1, 0].max
+        end
+
+        private
+
+        # Builds the log message for method calls
+        #
+        # @param tp [TracePoint] The TracePoint object
+        # @param tracer [Tracer] The tracer instance
+        # @return [String] The formatted log message
+        def build_call_message(tp, tracer)
+          method_name = colorize_text(Helpers.format_method_name(tp), :blue)
+          params_str = tracer.show_params ? colorize_text(Helpers.format_params(tp), :yellow) : ""
+          indent = Helpers.calculate_indent(tracer.depth)
+          depth_str = colorize_text("#depth:#{tracer.depth}", :magenta)
+
+          "#{indent}#{depth_str} > #{method_name} at #{tp.path}:#{tp.lineno} #{params_str}"
+        end
+
+        # Builds the log message for method returns
+        #
+        # @param tp [TracePoint] The TracePoint object
+        # @param tracer [Tracer] The tracer instance
+        # @param duration [Float] The execution time
+        # @return [String] The formatted log message
+        def build_return_message(tp, tracer, duration)
+          method_name = colorize_text(Helpers.format_method_name(tp), :cyan)
+          result_str = tracer.show_results ? colorize_text(Helpers.format_result(tp), :green) : ""
+          exec_time_str = if tracer.show_execution_time
+            colorize_text(
+              Helpers.format_execution_time(duration),
+              :light_white,
+            )
+          else
+            ""
+          end
+          indent = Helpers.calculate_indent(tracer.depth)
+          depth_str = colorize_text("#depth:#{tracer.depth}", :magenta)
+
+          "#{indent}#{depth_str} < #{method_name}#{result_str} at #{tp.path}:#{tp.lineno}#{exec_time_str}"
+        end
+
+        # Helper method to colorize text
+        #
+        # @param text [String] The text to colorize
+        # @param color [Symbol] The color to use
+        # @return [String] The colorized text
+        def colorize_text(text, color)
+          Utils::Color.colorize(text, color: color)
         end
       end
     end
