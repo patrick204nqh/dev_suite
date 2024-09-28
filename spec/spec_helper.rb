@@ -1,23 +1,19 @@
 # frozen_string_literal: true
 
-# Start SimpleCov unless in debug mode
-unless ENV["DEBUG"]
-  require "simplecov"
-  SimpleCov.start do
-    add_filter "/spec/"           # Ignore spec directory from coverage
-    track_files "lib/**/*.rb"     # Only track files in the lib directory
-  end
-end
-
 require "bundler/setup"
 require "rspec"
+require "webmock/rspec"
 require "dev_suite"
 require "pry"
 
-# Load custom matchers and helper modules from the spec/support directory
-Dir[File.join(__dir__, "support/**/*.rb")].sort.each { |file| require file }
+# Require support files
+require_relative "support/support_loader"
+require_relative "support/simplecov_helper"
 
 RSpec.configure do |config|
+  # WebMock Configuration
+  WebMock.disable_net_connect!(allow_localhost: true) # Prevent real network connections except to localhost
+
   # Expectation configuration
   config.expect_with(:rspec) do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
