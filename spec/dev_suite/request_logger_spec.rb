@@ -7,7 +7,7 @@ RSpec.describe(DevSuite::RequestLogger) do
   let(:uri) { URI.parse(url) }
 
   describe ".with_logging" do
-    xcontext "when adapter :net_http is enabled" do
+    context "when adapter :net_http is enabled" do
       before do
         DevSuite::RequestLogger::Config.configure do |config|
           config.adapters = [:net_http]

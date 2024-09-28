@@ -15,10 +15,13 @@ module IncludeWithoutColorMatcher
     failure_message do |actual|
       "expected '#{strip_ansi_codes(actual)}' to include '#{expected}'"
     end
+
+    description do
+      "include '#{expected}' without considering ANSI color codes"
+    end
   end
 end
 
-# Include the module to make the matcher available in RSpec
 RSpec.configure do |config|
   config.include(IncludeWithoutColorMatcher)
 end
