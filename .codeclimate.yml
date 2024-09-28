@@ -37,11 +37,11 @@ engines:
           paths:
             - "lib/**/*.rb"
   fixme:
-    enabled: true
+    enabled: false
     config:
-      terms:
-        ignore:
-          - "TODO"
+      strings:
+        - "TODO"
+        - "FIXME"
 
 exclude_patterns:
   - "spec/"
