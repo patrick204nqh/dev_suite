@@ -41,11 +41,11 @@ RSpec.describe(DevSuite::MethodTracer) do
       log_output = output.string
 
       # Check if method calls are logged with depth information
-      expect(log_output).to(include("#depth:1 > NestedDummyClass#greet"))
-      expect(log_output).to(include("#depth:2 > DummyClass#say_hello"))
+      expect(log_output).to(include_without_color("#depth:1 > NestedDummyClass#greet"))
+      expect(log_output).to(include_without_color("#depth:2 > DummyClass#say_hello"))
 
       # Check if return values are logged
-      expect(log_output).to(include('#depth:2 < DummyClass#say_hello #=> "Hello, RSpec!"'))
+      expect(log_output).to(include_without_color('#depth:2 < DummyClass#say_hello #=> "Hello, RSpec!"'))
 
       # Verify method source location (line numbers might need adjusting based on your code)
       expect(log_output).to(match(/at .*method_tracer_spec.rb:\d+/))
@@ -58,8 +58,8 @@ RSpec.describe(DevSuite::MethodTracer) do
       end
 
       log_output = output.string
-      expect(log_output).to(include("say_hello at"))
-      expect(log_output).to(include('("RSpec")'))
+      expect(log_output).to(include_without_color("say_hello at"))
+      expect(log_output).to(include_without_color('("RSpec")'))
     end
 
     it "does not log parameters if show_params is false" do
@@ -69,7 +69,7 @@ RSpec.describe(DevSuite::MethodTracer) do
       end
 
       log_output = output.string
-      expect(log_output).not_to(include('("RSpec")'))
+      expect(log_output).not_to(include_without_color('("RSpec")'))
     end
 
     it "logs return values if show_results is true" do
@@ -79,7 +79,7 @@ RSpec.describe(DevSuite::MethodTracer) do
       end
 
       log_output = output.string
-      expect(log_output).to(include('#=> "Hello, RSpec!"'))
+      expect(log_output).to(include_without_color('#=> "Hello, RSpec!"'))
     end
 
     it "does not log return values if show_results is false" do
@@ -89,7 +89,7 @@ RSpec.describe(DevSuite::MethodTracer) do
       end
 
       log_output = output.string
-      expect(log_output).not_to(include('#=> "Hello, RSpec!"'))
+      expect(log_output).not_to(include_without_color('#=> "Hello, RSpec!"'))
     end
 
     it "logs execution time if show_execution_time is true" do
@@ -121,8 +121,8 @@ RSpec.describe(DevSuite::MethodTracer) do
       log_output = output.string
 
       # Ensure the correct depth levels are logged
-      expect(log_output).to(include("#depth:1 > NestedDummyClass#greet"))
-      expect(log_output).to(include("#depth:2 > DummyClass#say_hello"))
+      expect(log_output).to(include_without_color("#depth:1 > NestedDummyClass#greet"))
+      expect(log_output).to(include_without_color("#depth:2 > DummyClass#say_hello"))
     end
 
     it "only traces methods within the given block" do
@@ -132,7 +132,7 @@ RSpec.describe(DevSuite::MethodTracer) do
       end
 
       log_output = output.string
-      expect(log_output).to(include("say_hello"))
+      expect(log_output).to(include_without_color("say_hello"))
 
       # Outside the tracing block, no logs should be present
       output.truncate(0)

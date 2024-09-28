@@ -5,7 +5,7 @@ module DevSuite
     module Color
       class Colorizer
         def colorize(text, **kargs)
-          puts Config.configuration.strategy.colorize(text, **kargs)
+          Config.configuration.strategy.colorize(text, **kargs)
         end
       end
 
