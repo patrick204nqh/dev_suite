@@ -25,10 +25,9 @@ engines:
     channel: rubocop-1-48-1
     config:
       file: .rubocop.yml
-  brakeman:
-    enabled: true
   bundler-audit:
     enabled: true
+    channel: bundler-audit-0-9-1
   duplication:
     enabled: true
     config:
