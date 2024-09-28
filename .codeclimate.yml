@@ -19,9 +19,10 @@ checks:
   identical-code:
     enabled: true
 
-plugins:
+engines:
   rubocop:
     enabled: true
+    channel: rubocop-1-48-1
     config:
       file: .rubocop.yml
   brakeman:
