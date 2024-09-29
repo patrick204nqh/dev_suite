@@ -5,7 +5,7 @@ module DevSuite
     module FileWriter
       module Writer
         class Yaml < Base
-          def write(path, content, normalize: false, backup: false, yaml_options: {})
+          def write(content, normalize: false, backup: false, yaml_options: {})
             validate_content(content)
             create_backup(path) if backup
 

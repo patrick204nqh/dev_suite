@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module API
+module ApiExamples
   module ResponseExamples
     # Shared example for an API response with dynamic status and body
     RSpec.shared_examples("an API response") do |status_code, expected_body = nil|
@@ -38,5 +38,5 @@ end
 
 # Include the shared examples in RSpec configuration
 RSpec.configure do |config|
-  config.include(API::ResponseExamples, type: :request)
+  config.include(ApiExamples::ResponseExamples, type: :request)
 end
