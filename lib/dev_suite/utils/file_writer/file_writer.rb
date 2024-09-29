@@ -10,13 +10,11 @@ module DevSuite
 
       class << self
         def write(path, content)
-          writer = WriterManager.new
-          writer.write(path, content)
+          WriterManager.write(path, content)
         end
 
         def update_key(path, key, value)
-          writer = WriterManager.new
-          writer.update_key(path, key, value)
+          WriterManager.update_key(path, key, value)
         end
       end
     end
