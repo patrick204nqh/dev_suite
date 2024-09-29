@@ -5,32 +5,57 @@ module DevSuite
     module FileWriter
       module Writer
         class Base < Utils::Construct::Component::Base
-          # Abstract method that subclasses must implement for custom file write operations
-          def write(_path, _content)
-            raise NotImplementedError, "Subclasses must implement the `write` method"
+          attr_reader :path
+
+          def initialize(path)
+            super()
+            @path = path
           end
 
-          # General method to update a key in any structured file
-          def update_key(path, key, value, **options)
-            # Step 1: Load the existing content of the file (this will be subclass-specific)
-            content = load_file_content(path)
+          def read
+            FileLoader.load(path)
+          end
 
-            # Step 2: Use a utility function to modify the content at the specified key path
+          def write(content, backup: false)
+            create_backup if backup
+            AtomicWriter.new(path, content).write
+          end
+
+          def append(content)
+            current_content = read
+            updated_content = current_content.merge(content)
+            write(updated_content)
+          end
+
+          def delete_lines(start_line, end_line = start_line)
+            lines = ::File.readlines(path)
+            lines.slice!(start_line - 1, end_line - start_line + 1)
+            write(lines.join)
+          end
+
+          def update_key(key, value, **options)
+            content = read
             Utils::Data.set_value_by_path(content, key, value)
+            write(content, **options)
+          end
 
-            # Step 3: Write the updated content back to the file using the subclass's write method
-            write(path, content, **options)
+          def delete_key(key, **options)
+            content = read
+            Utils::Data.delete_key_by_path(content, key)
+            write(content, **options)
+          end
+
+          def append_array(array_key, new_elements)
+            data = read
+            data[array_key] ||= []
+            data[array_key].concat(new_elements)
+            write(data)
           end
 
           private
 
           def file_exists?(path)
             ::File.exist?(path)
-          end
-
-          # Load the file content using a file loader
-          def load_file_content(file_path)
-            FileLoader.load(file_path)
           end
 
           def create_backup(path)
