@@ -23,7 +23,9 @@ module DevSuite
 
           def append(content)
             ::File.open(path, "a") do |file|
-              file.puts(content)
+              file.write("\n") if ::File.size(path).nonzero?
+
+              file.write(content.strip)
             end
           end
 

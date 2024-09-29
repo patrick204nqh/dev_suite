@@ -12,6 +12,12 @@ module DevSuite
             AtomicWriter.new(path, json_content).write
           end
 
+          def append(content)
+            current_content = read
+            updated_content = current_content.merge(content)
+            write(updated_content)
+          end
+
           private
 
           def convert_to_json(content, pretty)

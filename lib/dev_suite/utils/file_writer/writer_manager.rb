@@ -18,8 +18,20 @@ module DevSuite
             writer_instance(path).write(content)
           end
 
+          def append(path, content)
+            writer_instance(path).append(content)
+          end
+
+          def delete_lines(path, start_line, end_line = start_line)
+            writer_instance(path).delete_lines(start_line, end_line)
+          end
+
           def update_key(path, key, value)
             writer_instance(path).update_key(key, value)
+          end
+
+          def delete_key(path, key)
+            writer_instance(path).delete_key(key)
           end
 
           private
