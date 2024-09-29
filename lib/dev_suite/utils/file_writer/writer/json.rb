@@ -5,7 +5,7 @@ module DevSuite
     module FileWriter
       module Writer
         class Json < Base
-          def write(path, content, pretty: false, backup: false)
+          def write(content, pretty: false, backup: false)
             create_backup(path) if backup
 
             json_content = convert_to_json(content, pretty)
