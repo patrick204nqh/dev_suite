@@ -6,12 +6,12 @@ module DevSuite
       class WriterManager
         def write(path, content)
           writer = writer_for(path)
-          writer.write(content)
+          writer.write(path, content)
         end
 
         def update_key(path, key, value)
           writer = writer_for(path)
-          writer.update_key(key, value)
+          writer.update_key(path, key, value)
         end
 
         private
@@ -19,11 +19,11 @@ module DevSuite
         def writer_for(path)
           case ::File.extname(path)
           when ".json"
-            Writer::Json.new(path)
+            Writer::Json.new
           when ".yml", ".yaml"
-            Writer::Yaml.new(path)
+            Writer::Yaml.new
           else
-            Writer::Text.new(path)
+            Writer::Text.new
           end
         end
       end
