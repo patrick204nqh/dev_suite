@@ -13,12 +13,6 @@ module DevSuite
             AtomicWriter.new(path, yaml_content).write
           end
 
-          def append(content)
-            current_content = read
-            updated_content = current_content.merge(content)
-            write(updated_content)
-          end
-
           private
 
           # Prepare YAML content by normalizing and applying options

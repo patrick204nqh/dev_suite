@@ -22,11 +22,9 @@ module DevSuite
           end
 
           def append(content)
-            ::File.open(path, "a") do |file|
-              file.write("\n") if ::File.size(path).nonzero?
-
-              file.write(content.strip)
-            end
+            current_content = read
+            updated_content = current_content.merge(content)
+            write(updated_content)
           end
 
           def delete_lines(start_line, end_line = start_line)

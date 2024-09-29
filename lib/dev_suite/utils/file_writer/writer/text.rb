@@ -14,6 +14,14 @@ module DevSuite
 
             write(updated_content, backup: backup)
           end
+
+          def append(content)
+            ::File.open(path, "a") do |file|
+              file.write("\n") if ::File.size(path).nonzero?
+
+              file.write(content.strip)
+            end
+          end
         end
       end
     end
