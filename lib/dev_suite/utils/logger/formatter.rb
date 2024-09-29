@@ -13,13 +13,26 @@ module DevSuite
         }.freeze
 
         class << self
-          def format(message, level, emoji, custom_prefix, custom_color)
-            details = LOG_DETAILS[level]
-            prefix = custom_prefix || details[:prefix]
-            color = custom_color || details[:color]
-            emoji_icon = Emoji.resolve(emoji)
+          def format(message, options = {})
+            return "" if message.nil? || message.strip.empty?
 
-            Utils::Color.colorize("#{prefix} #{emoji_icon} #{message}".strip, color: color)
+            details = fetch_log_details(options[:level])
+            prefix = options[:prefix] || details[:prefix]
+            color = options[:color] || details[:color]
+            emoji_icon = Emoji.resolve(options[:emoji])
+
+            formatted_message = build_message(prefix, emoji_icon, message)
+            Utils::Color.colorize(formatted_message, color: color)
+          end
+
+          private
+
+          def fetch_log_details(level)
+            LOG_DETAILS[level || :none]
+          end
+
+          def build_message(prefix, emoji_icon, message)
+            "#{prefix} #{emoji_icon} #{message}".strip
           end
         end
       end

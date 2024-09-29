@@ -22,7 +22,14 @@ module DevSuite
           validate_log_level(level)
           return if skip_logging?(level)
 
-          formatted_message = Formatter.format(message, level, emoji, prefix, color)
+          options = {
+            level: level,
+            emoji: emoji,
+            prefix: prefix,
+            color: color,
+          }
+
+          formatted_message = Formatter.format(message, options)
           output_log(formatted_message)
         end
 
