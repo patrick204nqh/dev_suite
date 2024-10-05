@@ -3,7 +3,7 @@
 module DevSuite
   module Utils
     module Logger
-      require_relative "logger/logger"
+      class InvalidLogLevelError < StandardError; end
     end
   end
 end
