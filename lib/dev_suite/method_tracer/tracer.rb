@@ -4,7 +4,7 @@ module DevSuite
   module MethodTracer
     class Tracer
       attr_reader :show_params, :show_results, :show_execution_time, :max_depth
-      attr_accessor :depth, :trace_point, :start_times
+      attr_accessor :current_depth, :trace_point, :start_times
 
       def initialize(
         show_params: false,
@@ -16,8 +16,8 @@ module DevSuite
         @show_results = show_results
         @show_execution_time = show_execution_time
         @max_depth = max_depth
-        @depth = 0
         @start_times = {}
+        @current_depth = 0
       end
 
       def trace(&block)
@@ -50,15 +50,23 @@ module DevSuite
       end
 
       def handle_call_event(tp)
-        Logger.log_method_call(tp, self) if depth_within_limit?
+        @current_depth += 1
+
+        if current_depth_within_limit?
+          Logger.log_method_call(tp, self)
+        end
       end
 
       def handle_return_event(tp)
-        Logger.log_method_return(tp, self) if depth_within_limit?
+        if current_depth_within_limit?
+          Logger.log_method_return(tp, self)
+        end
+
+        @current_depth -= 1
       end
 
-      def depth_within_limit?
-        max_depth.nil? || @depth < max_depth
+      def current_depth_within_limit?
+        max_depth.nil? || current_depth <= max_depth
       end
     end
   end

@@ -5,8 +5,6 @@ module DevSuite
     module Logger
       class << self
         def log_method_call(tp, tracer)
-          tracer.depth += 1
-
           # Store the start time for execution time calculation
           tracer.start_times[tp.method_id] = Time.now
 
@@ -19,9 +17,6 @@ module DevSuite
 
           message = build_return_message(tp, tracer, duration)
           Utils::Logger.log(message, emoji: :finish, color: :cyan)
-
-          # Decrement depth safely
-          tracer.depth = [tracer.depth - 1, 0].max
         end
 
         private
@@ -34,8 +29,8 @@ module DevSuite
         def build_call_message(tp, tracer)
           method_name = colorize_text(Helpers.format_method_name(tp), :blue)
           params_str = tracer.show_params ? colorize_text(Helpers.format_params(tp), :yellow) : ""
-          indent = Helpers.calculate_indent(tracer.depth)
-          depth_str = colorize_text("#depth:#{tracer.depth}", :magenta)
+          indent = Helpers.calculate_indent(tracer.current_depth)
+          depth_str = colorize_text("#depth:#{tracer.current_depth}", :magenta)
 
           "#{indent}#{depth_str} > #{method_name} at #{tp.path}:#{tp.lineno} #{params_str}"
         end
@@ -57,8 +52,8 @@ module DevSuite
           else
             ""
           end
-          indent = Helpers.calculate_indent(tracer.depth)
-          depth_str = colorize_text("#depth:#{tracer.depth}", :magenta)
+          indent = Helpers.calculate_indent(tracer.current_depth)
+          depth_str = colorize_text("#depth:#{tracer.current_depth}", :magenta)
 
           "#{indent}#{depth_str} < #{method_name}#{result_str} at #{tp.path}:#{tp.lineno}#{exec_time_str}"
         end

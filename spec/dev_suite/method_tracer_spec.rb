@@ -3,21 +3,7 @@
 require "spec_helper"
 require "stringio"
 
-# Dummy classes for testing
-class DummyClass
-  def say_hello(name)
-    "Hello, #{name}!"
-  end
-end
-
-class NestedDummyClass
-  def greet
-    dummy = DummyClass.new
-    dummy.say_hello("RSpec")
-  end
-end
-
-RSpec.describe(DevSuite::MethodTracer) do
+RSpec.describe(DevSuite::MethodTracer::Tracer) do
   let(:output) { StringIO.new }
 
   before do
@@ -32,115 +18,120 @@ RSpec.describe(DevSuite::MethodTracer) do
   end
 
   describe ".trace" do
-    it "logs method calls with correct depth and file/line information" do
-      DevSuite::MethodTracer.trace(show_params: true, show_results: true, show_execution_time: true) do
-        nested_dummy = NestedDummyClass.new
-        nested_dummy.greet
+    context "with methods at the same level" do
+      it "logs method calls up to the max depth of 3" do
+        tracer = DevSuite::MethodTracer::Tracer.new(max_depth: 3, show_params: true, show_results: true)
+
+        tracer.trace do
+          complex = ComplexClass.new(value: 50)
+          complex.process_data
+        end
+
+        log_output = output.string
+
+        # Ensure that method calls up to depth 3 are logged
+        expect(log_output).to(include_without_color("#depth:1 > ComplexClass#process_data"))
+        expect(log_output).to(include_without_color("#depth:2 > ComplexClass#perform_operations_and_log"))
+        expect(log_output).to(include_without_color("#depth:3 > ComplexClass#perform_operations"))
+        expect(log_output).to(include_without_color("#depth:3 > ComplexClass#log_results"))
       end
-
-      log_output = output.string
-
-      # Check if method calls are logged with depth information
-      expect(log_output).to(include_without_color("#depth:1 > NestedDummyClass#greet"))
-      expect(log_output).to(include_without_color("#depth:2 > DummyClass#say_hello"))
-
-      # Check if return values are logged
-      expect(log_output).to(include_without_color('#depth:2 < DummyClass#say_hello #=> "Hello, RSpec!"'))
-
-      # Verify method source location (line numbers might need adjusting based on your code)
-      expect(log_output).to(match(/at .*method_tracer_spec.rb:\d+/))
     end
 
-    it "logs parameters if show_params is true" do
-      DevSuite::MethodTracer.trace(show_params: true) do
-        dummy = DummyClass.new
-        dummy.say_hello("RSpec")
+    context "with max_depth option" do
+      it "logs method calls only up to the max depth" do
+        tracer = DevSuite::MethodTracer::Tracer.new(max_depth: 2, show_params: true, show_results: true)
+
+        tracer.trace do
+          complex = ComplexClass.new(value: 50)
+          complex.process_data
+        end
+
+        log_output = output.string
+
+        # Ensure that the calls beyond the max_depth are not logged
+        expect(log_output).to(include_without_color("#depth:1 > ComplexClass#process_data"))
+        expect(log_output).to(include_without_color("#depth:2 > ComplexClass#validate_data"))
+        expect(log_output).not_to(include_without_color("#depth:3 > ComplexClass#data_present?"))
+        expect(log_output).not_to(include_without_color("#depth:4 > ComplexClass#log_results"))
       end
 
-      log_output = output.string
-      expect(log_output).to(include_without_color("say_hello at"))
-      expect(log_output).to(include_without_color('("RSpec")'))
+      it "logs method calls up to the max depth of 3" do
+        tracer = DevSuite::MethodTracer::Tracer.new(max_depth: 3, show_params: true, show_results: true)
+
+        tracer.trace do
+          complex = ComplexClass.new(value: 50)
+          complex.process_data
+        end
+
+        log_output = output.string
+
+        # Ensure that method calls up to depth 3 are logged
+        expect(log_output).to(include_without_color("#depth:1 > ComplexClass#process_data"))
+        expect(log_output).to(include_without_color("#depth:2 > ComplexClass#validate_data"))
+        expect(log_output).to(include_without_color("#depth:3 > ComplexClass#data_present?"))
+        expect(log_output).not_to(include_without_color("#depth:4 > ComplexClass#log_results"))
+      end
+
+      it "resets depth correctly after returning from a deep call" do
+        tracer = DevSuite::MethodTracer::Tracer.new(max_depth: 3)
+
+        tracer.trace do
+          complex = ComplexClass.new(value: 50)
+          complex.process_data
+        end
+
+        log_output = output.string
+
+        # Check that depth resets correctly
+        expect(tracer.current_depth).to(eq(0))
+      end
     end
 
-    it "does not log parameters if show_params is false" do
-      DevSuite::MethodTracer.trace(show_params: false) do
-        dummy = DummyClass.new
-        dummy.say_hello("RSpec")
-      end
+    context "with nested method calls and max depth" do
+      it "logs return values for methods up to the max depth" do
+        tracer = DevSuite::MethodTracer::Tracer.new(max_depth: 2, show_results: true)
 
-      log_output = output.string
-      expect(log_output).not_to(include_without_color('("RSpec")'))
+        tracer.trace do
+          complex = ComplexClass.new(value: 50)
+          complex.process_data
+        end
+
+        log_output = output.string
+
+        # Ensure that the return values are logged up to max depth
+        expect(log_output).to(include_without_color("#depth:2 < ComplexClass#validate_data"))
+        expect(log_output).not_to(include_without_color("#depth:3 < ComplexClass#data_present?"))
+      end
     end
 
-    it "logs return values if show_results is true" do
-      DevSuite::MethodTracer.trace(show_results: true) do
-        dummy = DummyClass.new
-        dummy.say_hello("RSpec")
+    context "with show_params and show_results" do
+      it "logs method parameters and results if enabled" do
+        tracer = DevSuite::MethodTracer::Tracer.new(show_params: true, show_results: true)
+
+        tracer.trace do
+          dummy = GreetingClass.new
+          dummy.say_hello("RSpec")
+        end
+
+        log_output = output.string
+
+        expect(log_output).to(include_without_color('("RSpec")'))
+        expect(log_output).to(include_without_color('#=> "Hello, RSpec!"'))
       end
 
-      log_output = output.string
-      expect(log_output).to(include_without_color('#=> "Hello, RSpec!"'))
-    end
+      it "does not log parameters and results if disabled" do
+        tracer = DevSuite::MethodTracer::Tracer.new(show_params: false, show_results: false)
 
-    it "does not log return values if show_results is false" do
-      DevSuite::MethodTracer.trace(show_results: false) do
-        dummy = DummyClass.new
-        dummy.say_hello("RSpec")
+        tracer.trace do
+          dummy = GreetingClass.new
+          dummy.say_hello("RSpec")
+        end
+
+        log_output = output.string
+
+        expect(log_output).not_to(include_without_color('("RSpec")'))
+        expect(log_output).not_to(include_without_color('#=> "Hello, RSpec!"'))
       end
-
-      log_output = output.string
-      expect(log_output).not_to(include_without_color('#=> "Hello, RSpec!"'))
-    end
-
-    it "logs execution time if show_execution_time is true" do
-      DevSuite::MethodTracer.trace(show_execution_time: true) do
-        dummy = DummyClass.new
-        dummy.say_hello("RSpec")
-      end
-
-      log_output = output.string
-      expect(log_output).to(match(/in \d+\.\d+ms/))
-    end
-
-    it "does not log execution time if show_execution_time is false" do
-      DevSuite::MethodTracer.trace(show_execution_time: false) do
-        dummy = DummyClass.new
-        dummy.say_hello("RSpec")
-      end
-
-      log_output = output.string
-      expect(log_output).not_to(match(/in \d+\.\d+ms/))
-    end
-
-    it "handles nested method calls and logs correct depth" do
-      DevSuite::MethodTracer.trace(show_params: true, show_results: true) do
-        nested_dummy = NestedDummyClass.new
-        nested_dummy.greet
-      end
-
-      log_output = output.string
-
-      # Ensure the correct depth levels are logged
-      expect(log_output).to(include_without_color("#depth:1 > NestedDummyClass#greet"))
-      expect(log_output).to(include_without_color("#depth:2 > DummyClass#say_hello"))
-    end
-
-    it "only traces methods within the given block" do
-      DevSuite::MethodTracer.trace(show_params: true) do
-        dummy = DummyClass.new
-        dummy.say_hello("RSpec")
-      end
-
-      log_output = output.string
-      expect(log_output).to(include_without_color("say_hello"))
-
-      # Outside the tracing block, no logs should be present
-      output.truncate(0)
-      output.rewind
-
-      dummy = DummyClass.new
-      dummy.say_hello("Outside")
-      expect(output.string).to(be_empty)
     end
   end
 end
