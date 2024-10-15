@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dev_suite (0.2.12)
+    dev_suite (0.2.13)
       benchmark (~> 0.1)
       csv (~> 3.0)
       get_process_mem (~> 1.0)
